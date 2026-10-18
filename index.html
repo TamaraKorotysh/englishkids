@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EnglishKids — учим слова играя</title>
+<!-- Установка на телефон: значок, имя, цвет шапки -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#5DB043">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="EnglishKids">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -313,6 +323,9 @@ button.friend-card:active{top:3px; box-shadow:0 1px 0 var(--line);}
 .goal-pill.done .goal-bar-fill{background:var(--leaf);}
 @keyframes pulse-goal{50%{transform:scale(1.025);}}
 .goal-reward{display:flex; align-items:center; gap:6px; font-size:15px; font-weight:800; color:var(--ink); margin-bottom:10px;}
+.install-why{font-size:14px; font-weight:800; color:var(--ink); margin:0 0 8px;}
+.install-steps{margin:0; padding-left:20px; font-size:14px; font-weight:700; color:var(--ink-soft); line-height:1.5;}
+.install-card .btn{margin-top:4px;}
 .goal-input{font-family:inherit; width:100%; font-size:16px; font-weight:800; color:var(--ink); padding:11px 14px; border-radius:14px; border:2px solid var(--line-dark); background:#fff;}
 .goal-input:focus{outline:none; border-color:var(--sky);}
 .pet-bubble{position:absolute; z-index:6; left:50%; top:14px; transform:translateX(-50%); max-width:86%; padding:8px 16px; border-radius:20px; background:#fff; border:3px solid var(--ink); text-align:center; pointer-events:none; animation:bubble-in 3.2s ease forwards;}
@@ -3107,6 +3120,9 @@ function renderParentDashboard(){
     <div class="section-label">Слова, которые даются труднее</div>
     <div class="dash-card">${struggleHtml}</div>
 
+    <div class="section-label">Установить на телефон</div>
+    ${installCardHtml()}
+
     <div class="section-label">Цель и награда</div>
     ${goalCardHtml()}
 
@@ -3175,6 +3191,49 @@ function toggleSound(on){
   appState.settings.soundOn = on;
   saveState();
   if(on) soundCorrect();
+}
+
+/* ============================= УСТАНОВКА НА ТЕЛЕФОН ============================= */
+// Android (Chrome) сам предлагает установку — ловим это событие и показываем кнопку у родителей.
+// На iPhone кнопки установки нет — показываем, где она в Safari.
+let installPrompt = null;
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); installPrompt = e; if(screen === 'parentDashboard') render(); });
+window.addEventListener('appinstalled', ()=>{ installPrompt = null; if(screen === 'parentDashboard') render(); });
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+function installCardHtml(){
+  const card = body => `<div class="dash-card install-card">${body}</div>`;
+  if(isStandalone()) return card(`<p class="dash-empty">${icon('check',16)} Приложение установлено и работает без интернета.</p>`);
+  if(location.protocol === 'file:') return card('<p class="dash-empty">Установить можно с сайта: откройте приложение по ссылке в браузере телефона.</p>');
+  const why = '<p class="install-why">Значок на главном экране, запуск во весь экран, работает без интернета.</p>';
+  if(installPrompt) return card(`${why}<button class="btn btn-primary" onclick="installApp()">Установить на телефон</button>`);
+  if(isIOS()) return card(`${why}<ol class="install-steps">
+      <li>Откройте эту страницу в <b>Safari</b>.</li>
+      <li>Нажмите <b>«Поделиться»</b> — квадрат со стрелкой вверх.</li>
+      <li>Выберите <b>«На экран „Домой“»</b> и нажмите <b>«Добавить»</b>.</li>
+    </ol>`);
+  return card(`${why}<ol class="install-steps">
+      <li>Откройте меню браузера — <b>⋮</b> вверху справа.</li>
+      <li>Выберите <b>«Установить приложение»</b> или <b>«Добавить на главный экран»</b>.</li>
+    </ol>`);
+}
+async function installApp(){
+  if(!installPrompt) return;
+  installPrompt.prompt();
+  await installPrompt.userChoice;
+  installPrompt = null;
+  render();
+}
+// Работа без интернета (sw.js). После запуска докачиваем в фоне все картинки курса.
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').then(()=>navigator.serviceWorker.ready).then(reg=>{
+      const ids = new Set([...DECOR, 'gift', 'school_1_book', 'nature_2_snow', 'nature_3_tree', 'nature_3_flower', 'fruits_veg_5_mushroom']);
+      Object.values(WORD_BY_ID).forEach(w=>{ if(w.emoji) ids.add(w.id); });
+      const urls = [...ids].map(id=>new URL(`assets/images/${id}.svg`, location.href).href);
+      if(reg.active) reg.active.postMessage({ type: 'precache', urls });
+    }).catch(err=>console.warn('Без офлайн-режима:', err));
+  });
 }
 
 /* ============================= СТАРТ ============================= */
