@@ -2461,6 +2461,8 @@ function applySessionResults(){
 
 function finishSession(){
   const sessionStarsGained = session.kind === 'station' ? applyGrammarResult() : applySessionResults();
+  const doneLesson = SECTIONS.find(s=>s.id===session.sectionId).lessons.find(l=>l.id===session.lessonId);
+  track(session.kind === 'station' ? 'станция пройдена' : 'урок пройден', doneLesson.title);
   markActiveToday();
   saveState();
   screen = 'sessionEnd';
@@ -2919,6 +2921,7 @@ function goalCardHtml(){
 }
 function setGoalSize(n){ soundClick(); goalDraft.target = n; render(); }
 function setGoal(){
+  track('цель поставлена', goalDraft.target + ' звёзд');
   const text = goalDraft.text.trim() || 'Сюрприз';
   appState.goal = { start: totalStarsEarned(), target: goalDraft.target, text, done: false };
   goalDraft.text = '';
@@ -3018,6 +3021,7 @@ function closeGrownPopup(level, idx){
   setTimeout(petTap, 500);
 }
 function closeFriendPopup(lv){
+  if(lv > 1) track('уровень ' + lv);
   if(appState.friendStages) FRIENDS.forEach(f=>{ if(f.level <= lv && appState.friendStages[f.level] === undefined) appState.friendStages[f.level] = friendInfo(f).idx; });
   // Отмечаем и все прошлые уровни — если ребёнок перепрыгнул через уровень, второе окно не нужно
   FRIENDS.forEach(f=>{ if(f.level <= lv && !appState.friendsSeen.includes(f.level)) appState.friendsSeen.push(f.level); });
@@ -3158,11 +3162,11 @@ function renderParentDashboard(){
 
     <details class="dash-details">
       <summary>Приватность и данные</summary>
-      <p>Это демо-прототип: весь прогресс хранится локально в браузере (localStorage), ничего не отправляется на сервер. В реальном приложении:</p>
+      <p>Весь прогресс ребёнка хранится только в этом браузере (localStorage) и никуда не отправляется. Для статистики мы считаем анонимно, сколько раз открывают приложение и проходят уроки (сервис GoatCounter, без cookies и без личных данных). В будущей версии:</p>
       <p>• Данные будут храниться на серверах в РФ (требование 152-ФЗ для пользователей из России)<br>
       • Про ребёнка собираем только никнейм и аватар — без фамилии, даты рождения, фото<br>
       • Родитель сможет удалить аккаунт и все данные прямо из приложения<br>
-      • Без сторонней рекламы и поведенческого трекинга (требование App Store Kids Category и Google Play Families)</p>
+      • Без рекламы и поведенческого трекинга (требование App Store Kids Category и Google Play Families)</p>
     </details>
     <details class="dash-details">
       <summary>Авторы картинок</summary>
@@ -3193,12 +3197,34 @@ function toggleSound(on){
   if(on) soundCorrect();
 }
 
+/* ============================= СТАТИСТИКА ============================= */
+// GoatCounter: считает открытия и события анонимно — без cookies, без имени, почты и прогресса ребёнка.
+// STATS_CODE — имя счётчика на goatcounter.com (например 'englishkids'). Пусто — статистика выключена.
+// На своём компьютере (localhost, файл) не считаем, чтобы проверки не портили цифры.
+const STATS_CODE = 'englishkids';
+const statsOn = !!STATS_CODE && location.protocol === 'https:';
+if(statsOn){
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://gc.zgo.at/count.js';
+  s.dataset.goatcounter = `https://${STATS_CODE}.goatcounter.com/count`;
+  document.head.appendChild(s);
+}
+// Событие: name — что случилось (в отчёте это строка), title — подробность
+function track(name, title){
+  if(!statsOn) return;
+  const send = () => { if(window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: name, title: title || name, event: true }); };
+  if(window.goatcounter && window.goatcounter.count) send(); else setTimeout(send, 3000);
+}
+if(isStandaloneLaunch()) track('запуск из значка');
+function isStandaloneLaunch(){ return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }
+
 /* ============================= УСТАНОВКА НА ТЕЛЕФОН ============================= */
 // Android (Chrome) сам предлагает установку — ловим это событие и показываем кнопку у родителей.
 // На iPhone кнопки установки нет — показываем, где она в Safari.
 let installPrompt = null;
 window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); installPrompt = e; if(screen === 'parentDashboard') render(); });
-window.addEventListener('appinstalled', ()=>{ installPrompt = null; if(screen === 'parentDashboard') render(); });
+window.addEventListener('appinstalled', ()=>{ track('приложение установлено'); installPrompt = null; if(screen === 'parentDashboard') render(); });
 const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 function installCardHtml(){
