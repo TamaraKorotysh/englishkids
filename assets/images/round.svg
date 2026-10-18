@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72"><g transform="translate(10 10)"><svg x="0" y="0" width="52" height="52" viewBox="0 0 72 72" preserveAspectRatio="none" overflow="visible">
+  <g id="color">
+    <circle cx="36" cy="36" r="28" fill="#f1b31c"/>
+  </g>
+  <g id="line">
+    <circle cx="36" cy="36" r="28" fill="none" stroke="#000" stroke-linejoin="round" stroke-width="2"/>
+  </g>
+</svg></g></svg>

@@ -1,0 +1,3185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EnglishKids — учим слова играя</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===== Тема «Сказочный лес»: тёплые цвета, мягкие объёмные формы ===== */
+:root{
+  --bg:#FFF6E6; --paper:#FFFDF8; --card:#FFFDF8;
+  --ink:#3B2A1A; --ink-soft:#7A6248; --muted:#A38B6D; --line:#EFDFC4; --line-dark:#DCC6A2;
+  --leaf:#5DB043; --leaf-dark:#3F8A2A; --leaf-shadow:#3D7F27; --leaf-light:#E4F4D6;
+  --sun:#FFC83D; --sun-shadow:#D99A12;
+  --berry:#EF5F57; --berry-shadow:#C43F38; --berry-light:#FDE3E0;
+  --sky:#4FB3E3; --sky-shadow:#2F8FBF; --sky-light:#E1F3FB;
+  --wood:#B97E4B; --wood-dark:#8A5A32;
+  /* старые имена — ими пользуются экраны питомца, родителей и финала */
+  --primary:var(--leaf); --primary-dark:var(--leaf-dark); --primary-shadow:var(--leaf-shadow);
+  --blue:var(--sky); --blue-shadow:var(--sky-shadow); --red:var(--berry); --red-shadow:var(--berry-shadow);
+  --yellow:var(--sun); --yellow-shadow:var(--sun-shadow); --purple:#B98AE0; --purple-shadow:#9168B8;
+  --gray-text:var(--ink); --gray-muted:var(--muted); --border:var(--line);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{
+  margin:0; font-family:'Nunito','Trebuchet MS',sans-serif; color:var(--ink);
+  background-color:#B5DE98;
+  background-image:radial-gradient(circle at 15% 12%, #E6F6CF 0, transparent 38%), radial-gradient(circle at 85% 90%, #8CC870 0, transparent 45%), linear-gradient(180deg,#CDEBB4,#98CF7E);
+  min-height:100vh; display:flex; align-items:center; justify-content:center; padding:16px;
+}
+.app{
+  width:100%; max-width:440px; height:calc(100vh - 32px); height:calc(100dvh - 32px); max-height:880px;
+  background:var(--bg); border-radius:36px; position:relative; overflow:hidden;
+  display:flex; flex-direction:column;
+  box-shadow:0 30px 60px rgba(40,70,20,.28), 0 0 0 8px rgba(255,255,255,.35);
+}
+@media (max-width:520px){
+  body{padding:0;}
+  .app{max-width:none; height:100vh; height:100dvh; max-height:none; border-radius:0; box-shadow:none;}
+}
+.screen{flex:1; overflow-y:auto; padding:18px 16px 16px; background:var(--bg); position:relative;}
+.screen::-webkit-scrollbar{width:0;}
+.screen-map{padding-top:0;}
+.screen-lesson{display:flex; flex-direction:column; padding:14px 18px 18px;}
+
+/* ===== Кнопки ===== */
+.btn{
+  border:none; border-radius:20px; padding:16px 18px; font-family:inherit; font-size:19px; font-weight:900;
+  cursor:pointer; width:100%; margin-top:10px; position:relative; top:0; overflow:hidden;
+  display:flex; align-items:center; justify-content:center; gap:8px; transition:top .08s, box-shadow .08s;
+}
+.btn:active{top:4px;}
+.btn-primary{background:var(--leaf); color:#fff; box-shadow:0 5px 0 var(--leaf-shadow);}
+.btn-primary:active{box-shadow:0 1px 0 var(--leaf-shadow);}
+.btn-berry{background:var(--berry); color:#fff; box-shadow:0 5px 0 var(--berry-shadow);}
+.btn-berry:active{box-shadow:0 1px 0 var(--berry-shadow);}
+.btn-blue{background:var(--sky); color:#fff; box-shadow:0 5px 0 var(--sky-shadow);}
+.btn-blue:active{box-shadow:0 1px 0 var(--sky-shadow);}
+.btn-outline{background:var(--paper); border:2px solid var(--line); color:var(--ink-soft); box-shadow:0 5px 0 var(--line);}
+.btn-outline:active{box-shadow:0 1px 0 var(--line);}
+.btn-ghost{background:transparent; color:var(--muted); box-shadow:none; font-size:13px; font-weight:800;}
+.btn-ghost:active{top:0;}
+.btn:disabled, .btn.btn-disabled{background:#EADBC2 !important; color:#B8A386 !important; box-shadow:0 5px 0 #D9C6A5 !important; cursor:default;}
+.btn:disabled:active{top:0;}
+.btn.grow{flex:1;}
+.btn-label{position:relative; display:inline-flex; align-items:center; gap:8px;}
+.btn-next .charge{position:absolute; left:0; top:0; bottom:0; width:0; background:rgba(93,176,67,.4);}
+.btn-next.charging .charge{animation:charge 2s linear forwards;}
+@keyframes charge{to{width:100%;}}
+.round-btn{
+  width:48px; height:48px; border-radius:50%; border:none; flex-shrink:0; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; background:transparent; color:var(--muted); position:relative; top:0;
+}
+.round-btn.soft{width:62px; height:62px; background:var(--paper); border:2px solid var(--line); box-shadow:0 5px 0 var(--line); color:var(--ink-soft);}
+.round-btn.soft:active{top:4px; box-shadow:0 1px 0 var(--line);}
+.speak-btn{
+  background:var(--sky); color:#fff; border:none; border-radius:50%; width:76px; height:76px; cursor:pointer; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; box-shadow:0 5px 0 var(--sky-shadow); position:relative; top:0;
+}
+.speak-btn:active{top:4px; box-shadow:0 1px 0 var(--sky-shadow);}
+.speak-btn.small{width:42px; height:42px; box-shadow:0 3px 0 var(--sky-shadow);}
+
+/* ===== Карта: лесная тропа ===== */
+.map-top{
+  position:sticky; top:0; z-index:20; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px;
+  margin:0 -16px 12px; padding:12px 16px; background:rgba(255,246,230,.94); border-bottom:2px solid var(--line);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+}
+.map-top-title{font-size:19px; font-weight:900; color:var(--leaf-dark);}
+.chip{display:flex; align-items:center; gap:5px; background:var(--paper); border:2px solid var(--line); border-radius:100px; padding:3px 12px 3px 5px; font-weight:900; font-size:18px; box-shadow:0 3px 0 var(--line);}
+.glade{position:relative; border-radius:34px; margin-bottom:16px; padding-top:14px; background:linear-gradient(180deg, var(--tint) 0%, transparent 90%);}
+.glade-sign{
+  position:relative; z-index:3; display:flex; align-items:center; gap:10px; margin:0 auto; width:fit-content; max-width:92%;
+  padding:7px 18px 7px 7px; border-radius:18px; color:#FFF6E3;
+  background:linear-gradient(180deg,#C98F58,#B07A47); border:3px solid var(--wood-dark); box-shadow:0 5px 0 #6E4524;
+}
+.sign-pic{width:48px; height:48px; border-radius:14px; background:#FFF6E3; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.sign-title{font-size:19px; font-weight:900; line-height:1.1; text-shadow:0 2px 0 rgba(0,0,0,.18);}
+.sign-meta{display:flex; align-items:center; gap:4px; font-size:13px; font-weight:800; margin-top:2px;}
+.trail{position:relative;}
+.trail-path{position:absolute; left:0; top:0; width:100%; height:100%; z-index:0; overflow:visible;}
+.deco{position:absolute; z-index:1; transform:translate(-50%,-50%); pointer-events:none;}
+.node{position:absolute; z-index:2; width:84px; height:84px; margin:-42px 0 0 -42px;}
+.node-btn{
+  width:84px; height:84px; border-radius:50%; border:none; padding:7px; cursor:pointer; position:relative; top:0;
+  background:conic-gradient(var(--c) var(--p), #EADBC2 0); box-shadow:0 6px 0 rgba(110,69,36,.28); transition:top .08s, box-shadow .08s;
+}
+.node-btn:active{top:4px; box-shadow:0 2px 0 rgba(110,69,36,.28);}
+.node-pic{width:100%; height:100%; border-radius:50%; background:var(--paper); display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:inset 0 -4px 0 rgba(0,0,0,.06);}
+.node.done .node-btn{background:linear-gradient(180deg,#FFD95A,#F2AE1F);}
+.node.locked .node-btn{background:#E6D6BB; cursor:default; box-shadow:0 6px 0 rgba(110,69,36,.14);}
+.node.locked .node-btn:active{top:0;}
+.node.locked .node-pic{background:#F3E9D7;}
+.node.locked .node-pic > *{filter:grayscale(1); opacity:.35;}
+.node.nope .node-btn{animation:shake .35s;}
+.node-badge{position:absolute; right:-6px; bottom:-4px; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--paper); border:2px solid var(--line-dark);}
+.node-badge.ok{background:var(--leaf); border-color:var(--leaf-shadow);}
+.node.current::before{content:''; position:absolute; inset:-12px; border-radius:50%; background:var(--c); animation:halo 1.8s ease-out infinite;}
+.node.current .node-btn{animation:bob 2.2s ease-in-out infinite;}
+.node-stars{position:absolute; top:-22px; left:50%; transform:translateX(-50%); display:flex; gap:0; z-index:3;}
+.node-stars svg:nth-child(2){transform:translateY(-6px);}
+.node-label{
+  position:absolute; top:94px; left:50%; transform:translateX(-50%); width:max-content; max-width:150px; text-align:center;
+  font-size:12px; line-height:1.2; font-weight:800; color:var(--ink-soft); background:rgba(255,253,248,.85); padding:2px 8px; border-radius:10px;
+}
+.node.locked .node-label{color:var(--muted);}
+.node-worm{position:absolute; top:-16px; width:66px; height:72px; z-index:4; pointer-events:none; animation:bob 2.2s ease-in-out .3s infinite;}
+.node-worm.left{right:100px;} .node-worm.right{left:100px;}
+.node-worm svg{width:100%; height:100%; display:block;}
+@keyframes halo{0%{transform:scale(.85); opacity:.35;} 100%{transform:scale(1.3); opacity:0;}}
+@keyframes bob{0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);}}
+
+.bottom-nav{display:flex; gap:6px; background:var(--paper); border-top:3px solid var(--line); padding:6px 10px calc(6px + env(safe-area-inset-bottom));}
+.nav-btn{flex:1; border:none; background:none; padding:6px 4px; display:flex; flex-direction:column; align-items:center; gap:1px; font-family:inherit; font-size:12px; font-weight:900; color:var(--muted); cursor:pointer; border-radius:16px;}
+.nav-btn.active{background:var(--leaf-light); color:var(--leaf-dark);}
+
+/* ===== Урок ===== */
+.lesson-top{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
+.lprogress{flex:1; height:18px; border-radius:100px; background:#EADBC2; overflow:hidden; box-shadow:inset 0 2px 0 rgba(0,0,0,.06);}
+.lprogress-fill{height:100%; min-width:18px; border-radius:100px; background:linear-gradient(180deg,#7CCB55,var(--leaf)); position:relative; transition:width .5s cubic-bezier(.34,1.56,.64,1);}
+.lprogress-fill::after{content:''; position:absolute; top:4px; left:8px; right:8px; height:4px; border-radius:4px; background:rgba(255,255,255,.45);}
+.lesson-pic{width:44px; height:44px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.stage{flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:16px; min-height:0;}
+.stage-actions{display:flex; gap:12px; align-items:center; padding-top:12px;}
+.stage-actions .btn{margin-top:0;}
+.stage-actions.spread{justify-content:space-between;}
+
+.prompt{display:flex; flex-direction:column; align-items:center; gap:8px;}
+.prompt-pic{width:180px; height:180px; border-radius:38px; background:var(--paper); border:3px solid var(--line); box-shadow:0 6px 0 var(--line); display:flex; align-items:center; justify-content:center; animation:pop-in .4s cubic-bezier(.34,1.56,.64,1);}
+.prompt.compact .prompt-pic{width:136px; height:136px; border-radius:32px;}
+.word-ru{font-size:28px; font-weight:900; color:var(--ink); text-align:center; line-height:1.15;}
+.word-ru.small{font-size:19px; color:var(--ink-soft);}
+
+.card-scene{perspective:1200px; width:100%; height:380px; max-height:56vh;}
+.card{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .6s cubic-bezier(.34,1.56,.64,1); cursor:pointer;}
+.card.flipped{transform:rotateY(180deg);}
+.face{position:absolute; inset:0; -webkit-backface-visibility:hidden; backface-visibility:hidden; border-radius:36px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center; padding:16px;}
+.front{background:var(--paper); border:4px solid var(--line); box-shadow:0 8px 0 var(--line);}
+.back{background:linear-gradient(180deg,#F1FAEA,#DDF1CF); border:4px solid #BFE3A8; box-shadow:0 8px 0 #BFE3A8; transform:rotateY(180deg);}
+.word-en{font-size:46px; font-weight:900; color:var(--leaf-dark); line-height:1; word-break:break-word;}
+.ipa{font-size:18px; color:var(--ink-soft); font-weight:700;}
+.tap-hint{position:absolute; right:22px; bottom:20px; color:var(--sun-shadow); animation:tap 1.4s ease-in-out infinite;}
+@keyframes tap{0%,100%{transform:scale(1); opacity:.9;} 50%{transform:scale(.75); opacity:.45;}}
+
+.options{display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%;}
+.opt-btn{font-family:inherit; background:var(--paper); border:3px solid var(--line); border-radius:22px; padding:20px 8px; font-size:22px; font-weight:900; color:var(--ink); cursor:pointer; box-shadow:0 5px 0 var(--line); position:relative; top:0; word-break:break-word;}
+.opt-btn:active{top:3px; box-shadow:0 2px 0 var(--line);}
+.opt-btn.correct{background:var(--leaf-light); border-color:var(--leaf); color:var(--leaf-dark); box-shadow:0 5px 0 var(--leaf);}
+.opt-btn.wrong{background:var(--berry-light); border-color:var(--berry); color:var(--berry-shadow); box-shadow:0 5px 0 var(--berry); animation:shake .3s;}
+
+.slots-row, .letters-row{display:flex; flex-wrap:wrap; gap:8px; justify-content:center;}
+.slot{width:44px; height:54px; border-radius:14px; background:#F3E7D2; border:2px dashed var(--line-dark); display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:900; color:var(--ink);}
+.slot.filled{background:var(--paper); border:2px solid var(--leaf); color:var(--leaf-dark); cursor:pointer; box-shadow:0 3px 0 var(--leaf);}
+.slot.wrong-slot{background:var(--berry-light); border:2px solid var(--berry); color:var(--berry-shadow); box-shadow:0 3px 0 var(--berry); animation:shake .3s;}
+.slot.space-sep{width:14px; border:none; background:transparent;}
+.letter-tile{width:52px; height:56px; border-radius:16px; background:linear-gradient(180deg,#FBE3B5,#F5CF8E); border:2px solid #D9A866; color:var(--ink); font-size:26px; font-weight:900; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 5px 0 #C89255; user-select:none; position:relative; top:0;}
+.letter-tile:active{top:4px; box-shadow:0 1px 0 #C89255;}
+.letter-tile.used{visibility:hidden;}
+.letter-tile.pop-in{animation:pop-in .35s cubic-bezier(.34,1.56,.64,1) both;}
+.many .slots-row{flex-wrap:nowrap; gap:4px; width:100%;}
+.many .slot{flex:1 1 0; min-width:0; max-width:34px; height:46px; font-size:21px; border-radius:11px;}
+.many .slot.space-sep{flex:0 0 8px;}
+.many .letter-tile{width:42px; height:48px; font-size:22px; border-radius:13px;}
+
+.cells-row{display:flex; flex-wrap:wrap; gap:7px; justify-content:center;}
+.cell-input{width:44px; height:54px; padding:0; text-align:center; font-family:inherit; font-size:26px; font-weight:900; border:3px solid var(--line); border-radius:14px; outline:none; background:var(--paper); color:var(--ink); box-shadow:0 4px 0 var(--line); text-transform:lowercase;}
+.cell-input:focus{border-color:var(--sky); background:var(--sky-light);}
+.cell-input.wrong{border-color:var(--berry); background:var(--berry-light); animation:shake .3s;}
+.cell-input.correct{border-color:var(--leaf); background:var(--leaf-light); color:var(--leaf-dark);}
+.cells-row.many{flex-wrap:nowrap; gap:4px; width:100%;}
+.cells-row.many .cell-input{flex:1 1 0; min-width:0; max-width:34px; height:46px; font-size:21px; border-width:2px;}
+.cell-sep{width:12px;}
+.hearts{display:flex; gap:4px; justify-content:center;}
+.listen-wrap{display:flex; flex-direction:column; align-items:center; gap:12px;}
+.listen-btn{width:140px; height:140px; border-radius:50%; border:none; background:var(--sky); color:#fff; box-shadow:0 8px 0 var(--sky-shadow); cursor:pointer; display:flex; align-items:center; justify-content:center; position:relative; top:0;}
+.listen-btn:active{top:5px; box-shadow:0 3px 0 var(--sky-shadow);}
+.listen-btn::before{content:''; position:absolute; inset:-12px; border-radius:50%; border:5px solid var(--sky); animation:halo 1.8s ease-out infinite;}
+.feedback{text-align:center; font-size:16px; font-weight:800; min-height:22px;}
+.feedback.ok{color:var(--leaf-dark);} .feedback.bad{color:var(--berry-shadow);}
+
+/* Панель «Верно / Почти» */
+.sheet-layer{position:absolute; inset:0; z-index:60; display:flex; align-items:flex-end; background:rgba(59,42,26,0); transition:background .25s;}
+.sheet-layer.show{background:rgba(59,42,26,.14);}
+.sheet{width:100%; padding:16px 18px 22px; border-radius:30px 30px 0 0; transform:translateY(105%); transition:transform .35s cubic-bezier(.34,1.3,.64,1);}
+.sheet-layer.show .sheet{transform:none;}
+.sheet.ok{background:#E4F4D6; border-top:4px solid #BFE3A8;}
+.sheet.bad{background:#FDE3E0; border-top:4px solid #F6B9B3;}
+.sheet-row{display:flex; align-items:center; gap:12px;}
+.sheet-worm{width:78px; height:84px; flex-shrink:0;}
+.sheet-worm svg{width:100%; height:100%; display:block;}
+.sheet-title{font-size:26px; font-weight:900;}
+.sheet.ok .sheet-title{color:var(--leaf-dark);} .sheet.bad .sheet-title{color:var(--berry-shadow);}
+.sheet-word{display:flex; align-items:center; gap:10px; font-size:28px; font-weight:900; color:var(--ink); line-height:1.1;}
+.sheet-ru{font-size:15px; font-weight:700; color:var(--ink-soft);}
+
+/* ===== Общие элементы (питомец, родители, финал) ===== */
+.topbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:10px;}
+.stage-title{font-size:16px; font-weight:900; color:var(--ink);}
+.exit-btn{background:none; border:none; font-size:24px; color:var(--muted); cursor:pointer; padding:4px; line-height:1;}
+.emoji{animation:bounce-in .5s cubic-bezier(.34,1.56,.64,1);}
+
+.section-label{font-size:12px; font-weight:900; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin:18px 0 8px;}
+
+.gate-box{text-align:center; padding:20px 0;}
+.gate-q{font-size:34px; font-weight:900; color:var(--sky-shadow); margin:16px 0;}
+.gate-options{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;}
+.gate-opt{font-family:inherit; background:var(--paper); border:2px solid var(--line); border-bottom:5px solid var(--line); border-radius:16px; padding:14px 0; font-size:20px; font-weight:900; color:var(--ink); cursor:pointer;}
+.dash-card{background:var(--paper); border-radius:20px; padding:14px; margin-bottom:12px; border:2px solid var(--line);}
+.dash-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+.dash-row:last-child{margin-bottom:0;}
+.dash-label{font-size:13px; color:var(--muted); font-weight:700;}
+.dash-value{font-size:14px; font-weight:900; color:var(--ink);}
+.topic-bar-row{margin-bottom:10px;}
+.topic-bar-name{font-size:13px; font-weight:800; margin-bottom:4px; display:flex; justify-content:space-between;}
+.topic-bar-track{background:#EFE3CE; border-radius:100px; height:10px; overflow:hidden;}
+.topic-bar-fill{height:100%; background:var(--leaf); border-radius:100px; transition:width .5s;}
+.struggle-word{display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); font-size:14px; font-weight:700;}
+.struggle-word:last-child{border-bottom:none;}
+.setting-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;}
+.setting-label{font-size:14px; font-weight:800; color:var(--ink);}
+select{font-family:inherit; font-size:14px; border-radius:10px; border:2px solid var(--line); padding:6px 10px; font-weight:800; color:var(--ink); background:var(--paper);}
+.day-pills{display:flex; gap:6px; flex-wrap:wrap;}
+.day-pill{width:36px; height:36px; border-radius:50%; background:#F1E6D3; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:900; color:var(--muted); cursor:pointer; border:2px solid transparent;}
+.day-pill.on{background:var(--sky); color:#fff; border-color:var(--sky-shadow);}
+.privacy-note{font-size:12px; color:var(--muted); line-height:1.5; background:#FBF1E0; padding:12px; border-radius:14px; font-weight:700;}
+
+.confetti-piece{position:absolute; top:-10px; border-radius:2px; animation:confetti-fall linear forwards; z-index:50;}
+
+/* ===== Питомец: лесная полянка ===== */
+.screen-pet{padding-top:0;}
+.pet-scene{
+  position:relative; height:300px; border-radius:32px; overflow:hidden; cursor:pointer;
+  background:linear-gradient(180deg,#BFE6FA 0%,#E4F5FC 55%,#FFF6E6 100%);
+  border:3px solid #CFE7C0; box-shadow:0 6px 0 #CFE7C0;
+}
+.pet-sun{position:absolute; right:26px; top:22px; width:46px; height:46px; border-radius:50%; background:#FFD95A; box-shadow:0 0 0 10px rgba(255,217,90,.3);}
+.pet-cloud{position:absolute; height:22px; border-radius:20px; background:#fff; opacity:.9; animation:drift 14s ease-in-out infinite alternate;}
+.pet-cloud::before{content:''; position:absolute; left:22%; top:-12px; width:30px; height:28px; border-radius:50%; background:#fff;}
+@keyframes drift{to{transform:translateX(26px);}}
+.pet-ground{position:absolute; left:-12%; right:-12%; bottom:-70px; height:150px; border-radius:50% 50% 0 0; background:linear-gradient(180deg,#8FD16E,#6DB84E);}
+.pet-scene .deco{z-index:1;}
+.pet-stage{position:absolute; left:50%; bottom:2px; transform:translateX(-50%); width:250px; z-index:2;}
+.pet-svg{width:100%; height:auto; display:block; overflow:visible;}
+.pet-bob{transform-box:fill-box; transform-origin:50% 100%; animation:pet-breathe 3s ease-in-out infinite;}
+.pet-egg .pet-bob{animation:pet-wobble 2.6s ease-in-out infinite;}
+.pet-svg.happy .pet-bob{animation:pet-jump .6s cubic-bezier(.34,1.56,.64,1);}
+.pet-eyes{transform-box:fill-box; transform-origin:center; animation:blink 4.5s infinite;}
+@keyframes pet-breathe{0%,100%{transform:scale(1,1);} 50%{transform:scale(1.03,.97);}}
+@keyframes pet-wobble{0%,60%,100%{transform:rotate(0);} 20%{transform:rotate(-5deg);} 40%{transform:rotate(4deg);}}
+@keyframes pet-jump{0%{transform:translateY(0);} 40%{transform:translateY(-26px) scale(.96,1.05);} 100%{transform:translateY(0);}}
+.pet-sparkle{transform-box:fill-box; transform-origin:center; animation:twinkle 1.8s ease-in-out infinite;}
+.pet-sparkle:nth-of-type(2n){animation-delay:-.9s;}
+@keyframes twinkle{0%,100%{transform:scale(1); opacity:1;} 50%{transform:scale(.6); opacity:.6;}}
+@keyframes blink{0%,93%,100%{transform:scaleY(1);} 96%{transform:scaleY(.1);}}
+.float-heart{position:absolute; z-index:5; pointer-events:none; opacity:0; animation:float-up 1.1s ease-out forwards;}
+@keyframes float-up{0%{transform:translate(-50%,0) scale(.6); opacity:0;} 20%{opacity:1;} 100%{transform:translate(-50%,-90px) scale(1.1); opacity:0;}}
+.pet-info{background:var(--paper); border:2px solid var(--line); border-radius:24px; padding:14px 16px; margin-top:16px; text-align:center; box-shadow:0 4px 0 var(--line);}
+.pet-info .pet-name{font-size:26px; font-weight:900; color:var(--ink); margin:0;}
+.pet-bar{height:16px; border-radius:100px; background:#EADBC2; overflow:hidden; margin:10px 0 8px;}
+.pet-bar-fill{height:100%; min-width:16px; border-radius:100px; background:linear-gradient(180deg,#FFD95A,#F2AE1F); transition:width .5s;}
+.pet-next{display:flex; align-items:center; justify-content:center; gap:5px; font-size:14px; font-weight:800; color:var(--ink-soft);}
+.pet-kind{font-size:13px; font-weight:800; color:var(--muted); margin-top:2px;}
+.pet-hint{font-size:12px; font-weight:700; color:var(--muted); margin-top:4px;}
+.pet-sleep .pet-bob{animation:pet-breathe 4s ease-in-out infinite;}
+.pet-zzz{animation:twinkle 2.4s ease-in-out infinite;}
+.house{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+.friend-card{font-family:inherit; position:relative; display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 4px 10px; border-radius:20px; background:var(--paper); border:2px solid var(--line); box-shadow:0 4px 0 var(--line); cursor:pointer; color:inherit; top:0;}
+button.friend-card:active{top:3px; box-shadow:0 1px 0 var(--line);}
+.friend-card.on{border-color:var(--leaf); background:var(--leaf-light); box-shadow:0 4px 0 var(--leaf);}
+.friend-card.mystery{cursor:default; background:#F6EEDF;}
+.friend-pic{position:relative; width:84px; height:80px;}
+.friend-pic .pet-bob, .friend-pic .pet-eyes, .friend-pic .pet-sparkle, .friend-pic .pet-zzz{animation:none;}
+.mystery .pet-svg{filter:brightness(0); opacity:.16;}
+.friend-q{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding-top:10px; font-size:38px; font-weight:900; color:var(--muted);}
+.friend-name{font-size:13px; font-weight:900; color:var(--ink); text-align:center; line-height:1.15;}
+.friend-sub{font-size:11px; font-weight:800; color:var(--muted); text-align:center; line-height:1.15; display:flex; align-items:center; gap:3px;}
+.friend-card.on .friend-sub{color:var(--leaf-dark);}
+.goal-pill{display:flex; align-items:center; gap:10px; margin:0 0 12px; padding:8px 12px 8px 8px; border-radius:20px; background:#FFF0CC; border:2px solid #FFE08A; box-shadow:0 3px 0 #FFE08A;}
+.goal-pill img{flex-shrink:0;}
+.goal-main{flex:1; min-width:0;}
+.goal-text{font-size:14px; font-weight:900; color:#9A6411; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.goal-bar{height:10px; border-radius:10px; background:#F6DFA8; overflow:hidden; margin-top:5px;}
+.goal-bar-fill{height:100%; min-width:10px; border-radius:10px; background:linear-gradient(180deg,#FFD95A,#F2AE1F); transition:width .5s;}
+.goal-num{display:flex; align-items:center; gap:3px; font-size:14px; font-weight:900; color:#9A6411; flex-shrink:0;}
+.goal-pill.slim{flex-basis:100%; margin:0; padding:3px 10px 3px 4px; gap:8px; border-radius:16px; box-shadow:none;}
+.goal-pill.slim img{width:30px; height:30px;}
+.goal-pill.slim .goal-text{font-size:13px;}
+.goal-pill.slim .goal-bar{height:8px; margin-top:3px;}
+.goal-pill.done{background:var(--leaf-light); border-color:#BFE3A8; box-shadow:0 3px 0 #BFE3A8; animation:pulse-goal 1.6s ease-in-out infinite;}
+.goal-pill.done .goal-text, .goal-pill.done .goal-num{color:var(--leaf-dark);}
+.goal-pill.done .goal-bar-fill{background:var(--leaf);}
+@keyframes pulse-goal{50%{transform:scale(1.025);}}
+.goal-reward{display:flex; align-items:center; gap:6px; font-size:15px; font-weight:800; color:var(--ink); margin-bottom:10px;}
+.goal-input{font-family:inherit; width:100%; font-size:16px; font-weight:800; color:var(--ink); padding:11px 14px; border-radius:14px; border:2px solid var(--line-dark); background:#fff;}
+.goal-input:focus{outline:none; border-color:var(--sky);}
+.pet-bubble{position:absolute; z-index:6; left:50%; top:14px; transform:translateX(-50%); max-width:86%; padding:8px 16px; border-radius:20px; background:#fff; border:3px solid var(--ink); text-align:center; pointer-events:none; animation:bubble-in 3.2s ease forwards;}
+.pet-bubble::after{content:''; position:absolute; left:50%; bottom:-12px; margin-left:-9px; border:9px solid transparent; border-top-color:var(--ink); border-bottom:0;}
+.pet-bubble-en{font-size:22px; font-weight:900; color:var(--ink); line-height:1.15;}
+.pet-bubble-ru{font-size:13px; font-weight:800; color:var(--muted);}
+@keyframes bubble-in{0%{opacity:0; transform:translateX(-50%) scale(.6);} 8%{opacity:1; transform:translateX(-50%) scale(1.05);} 12%,88%{opacity:1; transform:translateX(-50%) scale(1);} 100%{opacity:0; transform:translateX(-50%) scale(1);}}
+.grow-row{display:flex; align-items:flex-end; justify-content:center; gap:4px; margin-top:6px;}
+.grow-old{width:92px; opacity:.55;}
+.grow-new{width:170px;}
+.grow-arrow{padding-bottom:50px; animation:bob 1.6s ease-in-out infinite;}
+.pop-layer{position:absolute; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(59,42,26,.45); animation:fade-in .25s;}
+.pop-card{width:100%; max-width:360px; background:var(--paper); border-radius:30px; padding:20px 20px 18px; text-align:center; border:3px solid #FFE08A; box-shadow:0 8px 0 rgba(110,69,36,.25); animation:bounce-in .5s cubic-bezier(.34,1.56,.64,1);}
+.pop-title{font-size:28px; font-weight:900; color:var(--leaf-dark);}
+.pop-pet{width:190px; margin:4px auto 0;}
+.pop-text{font-size:16px; font-weight:800; color:var(--ink-soft); line-height:1.35; margin-top:6px;}
+.pop-gift{width:110px; height:110px; display:block; margin:0 auto 4px; animation:bob 2.2s ease-in-out infinite;}
+.pop-reward{font-size:24px; font-weight:900; color:#B7791F; margin:6px 0 2px; overflow-wrap:anywhere;}
+.pop-show{display:inline-block; margin-top:10px; padding:6px 14px; border-radius:100px; background:var(--berry-light); color:var(--berry-shadow); font-size:17px; font-weight:900;}
+@keyframes fade-in{from{opacity:0;}}
+.pet-steps{display:flex; justify-content:center; align-items:center; gap:6px; margin-top:10px;}
+.pet-steps span{width:10px; height:10px; border-radius:6px; background:#EADBC2;}
+.pet-steps span.on{background:var(--leaf);}
+.pet-steps span.cur{width:24px;}
+.wardrobe{display:grid; grid-template-columns:repeat(3,1fr); gap:10px;}
+.ward{
+  font-family:inherit; position:relative; top:0; background:var(--paper); border:3px solid var(--line); border-radius:20px;
+  padding:10px 4px 8px; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; box-shadow:0 4px 0 var(--line);
+}
+.ward:active{top:3px; box-shadow:0 1px 0 var(--line);}
+.ward.worn{border-color:var(--leaf); background:var(--leaf-light); box-shadow:0 4px 0 var(--leaf);}
+.ward.locked > svg:first-child{filter:grayscale(1); opacity:.35;}
+.ward-name, .ward-req{font-size:12px; font-weight:900; color:var(--ink-soft); display:flex; align-items:center; gap:3px;}
+.ward.worn .ward-name{color:var(--leaf-dark);}
+.ward-lock{position:absolute; top:5px; right:5px;}
+.ward.nope{animation:shake .35s;}
+.badges{display:grid; grid-template-columns:repeat(4,1fr); gap:14px 6px; padding-bottom:6px;}
+.badge{display:flex; flex-direction:column; align-items:center; gap:5px;}
+.badge-ring{width:64px; height:64px; border-radius:50%; padding:5px; background:conic-gradient(var(--c) var(--p), #EADBC2 0); box-shadow:0 4px 0 rgba(110,69,36,.18);}
+.badge.done .badge-ring{background:linear-gradient(180deg,#FFD95A,#F2AE1F);}
+.badge-pic{width:100%; height:100%; border-radius:50%; background:var(--paper); display:flex; align-items:center; justify-content:center;}
+.badge.empty .badge-pic > *{filter:grayscale(1); opacity:.4;}
+.badge-name{font-size:11px; font-weight:800; color:var(--ink-soft); text-align:center; line-height:1.15; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+
+/* ===== Финал урока ===== */
+.screen-sessionEnd{display:flex; flex-direction:column; padding-top:20px;}
+.end-wrap{flex:1;}
+.end-hero{
+  text-align:center; padding:16px 16px 20px; border-radius:32px;
+  background:radial-gradient(circle at 50% 22%, #FFF1C2 0, transparent 58%), linear-gradient(180deg,#E4F4D6,#FFF6E6);
+  border:3px solid #CFE7C0; box-shadow:0 6px 0 #CFE7C0;
+}
+.end-stars{display:flex; justify-content:center; align-items:flex-end; gap:2px; height:92px;}
+.end-star{display:inline-block; transform:scale(0); animation:star-pop .55s cubic-bezier(.34,1.56,.64,1) forwards;}
+.end-star:nth-child(1) svg{transform:rotate(-14deg) translateY(4px);}
+.end-star:nth-child(3) svg{transform:rotate(14deg) translateY(4px);}
+@keyframes star-pop{0%{transform:scale(0) rotate(-40deg);} 100%{transform:scale(1) rotate(0);}}
+.end-worm{width:104px; height:112px; margin:4px auto 0; animation:bob 2.2s ease-in-out infinite;}
+.end-worm svg{width:100%; height:100%; display:block;}
+.end-title{font-size:30px; font-weight:900; color:var(--leaf-dark); margin:6px 0 2px;}
+.end-sub{font-size:15px; font-weight:800; color:var(--ink-soft);}
+.end-chip{
+  display:inline-flex; align-items:center; gap:6px; margin-top:12px; padding:8px 18px; border-radius:100px;
+  background:var(--paper); border:2px solid var(--line); font-size:18px; font-weight:900; color:var(--ink-soft);
+  animation:bounce-in .5s cubic-bezier(.34,1.56,.64,1) 1.3s both;
+}
+.end-chip.gain{color:#B7791F; background:#FFF0CC; border-color:#FFE08A; font-size:24px;}
+.unlock-card{display:flex; align-items:center; gap:12px; margin-top:14px; padding:10px 14px; border-radius:22px; background:#FFF0CC; border:2px solid #FFE08A; animation:bounce-in .5s cubic-bezier(.34,1.56,.64,1) 1.6s both;}
+.unlock-pic{width:58px; height:58px; border-radius:50%; background:var(--paper); display:flex; align-items:center; justify-content:center; border:4px solid var(--c); flex-shrink:0;}
+.unlock-title{font-size:17px; font-weight:900; color:#B7791F;}
+.unlock-sub{font-size:13px; font-weight:800; color:var(--ink-soft);}
+.word-chips{display:flex; flex-wrap:wrap; justify-content:center; gap:8px;}
+.word-chip{
+  font-family:inherit; position:relative; top:0; min-width:74px; background:var(--paper); border:2px solid var(--line); border-radius:18px;
+  padding:8px 10px 6px; display:flex; flex-direction:column; align-items:center; gap:2px; font-size:15px; font-weight:900; color:var(--leaf-dark);
+  cursor:pointer; box-shadow:0 3px 0 var(--line);
+}
+.word-chip:active{top:2px; box-shadow:0 1px 0 var(--line);}
+.end-actions{padding-top:10px;}
+
+/* ===== Родителям ===== */
+.screen-parentGate, .screen-parentDashboard{padding-top:12px;}
+.parent-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
+.parent-title{font-size:20px; font-weight:900; color:var(--ink);}
+.gate-card{background:var(--paper); border:3px solid var(--line); border-radius:30px; padding:26px 18px 20px; text-align:center; box-shadow:0 6px 0 var(--line); margin-top:28px;}
+.gate-card.nope{animation:shake .35s;}
+.gate-text{font-size:15px; font-weight:700; color:var(--ink-soft); line-height:1.45; margin:10px 0 0;}
+.gate-opt{box-shadow:0 4px 0 var(--line); border-bottom-width:2px; position:relative; top:0;}
+.gate-opt:active{top:3px; box-shadow:0 1px 0 var(--line);}
+.stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:4px;}
+.stat{background:var(--paper); border:2px solid var(--line); border-radius:20px; padding:12px; display:flex; align-items:center; gap:10px; box-shadow:0 3px 0 var(--line);}
+.stat-icon{width:40px; height:40px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.stat-val{font-size:22px; font-weight:900; color:var(--ink); line-height:1.1;}
+.stat-val small{font-size:13px; color:var(--muted);}
+.stat-label{font-size:12px; font-weight:800; color:var(--muted);}
+.topic-row{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+.topic-row:last-child{margin-bottom:0;}
+.topic-pic{width:34px; height:34px; flex-shrink:0; display:flex; align-items:center; justify-content:center;}
+.topic-main{flex:1; min-width:0;}
+.struggle-word{gap:10px; justify-content:flex-start;}
+.sw-text{flex:1; min-width:0;}
+.sw-en{font-weight:900; color:var(--ink); font-size:15px;}
+.sw-ru{font-size:12px; color:var(--muted); font-weight:700;}
+.sw-stars{display:flex;}
+.dash-empty{color:var(--muted); font-size:13px; font-weight:700; margin:0;}
+.setting-row.stack{flex-direction:column; align-items:flex-start; gap:8px;}
+.seg{display:flex; flex-wrap:wrap; background:#F1E6D3; border-radius:14px; padding:3px; gap:3px;}
+.seg button{font-family:inherit; border:none; background:transparent; border-radius:11px; padding:8px 11px; font-size:13px; font-weight:900; color:var(--ink-soft); cursor:pointer;}
+.seg button.on{background:var(--paper); color:var(--leaf-dark); box-shadow:0 2px 0 var(--line-dark);}
+.day-pill{font-family:inherit; border:2px solid transparent;}
+.switch{position:relative; width:54px; height:32px; flex-shrink:0;}
+.switch input{position:absolute; opacity:0; width:0; height:0;}
+.switch span{position:absolute; inset:0; border-radius:32px; background:#E2D3B8; transition:background .2s; cursor:pointer;}
+.switch span::before{content:''; position:absolute; width:26px; height:26px; left:3px; top:3px; border-radius:50%; background:#fff; box-shadow:0 2px 3px rgba(0,0,0,.2); transition:transform .2s;}
+.switch input:checked + span{background:var(--leaf);}
+.switch input:checked + span::before{transform:translateX(22px);}
+.switch input:focus-visible + span{outline:3px solid var(--sky); outline-offset:2px;}
+.dash-details{background:var(--paper); border:2px solid var(--line); border-radius:18px; padding:12px 14px; margin-top:10px; font-size:13px; color:var(--ink-soft); line-height:1.5; font-weight:700;}
+.dash-details summary{font-weight:900; color:var(--ink); cursor:pointer; font-size:14px;}
+.dash-details p{margin:8px 0 0;}
+.dash-details a{color:var(--sky-shadow);}
+
+/* ===== Грамматические станции ===== */
+.node.station .node-btn{border-radius:28px; background:linear-gradient(180deg,#C98F58,#B07A47);}
+.node.station.done .node-btn{background:linear-gradient(180deg,#FFD95A,#F2AE1F);}
+.node.station.locked .node-btn{background:#E6D6BB;}
+.node.station .node-pic{border-radius:22px; background:#FFF6E3;}
+.node-tag{position:absolute; top:-30px; left:50%; transform:translateX(-50%); z-index:3; font-size:11px; font-weight:900; letter-spacing:.4px; text-transform:uppercase; color:#FFF6E3; background:var(--wood-dark); padding:2px 9px; border-radius:8px; white-space:nowrap;}
+.node.station .node-stars{top:-50px;}
+.station-pic{display:inline-flex; align-items:center; justify-content:center;}
+.station-pic .scene{flex-wrap:nowrap; gap:0;}
+
+.hl{color:var(--berry-shadow); background:var(--berry-light); border-radius:6px; padding:0 2px;}
+.hl-a{color:var(--sky-shadow); background:var(--sky-light); border-radius:6px; padding:0 3px;}
+.task-label{font-size:15px; font-weight:900; color:var(--ink-soft); text-align:center;}
+.retry-tag{display:flex; align-items:center; gap:5px; justify-content:center; margin:0 auto 4px; width:fit-content; font-size:12px; font-weight:900; color:#B7791F; background:#FFF0CC; border:2px solid #FFE08A; padding:2px 10px; border-radius:100px;}
+.phrase{font-size:28px; font-weight:900; color:var(--ink); line-height:1.25; text-align:center;}
+.phrase-btn{font-family:inherit; display:flex; align-items:center; gap:12px; background:var(--paper); border:3px solid var(--line); border-radius:22px; padding:12px 18px; cursor:pointer; box-shadow:0 4px 0 var(--line); color:var(--sky); position:relative; top:0; max-width:100%;}
+.phrase-btn:active{top:3px; box-shadow:0 1px 0 var(--line);}
+.phrase-btn .phrase{font-size:26px; text-align:left;}
+.scene{display:inline-flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:4px;}
+.scene-item{display:inline-flex; animation:pop-in .35s cubic-bezier(.34,1.56,.64,1) both;}
+.scene-card{min-height:150px; width:100%; max-width:320px; display:flex; align-items:center; justify-content:center; padding:14px; border-radius:30px; background:var(--paper); border:3px solid var(--line); box-shadow:0 5px 0 var(--line);}
+.scene-opts{display:flex; flex-direction:column; gap:10px; width:100%;}
+.scene-opt{font-family:inherit; min-height:72px; display:flex; align-items:center; justify-content:center; padding:10px; border-radius:22px; background:var(--paper); border:3px solid var(--line); box-shadow:0 4px 0 var(--line); cursor:pointer; position:relative; top:0;}
+.scene-opt:active{top:3px; box-shadow:0 1px 0 var(--line);}
+.scene-opt.correct, .yn-btn.correct{background:var(--leaf-light); border-color:var(--leaf); box-shadow:0 4px 0 var(--leaf);}
+.scene-opt.wrong, .yn-btn.wrong{background:var(--berry-light); border-color:var(--berry); box-shadow:0 4px 0 var(--berry); animation:shake .3s;}
+.gap{display:inline-block; min-width:90px; padding:0 10px; border-bottom:4px dashed var(--line-dark); color:var(--muted);}
+.gap.ok{color:var(--leaf-dark); border-bottom:4px solid var(--leaf);}
+.gap.bad{color:var(--berry-shadow); border-bottom:4px solid var(--berry);}
+.options.three{grid-template-columns:1fr 1fr 1fr;}
+.yn{display:flex; gap:16px; justify-content:center; width:100%;}
+.yn-btn{font-family:inherit; flex:1; max-width:150px; height:96px; border-radius:26px; border:3px solid transparent; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; font-size:16px; font-weight:900; color:#fff; position:relative; top:0;}
+.yn-btn.yes{background:var(--leaf); box-shadow:0 5px 0 var(--leaf-shadow);}
+.yn-btn.no{background:var(--berry); box-shadow:0 5px 0 var(--berry-shadow);}
+.yn-btn:active{top:4px;}
+.yn-btn.correct, .yn-btn.wrong{color:var(--ink);}
+.yn-btn.correct svg path, .yn-btn.wrong svg path{stroke:var(--ink);}
+.ru-prompt{font-size:30px; font-weight:900; color:var(--ink); text-align:center;}
+.ru-hint{font-size:15px; font-weight:800; color:var(--muted); text-align:center;}
+.build-line{min-height:66px; width:100%; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; padding:8px; border-bottom:3px solid var(--line-dark);}
+.build-line.ok{border-bottom-color:var(--leaf);} .build-line.bad{border-bottom-color:var(--berry);}
+.build-hint{font-size:14px; font-weight:700; color:var(--muted);}
+.build-bank, .fix-words{display:flex; flex-wrap:wrap; gap:10px; justify-content:center;}
+.wblock{font-family:inherit; font-size:22px; font-weight:900; color:var(--ink); padding:10px 16px; border-radius:16px; cursor:pointer; background:linear-gradient(180deg,#FBE3B5,#F5CF8E); border:2px solid #D9A866; box-shadow:0 5px 0 #C89255; position:relative; top:0;}
+.wblock:active{top:4px; box-shadow:0 1px 0 #C89255;}
+.wblock.used{visibility:hidden;}
+.wblock.in-line{background:var(--paper); border-color:var(--line-dark); box-shadow:0 4px 0 var(--line-dark);}
+.wblock.plain{background:var(--paper); border:3px solid var(--line); box-shadow:0 5px 0 var(--line); font-size:28px; padding:12px 22px;}
+.wblock.correct{background:var(--leaf-light); border-color:var(--leaf); box-shadow:0 5px 0 var(--leaf);}
+.wblock.wrong{background:var(--berry-light); border-color:var(--berry); box-shadow:0 5px 0 var(--berry); animation:shake .3s;}
+.type-line{display:flex; align-items:center; gap:10px; justify-content:center;}
+.gram-input{width:150px; font-family:inherit; font-size:28px; font-weight:900; text-align:center; color:var(--ink); padding:8px 10px; border-radius:16px; border:3px solid var(--line); background:var(--paper); box-shadow:0 4px 0 var(--line); outline:none;}
+.gram-input:focus{border-color:var(--sky); background:var(--sky-light);}
+.gram-input.correct{border-color:var(--leaf); background:var(--leaf-light); color:var(--leaf-dark);}
+.gram-input.wrong{border-color:var(--berry); background:var(--berry-light); color:var(--berry-shadow); animation:shake .3s;}
+
+.rule-stage{justify-content:flex-start;}
+.rule-card{width:100%; background:var(--paper); border:3px solid var(--line); border-radius:30px; padding:16px; box-shadow:0 6px 0 var(--line);}
+.rule-head{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+.rule-worm{width:56px; height:60px; flex-shrink:0;}
+.rule-worm svg{width:100%; height:100%; display:block;}
+.rule-title{font-size:24px; font-weight:900; color:var(--leaf-dark);}
+.rule-text{font-size:17px; font-weight:700; color:var(--ink); line-height:1.45;}
+.rule-body{display:flex; flex-direction:column; gap:8px; margin-top:12px;}
+.rule-note{font-size:14px; font-weight:700; color:var(--ink-soft); background:#FFF0CC; border-radius:14px; padding:8px 12px; line-height:1.4;}
+.ex-row{font-family:inherit; display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:18px; background:#FBF4E6; border:2px solid var(--line); cursor:pointer; text-align:left; color:var(--sky);}
+.ex-scene{width:120px; display:flex; justify-content:center; flex-shrink:0;}
+.ex-text{flex:1; display:flex; flex-direction:column;}
+.ex-en{font-size:22px; font-weight:900; color:var(--ink);}
+.ex-ru{font-size:13px; font-weight:700; color:var(--muted);}
+.num-grid{display:grid; grid-template-columns:repeat(5,1fr); gap:6px;}
+.num-tile{font-family:inherit; display:flex; flex-direction:column; align-items:center; gap:2px; padding:10px 2px; border-radius:16px; background:#FBF4E6; border:2px solid var(--line); box-shadow:0 3px 0 var(--line); cursor:pointer; position:relative; top:0;}
+.num-tile:active{top:2px; box-shadow:0 1px 0 var(--line);}
+.num-digit{font-size:30px; font-weight:900; color:var(--sky-shadow); line-height:1;}
+.num-word{font-size:14px; font-weight:900; color:var(--ink);}
+.tricky{display:flex; align-items:center; gap:6px; padding:8px; border-radius:18px; background:#FBF4E6; border:2px solid var(--line);}
+.tricky-side{flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; font-size:17px; font-weight:900; color:var(--ink); text-align:center;}
+.tricky-arrow{color:var(--muted); flex-shrink:0;}
+.story-frame{width:100%; display:flex; flex-direction:column; align-items:center; gap:12px; animation:bounce-in .4s cubic-bezier(.34,1.56,.64,1);}
+.story-ru{font-size:15px; font-weight:800; color:var(--muted);}
+.story-dots{display:flex; gap:6px;}
+.story-dots span{width:10px; height:10px; border-radius:6px; background:#EADBC2;}
+.story-dots span.on{background:var(--leaf);}
+.phrase-chip span:last-child{font-size:14px; color:var(--ink);}
+
+/* ===== Блок «Ферма»: станция звуков, хитрецы ===== */
+.node-tag.sound{background:var(--sky-shadow);}
+.station-pic{gap:1px;}
+.sheet-note{margin-top:6px; display:block; line-height:1.4; font-size:14px; font-weight:700; color:var(--ink); background:rgba(255,255,255,.65); border-radius:12px; padding:5px 9px;}
+.sheet-note svg{vertical-align:-3px; margin-right:2px;}
+.tricky-line{display:flex; align-items:center; gap:5px; font-size:16px; font-weight:800; color:var(--ink-soft); background:#FFF0CC; border:2px solid #FFE08A; border-radius:12px; padding:3px 10px;}
+.ph-ee{color:#2E8B3A; background:#DDF3D3; border-radius:6px; padding:0 2px;}
+.ph-i{color:#7A4BC2; background:#EEE3FA; border-radius:6px; padding:0 2px;}
+.ru-tricks{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+.ru-trick{background:#FBF4E6; border:2px solid var(--line); border-radius:16px; padding:8px 10px; font-size:15px; font-weight:700; color:var(--ink); line-height:1.5;}
+.ru-trick-title{font-size:12px; font-weight:900; color:var(--muted); text-transform:uppercase; letter-spacing:.3px; line-height:1.2; margin-bottom:4px;}
+.morph{font-family:inherit; display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px; border-radius:22px; background:#FBF4E6; border:3px dashed var(--line-dark); cursor:pointer;}
+.morph-pic{min-height:48px; display:flex; align-items:center;}
+.morph-word{font-size:44px; font-weight:900; color:var(--ink); letter-spacing:1px;}
+.mx .to{display:none;}
+.morph.done .mx .from{display:none;}
+.morph.done .mx .to{display:inline; color:var(--berry-shadow); background:var(--berry-light); border-radius:8px; padding:0 3px; animation:bounce-in .4s cubic-bezier(.34,1.56,.64,1);}
+.morph-hint{font-size:13px; font-weight:800; color:var(--muted);}
+.mouth-row{display:flex; align-items:center; gap:14px; justify-content:center;}
+.mouth{width:110px; height:74px;}
+.dur-wrap{display:flex; flex-direction:column; align-items:center; gap:3px;}
+.dur{display:block; width:90px; height:12px; border-radius:10px; background:#EADBC2; overflow:hidden;}
+.dur span{display:block; height:100%; border-radius:10px;}
+.dur.short span{width:30%; background:#7A4BC2;}
+.dur.long span{width:100%; background:#2E8B3A;}
+.dur-label{font-size:12px; font-weight:900; color:var(--muted);}
+.pair-cards{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.pair-card{font-family:inherit; display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 6px; border-radius:20px; background:#FBF4E6; border:2px solid var(--line); box-shadow:0 3px 0 var(--line); cursor:pointer; position:relative; top:0;}
+.pair-card:active{top:2px; box-shadow:0 1px 0 var(--line);}
+.pair-word{font-size:28px; font-weight:900; color:var(--ink);}
+.pic-opts{display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%;}
+.pic-opt, .sound-opt{font-family:inherit; min-height:130px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; border-radius:26px; background:var(--paper); border:3px solid var(--line); box-shadow:0 5px 0 var(--line); cursor:pointer; position:relative; top:0;}
+.pic-opt:active, .sound-opt:active{top:3px; box-shadow:0 2px 0 var(--line);}
+.sound-opts{display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%;}
+.sound-opt{min-height:96px; font-size:34px;}
+.pic-opt.correct, .sound-opt.correct{background:var(--leaf-light); border-color:var(--leaf); box-shadow:0 5px 0 var(--leaf);}
+.pic-opt.wrong, .sound-opt.wrong{background:var(--berry-light); border-color:var(--berry); box-shadow:0 5px 0 var(--berry); animation:shake .3s;}
+.phrase.spell{font-size:40px; letter-spacing:1px;}
+.phrase.spell .gap{min-width:56px;}
+.twister{width:100%; text-align:center; background:var(--paper); border:3px solid var(--line); border-radius:24px; padding:12px; box-shadow:0 4px 0 var(--line);}
+.twister .phrase{font-size:23px;}
+.twister-btns{display:flex; gap:8px; justify-content:center; margin-top:8px;}
+.seg-btn{font-family:inherit; display:inline-flex; align-items:center; gap:5px; border:none; border-radius:14px; padding:8px 12px; background:var(--sky-light); color:var(--sky-shadow); font-size:14px; font-weight:900; cursor:pointer;}
+.record-row{width:100%;}
+.record-row .btn{margin-top:8px;}
+.btn[hidden]{display:none;}
+.btn.rec{background:var(--berry); box-shadow:0 5px 0 var(--berry-shadow); animation:pulse-rec 1s ease-in-out infinite;}
+@keyframes pulse-rec{50%{opacity:.75;}}
+.check-note{margin-top:10px; font-size:13px; font-weight:800; border-radius:12px; padding:8px 10px; display:flex; align-items:center; gap:6px;}
+.check-note.ok{color:var(--leaf-dark); background:var(--leaf-light);}
+.check-note.ok svg path{stroke:var(--leaf-dark);}
+.check-note.bad{color:var(--berry-shadow); background:var(--berry-light);}
+
+/* ===== Курс на 1400 слов ===== */
+.level-banner{margin:18px 0 16px; padding:16px 14px; border-radius:28px; text-align:center; color:#fff; box-shadow:0 6px 0 rgba(0,0,0,.15);}
+.level-banner.lv1{background:linear-gradient(160deg,#7CCB55,#3F8A2A);}
+.level-banner.lv2{background:linear-gradient(160deg,#3F8A6B,#1E5631);}
+.level-banner.lv3{background:linear-gradient(160deg,#6C8EBF,#3B4F7A);}
+.level-num{font-size:13px; font-weight:900; text-transform:uppercase; letter-spacing:1px; opacity:.85;}
+.level-title{font-size:26px; font-weight:900; line-height:1.15;}
+.level-sub{font-size:13px; font-weight:800; opacity:.9;}
+.nopic{display:inline-flex; align-items:center; justify-content:center;}
+.map-fab{position:absolute; right:14px; bottom:calc(92px + env(safe-area-inset-bottom)); z-index:30; display:flex; flex-direction:column; gap:10px;}
+.fab{width:54px; height:54px; border-radius:50%; border:2px solid var(--line); background:var(--paper); box-shadow:0 4px 0 var(--line); display:flex; align-items:center; justify-content:center; color:var(--leaf-dark); cursor:pointer; position:relative; top:0; transition:opacity .2s, transform .2s;}
+.fab:active{top:3px; box-shadow:0 1px 0 var(--line);}
+.fab.hidden{opacity:0; pointer-events:none; transform:scale(.7);}
+#fabUp svg{transform:rotate(-90deg);}
+.fab-worm svg{width:40px; height:44px;}
+.example-card{display:block; max-width:300px; margin:0 auto; padding:14px 18px; border-radius:22px; font-family:inherit; font-size:21px; font-weight:800; line-height:1.35; text-align:center; color:var(--ink);}
+.example-card.ru{background:#FFF0CC; border:2px solid #FFE08A;}
+.example-card.en{display:flex; align-items:center; gap:10px; text-align:left; background:var(--sky-light); border:2px solid #B9E2F5; color:var(--ink); cursor:pointer;}
+.example-card.en svg{color:var(--sky-shadow); flex-shrink:0;}
+.example-card .hl{color:var(--berry-shadow);}
+.ex-quote{color:var(--sun-shadow); font-weight:900;}
+.back .example-card{font-size:18px; padding:10px 14px;}
+.phrase.sentence{font-size:24px; line-height:1.5;}
+.phrase.sentence .gap{min-width:70px;}
+.gram-input.inline{display:inline-block; font-size:22px; padding:2px 6px; margin:0 4px; min-width:3ch; vertical-align:baseline;}
+.options.stack{grid-template-columns:1fr;}
+.options.stack .opt-btn{font-size:18px; padding:14px 10px;}
+.ru-prompt.long{font-size:22px;}
+.wblock.small{font-size:20px; padding:10px 14px;}
+.sound-tag{font-size:13px; font-weight:900; color:var(--muted); text-align:center;}
+.sound-opt b{font-size:34px;}
+
+@keyframes confetti-fall{to{transform:translateY(900px) rotate(540deg); opacity:0;}}
+@keyframes shake{0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);}}
+@keyframes pop-in{0%{transform:scale(0) rotate(-12deg);} 100%{transform:scale(1) rotate(0);}}
+@keyframes bounce-in{0%{transform:scale(0);} 100%{transform:scale(1);}}
+@media (prefers-reduced-motion: reduce){
+  *, *::before{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<!-- Данные курса: слова и уроки, станции правил, станции звуков -->
+<script src="data/course.js"></script>
+<script src="data/grammar.js"></script>
+<script src="data/sounds.js"></script>
+<script src="data/examples.js"></script>
+<script>
+// Картинка слова: SVG из OpenMoji (assets/images/<id>.svg); нет файла — эмодзи; нет эмодзи — плашка «Aa»
+function wImg(w, px){
+  if(!w) return '';
+  if(!w.emoji) return `<span class="nopic" style="width:${px}px; height:${px}px;">${icon('abc', Math.round(px*0.8))}</span>`;
+  return `<img src="assets/images/${w.id}.svg" alt="${w.en}" width="${px}" height="${px}" loading="lazy" style="object-fit:contain" onerror="this.outerHTML='<span style=&quot;font-size:${Math.round(px*0.8)}px&quot;>${w.emoji}</span>'">`;
+}
+
+/* ============================= ДАННЫЕ КУРСА ============================= */
+// Курс лежит в data/course.js: LEVEL → UNIT (тема на тропе) → LESSON (урок) → слова, STATION — место станции.
+// Станции правил описаны в data/grammar.js, станции звуков — в data/sounds.js.
+// Станция «Один и много» (plural) собрана в движке вручную.
+const PLURAL_SPEC = { title:'Один и много', explains:['a', 'how', 'many'] };
+const LEVELS = [], SECTIONS = [], STATIONS = [];
+(function parseCourse(){
+  let level = null, section = null, lesson = null;
+  const parts = s => s.split('|').map(x=>x.trim());
+  window.COURSE_TEXT.split('\n').forEach(raw=>{
+    const line = raw.trim();
+    if(!line) return;
+    if(line.startsWith('LEVEL ')){ const [num, title, subtitle] = parts(line.slice(6)); level = { num:+num, title, subtitle }; LEVELS.push(level); return; }
+    if(line.startsWith('UNIT ')){ const [id, title, color] = parts(line.slice(5)); section = { id, title, color, level:level.num, lessons:[] }; SECTIONS.push(section); return; }
+    if(line.startsWith('LESSON ')){ const [id, title] = parts(line.slice(7)); lesson = { id, title, words:[] }; section.lessons.push(lesson); return; }
+    if(line.startsWith('STATION ')){
+      const [head, explicitId] = parts(line.slice(8));
+      const [type, topic] = head.split(/\s+/);
+      const spec = topic === 'plural' ? PLURAL_SPEC : (type === 'grammar' ? window.GRAMMAR : window.SOUNDS)[topic];
+      if(!spec){ console.warn('Нет описания станции', topic); return; }
+      const st = { id: explicitId || `${type === 'grammar' ? 'gr' : 'snd'}_${topic}`, type, topic, spec, title: spec.title };
+      STATIONS.push(st);
+      section.lessons.push({ id: st.id, kind:'station', title: st.title, words:[], station: st });
+      return;
+    }
+    const [en, ru, ipa, emoji, pos, id] = parts(line);
+    lesson.words.push({ en, ru, ipa, emoji: emoji === '-' ? '' : emoji, pos, id });
+  });
+})();
+
+/* ============================= КОНСТАНТЫ ============================= */
+const UNLOCK_THRESHOLD = 0.7;
+const FLIP_MIN_DELAY_MS = 2000;
+
+function maxStarsForLesson(lesson){ return lesson.kind === 'station' ? 3 : lesson.words.length * 3; }
+function maxStarsForSection(section){ return section.lessons.reduce((a,l)=>a+maxStarsForLesson(l),0); }
+const MAX_TOTAL_STARS = SECTIONS.reduce((sum,s)=> sum + maxStarsForSection(s), 0);
+
+// Друзья: на каждом уровне свой, растёт от звёзд своего уровня (рисуется в petSvg).
+// Пороги стадий — доли от всех звёзд уровня: у цыплёнка это примерно 30, 90, 200, 400, 700, 1100.
+const FRIEND_STEPS = [0, .02, .06, .14, .28, .48, .76];
+const FRIENDS = [
+  { level:1, species:'chick', title:'Цыплёнок', names:['Яйцо', 'Птенчик', 'Цыплёнок', 'Пушистик', 'Умник', 'Чемпион', 'Король слов'] },
+  { level:2, species:'fox',   title:'Лисёнок',  names:['Клубочек', 'Лисёнок', 'Рыжик', 'Пушистый хвост', 'Хитрый умник', 'Чемпион', 'Король леса'] },
+  { level:3, species:'eagle', title:'Орлёнок',  names:['Яйцо в гнезде', 'Орлёнок', 'Пёрышко', 'Смелое крыло', 'Зоркий глаз', 'Чемпион', 'Король гор'] },
+];
+// head — головные уборы: одновременно надет только один
+const ACCESSORIES = [
+  {id:'bow',     req:25,  name:'Бантик'},
+  {id:'glasses', req:75,  name:'Очки'},
+  {id:'hat',     req:150, name:'Шляпа', head:true},
+  {id:'crown',   req:300, name:'Корона', head:true},
+  {id:'medal',   req:500, name:'Медаль'},
+  {id:'trophy',  req:800, name:'Кубок'},
+];
+
+/* ============================= STATE ============================= */
+const STORAGE_KEY = 'engAppStateV4';
+function defaultState(){
+  return {
+    progress: {},
+    streak: { count:0, lastDateStr:null, freezeAvailable:true },
+    settings: { timeLimit:30, reminderDays:['Пн','Ср','Пт'], voice:'US', soundOn:true },
+    petOff: [], // аксессуары, которые ребёнок снял с питомца (остальные открытые надеты)
+    friendsSeen: [], // уровни, чьих друзей уже показали в окне «Новый друг!»
+    petShow: null,   // какого друга из «Лесного домика» показывать на полянке (null — текущего)
+    goal: null,      // цель от родителей: {start, target, text, done}
+    friendStages: null, // {уровень: стадия}, которую ребёнок уже видел — чтобы поздравить, когда друг подрастёт
+    simDayOffset: 0,
+  };
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return Object.assign(defaultState(), JSON.parse(raw));
+  }catch(e){}
+  return defaultState();
+}
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(appState)); }
+let appState = loadState();
+
+// Локальная дата (а не UTC), иначе в Москве день «переключается» в 3 часа ночи
+function localDateStr(d){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function todayStr(){
+  const d = new Date();
+  d.setDate(d.getDate() + appState.simDayOffset);
+  return localDateStr(d);
+}
+function daysBetween(a, b){
+  const [y1,m1,d1] = a.split('-').map(Number), [y2,m2,d2] = b.split('-').map(Number);
+  return Math.round((Date.UTC(y2,m2-1,d2) - Date.UTC(y1,m1-1,d1)) / 86400000);
+}
+// Стрик для показа: если ребёнок пропустил дни (и заморозка не спасает), показываем 0
+function currentStreak(){
+  const s = appState.streak;
+  if(!s.lastDateStr) return 0;
+  const gap = daysBetween(s.lastDateStr, todayStr());
+  if(gap <= 1) return s.count;
+  if(gap === 2 && s.freezeAvailable) return s.count;
+  return 0;
+}
+function markActiveToday(){
+  const today = todayStr();
+  if(appState.streak.lastDateStr === today) return;
+  const prev = appState.streak.lastDateStr;
+  if(prev){
+    const diffDays = daysBetween(prev, today);
+    if(diffDays === 1){ appState.streak.count++; }
+    else if(diffDays > 1){
+      if(appState.streak.freezeAvailable && diffDays === 2){
+        appState.streak.freezeAvailable = false;
+        appState.streak.count++;
+      } else {
+        appState.streak.count = 1;
+        appState.streak.freezeAvailable = true;
+      }
+    }
+  } else {
+    appState.streak.count = 1;
+  }
+  appState.streak.lastDateStr = today;
+  saveState();
+}
+function simulateNextDay(){
+  appState.simDayOffset++;
+  saveState();
+  render();
+}
+
+function totalStarsEarned(){
+  return Object.values(appState.progress).reduce((a,b)=>a+b,0);
+}
+// Звёзды станции хранятся под ключом g_<id> (0–3), звёзды слов — под id слова
+function lessonStars(lesson){
+  if(lesson.kind === 'station') return appState.progress['g_' + lesson.id] || 0;
+  return lesson.words.reduce((sum,w)=> sum + (appState.progress[w.id]||0), 0);
+}
+function sectionStars(section){
+  return section.lessons.reduce((sum,l)=> sum + lessonStars(l), 0);
+}
+const FLAT_LESSONS = [];
+SECTIONS.forEach(s => s.lessons.forEach(l => FLAT_LESSONS.push({section:s, lesson:l})));
+function flatLessons(){ return FLAT_LESSONS; }
+// realOnly — по настоящему прогрессу, без демо-режима «Открыть все уроки»
+function isLessonUnlocked(flatIdx, realOnly){
+  if(flatIdx === 0 || (!realOnly && appState.settings.unlockAll)) return true;
+  const flat = flatLessons();
+  // Уже начатый урок не закрываем — например, если станцию добавили перед ним позже
+  if(lessonStars(flat[flatIdx].lesson) > 0) return true;
+  const prev = flat[flatIdx-1].lesson;
+  if(prev.kind === 'station') return lessonStars(prev) >= 2;
+  return lessonStars(prev) >= maxStarsForLesson(prev) * UNLOCK_THRESHOLD;
+}
+// Самый дальний урок, открытый настоящим прогрессом (без демо-режима)
+function frontierIdx(){
+  let i = 0;
+  while(i + 1 < FLAT_LESSONS.length && isLessonUnlocked(i + 1, true)) i++;
+  return i;
+}
+function levelStars(num){ return SECTIONS.filter(s=>s.level === num).reduce((a, s)=>a + sectionStars(s), 0); }
+function levelMaxStars(num){ return SECTIONS.filter(s=>s.level === num).reduce((a, s)=>a + maxStarsForSection(s), 0); }
+// Уровень, до которого ребёнок дошёл: его друг сейчас растёт
+function currentLevel(){ return FLAT_LESSONS[frontierIdx()].section.level; }
+function friendInfo(friend){
+  const max = levelMaxStars(friend.level);
+  const stars = levelStars(friend.level);
+  const mins = FRIEND_STEPS.map(p=>Math.round(p * max));
+  let idx = 0;
+  mins.forEach((m, i)=>{ if(stars >= m) idx = i; });
+  const next = idx + 1 < mins.length ? { min: mins[idx + 1], name: friend.names[idx + 1] } : null;
+  return { friend, idx, name: friend.names[idx], min: mins[idx], next, stars, met: friend.level <= currentLevel() };
+}
+
+/* ============================= ЗВУКИ ============================= */
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+// Браузеры создают AudioContext «на паузе» до первого касания — будим его
+['pointerdown','keydown'].forEach(ev => document.addEventListener(ev, ()=>{
+  if(audioContext.state === 'suspended') audioContext.resume();
+}, {passive:true}));
+function playTone(freq, duration, type='sine'){
+  if(!appState.settings.soundOn) return;
+  const osc = audioContext.createOscillator();
+  const gain = audioContext.createGain();
+  osc.connect(gain);
+  gain.connect(audioContext.destination);
+  osc.frequency.value = freq;
+  osc.type = type;
+  gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+  osc.start();
+  osc.stop(audioContext.currentTime + duration);
+}
+function soundCorrect(){ playTone(523, 0.1); setTimeout(()=>playTone(659, 0.15), 80); }
+function soundWrong(){ playTone(200, 0.3, 'sawtooth'); }
+function soundClick(){ playTone(800, 0.05); }
+function soundCelebrate(){ 
+  [523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f, 0.12), i*80));
+}
+function vibrate(ms){ if(navigator.vibrate) navigator.vibrate(ms); }
+
+/* ============================= ОЗВУЧКА ============================= */
+let voices = [];
+function loadVoicesList(){ voices = window.speechSynthesis ? speechSynthesis.getVoices() : []; }
+if('speechSynthesis' in window){ loadVoicesList(); speechSynthesis.onvoiceschanged = loadVoicesList; }
+// Озвучка: сначала готовый файл assets/audio/<us|uk>/<id>.mp3 (нейросетевой голос),
+// если файла нет — голос браузера. Отсутствующие файлы запоминаем, чтобы не ждать их снова.
+const WORD_ID_BY_EN = {};
+SECTIONS.forEach(s=>s.lessons.forEach(l=>l.words.forEach(w=>{ WORD_ID_BY_EN[w.en.toLowerCase()] = w.id; })));
+const missingAudio = new Set();
+let currentAudio = null;
+function stopAllSpeech(){
+  if(currentAudio){ currentAudio.pause(); currentAudio = null; }
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+}
+function speak(text){
+  stopAllSpeech();
+  const id = WORD_ID_BY_EN[text.toLowerCase()];
+  const src = id && `assets/audio/${appState.settings.voice === 'UK' ? 'uk' : 'us'}/${id}.mp3`;
+  if(!src || missingAudio.has(src)){ speakWithBrowser(text); return; }
+  const audio = new Audio(src);
+  currentAudio = audio;
+  const fallback = ()=>{
+    missingAudio.add(src);
+    if(currentAudio === audio){ currentAudio = null; speakWithBrowser(text); }
+  };
+  audio.onerror = fallback;
+  audio.play().catch(err=>{ if(err.name !== 'AbortError') fallback(); });
+}
+function speakSlow(text){ stopAllSpeech(); speakWithBrowser(text, 0.55); }
+function speakWithBrowser(text, rate = 0.85){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = appState.settings.voice === 'UK' ? 'en-GB' : 'en-US';
+  u.rate = rate;
+  const v = voices.find(v=>v.lang && v.lang.startsWith('en') && (appState.settings.voice==='UK' ? v.lang.includes('GB') : v.lang.includes('US')));
+  if(v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+
+/* ============================= УТИЛИТЫ ============================= */
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function isLetter(ch){ return /[a-zA-Z]/.test(ch); }
+
+/* ============================= ИКОНКИ ============================= */
+// Свои SVG-иконки в той же манере, что и картинки OpenMoji (заливка + тёмный контур),
+// чтобы интерфейс не смешивал разные стили эмодзи.
+const INK = '#2B2118';
+const STAR_PATH = 'M36 7l8.6 17.5 19.3 2.8-14 13.6 3.3 19.2L36 51l-17.2 9.1 3.3-19.2-14-13.6 19.3-2.8z';
+const HEART_PATH = 'M36 60S10 44 10 26a13 13 0 0126-4 13 13 0 0126 4c0 18-26 34-26 34z';
+const ICONS = {
+  star: `<path d="${STAR_PATH}" fill="#FCD535" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/>`,
+  starEmpty: `<path d="${STAR_PATH}" fill="#EADBC2" stroke="#CDB894" stroke-width="3.5" stroke-linejoin="round"/>`,
+  heart: `<path d="${HEART_PATH}" fill="#EF5F57" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/>`,
+  heartEmpty: `<path d="${HEART_PATH}" fill="#EADBC2" stroke="#CDB894" stroke-width="3.5" stroke-linejoin="round"/>`,
+  flame: `<path d="M36 64c-12 0-20-8-20-19 0-10 7-15 9-24 5 4 7 9 7 13 3-4 4-10 3-18 11 6 21 17 21 30 0 11-8 18-20 18z" fill="#F4A13A" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><path d="M36 62c-6 0-10-4-10-9 0-5 4-8 6-12 3 3 4 5 4 8 2-2 3-4 3-6 4 3 7 6 7 11 0 5-4 8-10 8z" fill="#FCD535"/>`,
+  lock: `<path d="M25 32v-7a11 11 0 0122 0v7" fill="none" stroke="${INK}" stroke-width="4.5"/><rect x="16" y="31" width="40" height="30" rx="8" fill="#F1B31C" stroke="${INK}" stroke-width="4"/><circle cx="36" cy="46" r="4.5" fill="${INK}"/>`,
+  check: `<path d="M18 37l12 12 24-26" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>`,
+  speaker: `<path d="M10 28h12l16-13v42L22 44H10z" fill="currentColor" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M47 26a14 14 0 010 20M55 18a25 25 0 010 36" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>`,
+  close: `<path d="M20 20l32 32M52 20L20 52" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>`,
+  arrow: `<path d="M14 36h40M38 20l16 16-16 16" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`,
+  backspace: `<path d="M27 17h29a6 6 0 016 6v26a6 6 0 01-6 6H27L9 36z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M34 28l16 16M50 28L34 44" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>`,
+  reset: `<path d="M19 38a17 17 0 1 0 5-14" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M15 12v14h14" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`,
+  bulb: `<path d="M36 9a18 18 0 00-10 33c2 2 3 4 3 7h14c0-3 1-5 3-7A18 18 0 0036 9z" fill="#FCD535" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><path d="M29 56h14M31 63h10" stroke="${INK}" stroke-width="3.5" stroke-linecap="round"/>`,
+  tap: `<circle cx="36" cy="36" r="11" fill="currentColor"/><circle cx="36" cy="36" r="24" fill="none" stroke="currentColor" stroke-width="4" opacity=".5"/>`,
+  map: `<path d="M9 18l17-6 20 6 17-6v42l-17 6-20-6-17 6z" fill="#A8D672" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><path d="M26 12v42M46 18v42" stroke="${INK}" stroke-width="3"/><path d="M15 40c6-3 10 4 16 0s9-12 17-8 8 4 9 3" fill="none" stroke="#EF5F57" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="1 6"/>`,
+  egg: `<path d="M36 8c12 0 22 18 22 32s-10 24-22 24-22-10-22-24S24 8 36 8z" fill="#FFF3D6" stroke="${INK}" stroke-width="3.5"/><circle cx="29" cy="32" r="4" fill="#F4C76A"/><circle cx="43" cy="44" r="5" fill="#F4C76A"/><circle cx="31" cy="50" r="3" fill="#F4C76A"/>`,
+  parents: `<circle cx="27" cy="22" r="9" fill="#F2C49B" stroke="${INK}" stroke-width="3.5"/><path d="M12 60c0-12 6-21 15-21s15 9 15 21z" fill="#4FB3E3" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><circle cx="50" cy="34" r="7" fill="#F2C49B" stroke="${INK}" stroke-width="3.5"/><path d="M39 60c0-9 5-15 11-15s11 6 11 15z" fill="#EF5F57" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/>`,
+};
+function icon(name, size){
+  return `<svg viewBox="0 0 72 72" width="${size}" height="${size}" aria-hidden="true" focusable="false">${ICONS[name]}</svg>`;
+}
+function starsRow(n, size){ return [0,1,2].map(i=>icon(i<n?'star':'starEmpty', size)).join(''); }
+function heartsRow(n){ return [0,1,2].map(i=>icon(i<n?'heart':'heartEmpty', 28)).join(''); }
+
+/* ============================= НАВИГАЦИЯ ============================= */
+let screen = 'map';
+let session = null;
+let lastRenderedScreen = null;
+
+function render(){
+  const app = document.getElementById('app');
+  let bodyHtml = '';
+  if(screen === 'map') bodyHtml = renderMap();
+  else if(screen === 'pet') bodyHtml = renderPet();
+  else if(screen === 'parentGate') bodyHtml = renderParentGate();
+  else if(screen === 'parentDashboard') bodyHtml = renderParentDashboard();
+  else if(screen === 'lesson') bodyHtml = renderLessonScreen();
+  else if(screen === 'sessionEnd') bodyHtml = renderSessionEnd();
+
+  const prevEl = app.querySelector('.screen');
+  const keepScroll = prevEl && lastRenderedScreen === screen && screen !== 'map' && screen !== 'lesson' ? prevEl.scrollTop : 0;
+  // Тропа: уходя с неё, запоминаем место; вернувшись из «Питомца» или «Родителям» — возвращаемся туда же.
+  // К червячку прокручиваем только при первом открытии и после урока.
+  if(prevEl && lastRenderedScreen === 'map') mapScroll = prevEl.scrollTop;
+  mapRestore = screen === 'map' && mapScroll !== null && ['map', 'pet', 'parentGate', 'parentDashboard'].includes(lastRenderedScreen) ? mapScroll : null;
+  const showNav = (screen==='map' || screen==='pet');
+  app.innerHTML = `<div class="screen screen-${screen}">${bodyHtml}</div>` + (screen === 'map' ? renderMapButtons() : '') + (showNav ? renderBottomNav() : '') + popupHtml();
+  if(keepScroll) app.querySelector('.screen').scrollTop = keepScroll;
+  lastRenderedScreen = screen;
+  afterRender();
+}
+function renderBottomNav(){
+  return `
+    <div class="bottom-nav">
+      <button class="nav-btn ${screen==='map'?'active':''}" onclick="goTo('map')">${icon('map',34)}Тропа</button>
+      <button class="nav-btn ${screen==='pet'?'active':''}" onclick="goTo('pet')">${icon('egg',34)}Друг</button>
+      <button class="nav-btn" onclick="goTo('parentGate')">${icon('parents',34)}Родителям</button>
+    </div>
+  `;
+}
+function goTo(s){ screen = s; render(); }
+
+/* ---- Быстрые кнопки на тропе: наверх и к текущему уроку ---- */
+let mapScroll = null, mapRestore = null;
+function renderMapButtons(){
+  return `
+    <div class="map-fab">
+      <button class="fab hidden" id="fabUp" onclick="mapScrollTo('top')" aria-label="Наверх">${icon('arrow',28)}</button>
+      <button class="fab fab-worm" id="fabWorm" onclick="mapScrollTo('current')" aria-label="К текущему уроку">${wormSvg('wait')}</button>
+    </div>`;
+}
+function currentNodeTop(scroller){
+  const cur = document.querySelector('.node.current');
+  if(!cur) return null;
+  return scroller.scrollTop + cur.getBoundingClientRect().top - scroller.getBoundingClientRect().top - scroller.clientHeight/2;
+}
+function mapScrollTo(where){
+  const scroller = document.querySelector('.screen-map');
+  if(!scroller) return;
+  soundClick();
+  const top = where === 'top' ? 0 : currentNodeTop(scroller);
+  if(top !== null) scroller.scrollTo({ top, behavior:'smooth' });
+}
+function updateMapButtons(){
+  const scroller = document.querySelector('.screen-map');
+  const up = document.getElementById('fabUp'), worm = document.getElementById('fabWorm');
+  if(!scroller || !up) return;
+  up.classList.toggle('hidden', scroller.scrollTop < 500);
+  // Кнопка «к червячку» нужна, только если текущий урок далеко от экрана
+  const target = currentNodeTop(scroller);
+  worm.classList.toggle('hidden', target === null || Math.abs(target - scroller.scrollTop) < scroller.clientHeight * 0.6);
+}
+
+function wormSvg(mood){
+  const ink = '#3a2a20';
+  // Глаза внутри очков
+  const eyes = {
+    wait:      `<circle cx="50" cy="44" r="3.5" fill="${ink}"/><circle cx="74" cy="44" r="3.5" fill="${ink}"/>`,
+    happy:     `<path d="M45 45 Q50 39 55 45" stroke="${ink}" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M69 45 Q74 39 79 45" stroke="${ink}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`,
+    sad:       `<circle cx="50" cy="46" r="3.2" fill="${ink}"/><circle cx="74" cy="46" r="3.2" fill="${ink}"/><path d="M42 38 L54 41" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/><path d="M82 38 L70 41" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/>`,
+    celebrate: `<path d="M45 45 Q50 39 55 45" stroke="${ink}" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M69 45 Q74 39 79 45" stroke="${ink}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`
+  };
+  const mouths = {
+    wait:      `<path d="M55 58 Q62 62 69 58" stroke="${ink}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`,
+    happy:     `<path d="M52 56 Q62 68 72 56" stroke="${ink}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`,
+    sad:       `<path d="M55 64 Q62 58 69 64" stroke="${ink}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`,
+    celebrate: `<ellipse cx="62" cy="60" rx="6" ry="5" fill="#c0392b"/>`
+  };
+  // Книга: в обычном состоянии у живота, при празднике поднята вверх
+  const book = mood === 'celebrate'
+    ? `<g transform="translate(96 40) rotate(-18)"><rect x="-15" y="-11" width="30" height="22" rx="2" fill="#e74c3c"/><rect x="-12" y="-8" width="24" height="16" fill="#fff"/><line x1="-8" y1="-3" x2="8" y2="-3" stroke="#e74c3c" stroke-width="1.5"/><line x1="-8" y1="2" x2="6" y2="2" stroke="#e74c3c" stroke-width="1.5"/></g>`
+    : `<g transform="translate(88 100) rotate(12)"><rect x="-16" y="-11" width="32" height="22" rx="2" fill="#e74c3c"/><rect x="-13" y="-8" width="26" height="16" fill="#fff"/><line x1="-9" y1="-3" x2="9" y2="-3" stroke="#e74c3c" stroke-width="1.5"/><line x1="-9" y1="2" x2="7" y2="2" stroke="#e74c3c" stroke-width="1.5"/></g>`;
+  const sparkles = mood === 'celebrate'
+    ? `<polygon points="14,20 16,25 21,25 17,28 19,33 14,30 9,33 11,28 7,25 12,25" fill="#ffc800"/><polygon points="106,70 107.5,73.5 111,73.5 108,75.5 109,79 106,77 103,79 104,75.5 101,73.5 104.5,73.5" fill="#ffc800"/>`
+    : '';
+  return `<svg viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg">
+    <!-- тело из сегментов -->
+    <circle cx="28" cy="120" r="7" fill="#6cbf4a"/>
+    <circle cx="40" cy="110" r="10" fill="#6cbf4a"/>
+    <circle cx="54" cy="98" r="13" fill="#6cbf4a"/>
+    <circle cx="66" cy="84" r="15" fill="#6cbf4a"/>
+    <!-- полоски сегментов -->
+    <path d="M36 104 Q38 110 44 112" stroke="#4f9a33" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M50 92 Q52 98 58 100" stroke="#4f9a33" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M62 76 Q64 82 70 84" stroke="#4f9a33" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <!-- блики -->
+    <circle cx="60" cy="78" r="3" fill="#b5e6a0" opacity=".8"/>
+    <!-- голова -->
+    <circle cx="62" cy="46" r="28" fill="#7fd05a"/>
+    <circle cx="54" cy="34" r="7" fill="#b5e6a0" opacity=".6"/>
+    <!-- щёчки -->
+    <circle cx="42" cy="56" r="4" fill="#ff6b8b" opacity=".45"/>
+    <circle cx="82" cy="56" r="4" fill="#ff6b8b" opacity=".45"/>
+    <!-- очки -->
+    <circle cx="50" cy="44" r="9" fill="#fff" fill-opacity=".35" stroke="${ink}" stroke-width="2.6"/>
+    <circle cx="74" cy="44" r="9" fill="#fff" fill-opacity=".35" stroke="${ink}" stroke-width="2.6"/>
+    <line x1="59" y1="44" x2="65" y2="44" stroke="${ink}" stroke-width="2.6"/>
+    <line x1="41" y1="43" x2="36" y2="40" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/>
+    <line x1="83" y1="43" x2="88" y2="40" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/>
+    ${eyes[mood] || eyes.wait}
+    ${mouths[mood] || mouths.wait}
+    ${book}
+    ${sparkles}
+  </svg>`;
+}
+/* ============================= КАРТА: лесная тропа ============================= */
+const NODE_SPACING = 142;       // расстояние между уроками по вертикали, px
+const TRAIL_TOP = 84;           // отступ первого урока от таблички темы
+const TRAIL_X = [50, 76, 50, 24]; // тропинка петляет: центр → вправо → центр → влево
+// Лесные украшения по краям тропы (картинки OpenMoji из assets/images)
+const DECOR = ['nature_3_tree','nature_3_flower','fruits_veg_5_mushroom','nature_3_tree','animals_8_butterfly',
+               'nature_3_grass','animals_8_ladybug','nature_3_tree','animals_8_snail','seasons_1_fall'];
+
+function lessonStarCount(lesson){
+  if(lesson.kind === 'station') return lessonStars(lesson);
+  const r = lessonStars(lesson) / maxStarsForLesson(lesson);
+  return r >= 1 ? 3 : r >= UNLOCK_THRESHOLD ? 2 : r > 0 ? 1 : 0;
+}
+function trailPathD(points, height){
+  // Плавная кривая через все уроки; координата x в процентах (viewBox шириной 100)
+  let d = `M50 0 C50 ${points[0].y/2} ${points[0].x} ${points[0].y/2} ${points[0].x} ${points[0].y}`;
+  for(let i=1; i<points.length; i++){
+    const a = points[i-1], b = points[i], mid = (a.y + b.y) / 2;
+    d += ` C${a.x} ${mid} ${b.x} ${mid} ${b.x} ${b.y}`;
+  }
+  const last = points[points.length-1];
+  d += ` C${last.x} ${(last.y+height)/2} 50 ${(last.y+height)/2} 50 ${height}`;
+  return d;
+}
+function nodeLocked(btn){
+  soundClick();
+  const node = btn.closest('.node');
+  node.classList.remove('nope'); void node.offsetWidth; node.classList.add('nope');
+}
+
+function sectionPicWord(section){
+  for(const l of section.lessons) for(const w of l.words) if(w.emoji) return w;
+  return section.lessons[0].words[0];
+}
+// Табличка уровня на тропе
+function levelBanner(num){
+  const lv = LEVELS.find(l=>l.num === num);
+  const words = SECTIONS.filter(s=>s.level === num).reduce((a, s)=>a + s.lessons.reduce((b, l)=>b + l.words.length, 0), 0);
+  return `<div class="level-banner lv${num}">
+      <div class="level-num">Уровень ${num}</div>
+      <div class="level-title">${lv.title}</div>
+      <div class="level-sub">${lv.subtitle} · ${words} слов</div>
+    </div>`;
+}
+
+function renderMap(){
+  const total = totalStarsEarned();
+  const flat = flatLessons();
+  // Текущий урок — самый дальний открытый: возле него сидит червячок
+  let currentIdx = 0;
+  while(currentIdx + 1 < flat.length && isLessonUnlocked(currentIdx + 1, true)) currentIdx++;
+  if(lessonStarCount(flat[currentIdx].lesson) === 3) currentIdx = -1;
+
+  let flatCursor = 0;
+  const sectionsHtml = SECTIONS.map((section, si)=>{
+    const sStars = sectionStars(section);
+    const sMax = maxStarsForSection(section);
+    const points = section.lessons.map((_, li)=>({ x: TRAIL_X[li % TRAIL_X.length], y: TRAIL_TOP + li*NODE_SPACING }));
+    const height = TRAIL_TOP + (section.lessons.length - 1) * NODE_SPACING + 96;
+
+    const nodesHtml = section.lessons.map((lesson, li)=>{
+      const idx = flatCursor++;
+      const {x, y} = points[li];
+      const unlocked = isLessonUnlocked(idx);
+      const starCount = lessonStarCount(lesson);
+      const pct = Math.round(lessonStars(lesson) / maxStarsForLesson(lesson) * 100);
+      const state = !unlocked ? 'locked' : starCount === 3 ? 'done' : 'open';
+      const isCurrent = idx === currentIdx;
+      return `
+        <div class="node ${state} ${isCurrent?'current':''} ${lesson.kind==='station'?'station':''}" style="left:${x}%; top:${y}px; --c:${section.color}; --p:${pct}%;">
+          ${lesson.kind==='station' ? `<div class="node-tag ${lesson.station.type}">${lesson.station.type === 'sound' ? 'звуки' : 'правило'}</div>` : ''}
+          <button class="node-btn" onclick="${unlocked ? `openLesson('${lesson.id}')` : 'nodeLocked(this)'}" aria-label="${lesson.title}">
+            <span class="node-pic">${lessonPicHtml(lesson, 46)}</span>
+            ${state==='locked' ? `<span class="node-badge">${icon('lock',22)}</span>` : ''}
+            ${state==='done' ? `<span class="node-badge ok">${icon('check',20)}</span>` : ''}
+          </button>
+          ${unlocked && starCount > 0 ? `<div class="node-stars">${starsRow(starCount, 24)}</div>` : ''}
+          <div class="node-label">${lesson.title}</div>
+          ${isCurrent ? `<div class="node-worm ${x > 50 ? 'left' : 'right'}">${wormSvg('wait')}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    // Украшения ставим на противоположную от урока сторону тропы
+    const decoHtml = points.map((p, li)=>{
+      const seed = si*7 + li*3;
+      const side = p.x > 50 ? 15 : p.x < 50 ? 85 : (seed % 2 ? 12 : 88);
+      const size = 38 + (seed % 3) * 8;
+      const id = DECOR[seed % DECOR.length];
+      return `<img class="deco" src="assets/images/${id}.svg" alt="" style="left:${side}%; top:${p.y + 14}px; width:${size}px; height:${size}px;" onerror="this.remove()">`;
+    }).join('');
+
+    return `
+      ${si === 0 || SECTIONS[si-1].level !== section.level ? levelBanner(section.level) : ''}
+      <section class="glade" style="--tint:${section.color}24;">
+        <div class="glade-sign">
+          <div class="sign-pic">${wImg(sectionPicWord(section), 40)}</div>
+          <div>
+            <div class="sign-title">${section.title}</div>
+            <div class="sign-meta">${icon('star',16)} ${sStars} / ${sMax}</div>
+          </div>
+        </div>
+        <div class="trail" style="height:${height}px;">
+          <svg class="trail-path" viewBox="0 0 100 ${height}" preserveAspectRatio="none" aria-hidden="true">
+            <path d="${trailPathD(points, height)}" fill="none" stroke="#E9D3AA" stroke-width="30" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+            <path d="${trailPathD(points, height)}" fill="none" stroke="#F8ECD4" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 14" vector-effect="non-scaling-stroke"/>
+          </svg>
+          ${decoHtml}
+          ${nodesHtml}
+        </div>
+      </section>`;
+  }).join('');
+
+  return `
+    <div class="map-top">
+      <div class="chip">${icon('flame',28)} ${currentStreak()}</div>
+      <div class="map-top-title">Лесная тропа</div>
+      <div class="chip">${icon('star',28)} ${total}</div>
+      ${goalPillHtml(true)}
+    </div>
+    ${sectionsHtml}
+    <button class="btn btn-ghost" onclick="simulateNextDay()">(демо) Симулировать новый день</button>
+  `;
+}
+
+/* ============================= LESSON SESSION ============================= */
+function openLesson(lessonId){
+  soundClick();
+  vibrate(10);
+  let found = null, foundSection = null;
+  for(const s of SECTIONS){
+    const l = s.lessons.find(l=>l.id===lessonId);
+    if(l){ found = l; foundSection = s; break; }
+  }
+  if(found.kind === 'station'){
+    session = { kind:'station', sectionId:foundSection.id, lessonId, steps: buildStationSteps(found.station), stepIdx:0 };
+    screen = 'lesson';
+    render();
+    return;
+  }
+  session = {
+    sectionId: foundSection.id,
+    lessonId: lessonId,
+    stages: ['flashcard','recognition','assembly','typing','dictation'],
+    stageIdx: 0,
+    wordIdx: 0,
+    words: found.words,
+    results: {},
+  };
+  found.words.forEach(w => session.results[w.id] = {rec:false, asm:false, typ:false, dic:false});
+  screen = 'lesson';
+  render();
+}
+
+function renderLessonScreen(){
+  if(session.kind === 'station') return renderGrammarScreen();
+  const section = SECTIONS.find(s=>s.id===session.sectionId);
+  const lesson = section.lessons.find(l=>l.id===session.lessonId);
+  const stageKey = session.stages[session.stageIdx];
+  const totalSteps = session.stages.length * session.words.length;
+  const doneSteps = session.stageIdx * session.words.length + session.wordIdx;
+  const pct = Math.round(doneSteps/totalSteps*100);
+
+  let inner = '';
+  if(stageKey === 'flashcard') inner = renderFlashcard();
+  else if(stageKey === 'recognition') inner = renderRecognition();
+  else if(stageKey === 'assembly') inner = renderAssembly();
+  else if(stageKey === 'typing') inner = renderTyping(false);
+  else if(stageKey === 'dictation') inner = renderTyping(true);
+
+  return `
+    <div class="lesson-top">
+      <button class="round-btn" onclick="exitLesson()" aria-label="Выйти из урока">${icon('close',26)}</button>
+      <div class="lprogress"><div class="lprogress-fill" style="width:${pct}%"></div></div>
+      <div class="lesson-pic">${wImg(lesson.words[0], 38)}</div>
+    </div>
+    ${inner}
+  `;
+}
+// Картинка урока: у обычного — первое слово, у станции — маленькая сцена по её теме
+function lessonPicHtml(lesson, px){
+  if(lesson.kind === 'station') return `<span class="station-pic">${stationPicWords(lesson.station).map(w=>wImg(w, Math.round(px*0.5))).join('')}</span>`;
+  return wImg(lesson.words.find(w=>w.emoji) || lesson.words[0], px);
+}
+function exitLesson(){
+  const isGrammar = session.kind === 'station';
+  if(confirm(isGrammar ? 'Выйти со станции? Звёзды начисляются, только когда пройдёшь её до конца.' : 'Выйти из урока? Заработанные звёзды сохранятся.')){
+    if(flashcardTimerId){ clearTimeout(flashcardTimerId); flashcardTimerId = null; }
+    const gained = isGrammar ? 0 : applySessionResults();
+    if(gained > 0){ markActiveToday(); }
+    saveState();
+    screen = 'map'; session = null; render();
+  }
+}
+function currentWord(){ return session.words[session.wordIdx]; }
+
+// Слова без картинки показываем примером-предложением из data/examples.js (*слово* — подсветка):
+// на лицевой стороне и в заданиях — русский пример (чтобы не подсказать ответ), на обороте — английский с озвучкой
+function exampleOf(w){ return (window.EXAMPLES || {})[w.en.toLowerCase()]; }
+const exampleHtml = s => esc(s).replace(/\*([^*]+)\*/g, '<b class="hl">$1</b>');
+const examplePlain = s => s.replace(/\*/g, '');
+function wordVisual(w, px, side){
+  const ex = !w.emoji && exampleOf(w);
+  if(!ex) return wImg(w, px);
+  if(side === 'en') return `<button class="example-card en" onclick="event.stopPropagation(); speak(${jsq(examplePlain(ex[0]))})" aria-label="Послушать пример">${icon('speaker',22)}<span>${exampleHtml(ex[0])}</span></button>`;
+  return `<div class="example-card ru"><span class="ex-quote">«</span>${exampleHtml(ex[1])}<span class="ex-quote">»</span></div>`;
+}
+
+// Крупная картинка задания (или пример) + русское слово
+function promptHtml(w, compact){
+  if(!w.emoji && exampleOf(w)) return `
+    <div class="prompt">
+      ${wordVisual(w, 0, 'ru')}
+      <div class="word-ru">${w.ru}</div>
+    </div>`;
+  return `
+    <div class="prompt ${compact ? 'compact' : ''}">
+      <div class="prompt-pic">${wImg(w, compact ? 104 : 140)}</div>
+      <div class="word-ru">${w.ru}</div>
+    </div>`;
+}
+
+/* ---- Панель «Верно / Почти» вместо автоматического перехода ---- */
+const PRAISE = ['Верно!', 'Отлично!', 'Молодец!', 'Супер!', 'Ура!'];
+function showFeedback(ok, w){
+  const app = document.getElementById('app');
+  const layer = document.createElement('div');
+  layer.className = 'sheet-layer';
+  layer.innerHTML = `
+    <div class="sheet ${ok ? 'ok' : 'bad'}" role="dialog" aria-live="polite">
+      <div class="sheet-row">
+        <div class="sheet-worm">${wormSvg(ok ? 'happy' : 'sad')}</div>
+        <div>
+          <div class="sheet-title">${ok ? PRAISE[Math.floor(Math.random()*PRAISE.length)] : 'Почти!'}</div>
+          <div class="sheet-word">${w.en}
+            <button class="speak-btn small" onclick="speak(${jsq(w.en)})" aria-label="Послушать">${icon('speaker',22)}</button>
+          </div>
+          <div class="sheet-ru">${w.ru}</div>
+          ${w.note ? `<div class="sheet-note">${w.note}</div>` : ''}
+        </div>
+      </div>
+      <button class="btn ${ok ? 'btn-primary' : 'btn-berry'}" onclick="nextInStage()">
+        <span class="btn-label">Дальше ${icon('arrow',22)}</span>
+      </button>
+    </div>`;
+  app.appendChild(layer);
+  requestAnimationFrame(()=>layer.classList.add('show'));
+  // Enter на клавиатуре сразу ведёт дальше
+  setTimeout(()=>{ const b = layer.querySelector('.btn'); if(b) b.focus(); }, 50);
+}
+
+/* ---- FLASHCARD ---- */
+let flashcardFlippedOnce = false;
+let flashcardTimerId = null;
+function renderFlashcard(){
+  flashcardFlippedOnce = false;
+  if(flashcardTimerId){ clearTimeout(flashcardTimerId); flashcardTimerId = null; }
+  const w = currentWord();
+  return `
+    <div class="stage">
+      <div class="card-scene">
+        <div class="card" id="flipCard" onclick="flipCard()">
+          <div class="face front">
+            <div class="emoji">${wordVisual(w, 170, 'ru')}</div>
+            <div class="word-ru">${w.ru}</div>
+            <div class="tap-hint">${icon('tap',40)}</div>
+          </div>
+          <div class="face back">
+            <div>${wordVisual(w, 90, 'en')}</div>
+            <div class="word-en">${phonicsHtml(w.en)}</div>
+            ${trickyLine(w)}
+            <div class="ipa">${w.ipa}</div>
+            <button class="speak-btn" onclick="event.stopPropagation(); speak(${jsq(w.en)})" aria-label="Послушать">${icon('speaker',36)}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stage-actions">
+      <button class="btn btn-primary btn-next" id="nextBtn" disabled onclick="nextInStage()">
+        <span class="charge"></span><span class="btn-label">Дальше ${icon('arrow',22)}</span>
+      </button>
+    </div>
+  `;
+}
+function flipCard(){
+  soundClick();
+  const el = document.getElementById('flipCard');
+  el.classList.toggle('flipped');
+  if(el.classList.contains('flipped')){
+    setTimeout(()=>speak(currentWord().en), 350);
+    if(!flashcardFlippedOnce){
+      flashcardFlippedOnce = true;
+      // Кнопка «заряжается» 2 секунды, пока ребёнок слушает слово — без текста с таймером
+      document.getElementById('nextBtn').classList.add('charging');
+      flashcardTimerId = setTimeout(()=>{
+        const b = document.getElementById('nextBtn');
+        if(b){ b.disabled = false; b.classList.remove('charging'); }
+        soundCorrect();
+      }, FLIP_MIN_DELAY_MS);
+    }
+  }
+}
+
+/* ---- RECOGNITION ---- */
+let recogAnswered = false;
+function renderRecognition(){
+  recogAnswered = false;
+  const w = currentWord();
+  // Всегда 4 варианта: сначала слова урока, затем добираем из темы и из всего словаря
+  const valid = x => x.en!==w.en && x.ru!==w.ru;
+  const section = SECTIONS.find(s=>s.id===session.sectionId);
+  const sectionWords = section.lessons.flatMap(l=>l.words);
+  const allWords = SECTIONS.flatMap(s=>s.lessons.flatMap(l=>l.words));
+  const others = [];
+  for(const pool of [session.words, sectionWords, allWords]){
+    for(const x of shuffle(pool.filter(valid))){
+      if(others.length >= 3) break;
+      if(!others.includes(x.en)) others.push(x.en);
+    }
+  }
+  const options = shuffle([w.en, ...others]);
+  window.__recogCorrect = w.en;
+  return `
+    <div class="stage">
+      ${promptHtml(w, false)}
+      <div class="options">${options.map(o=>`<button class="opt-btn" onclick="checkRecog(this,'${o}')">${o}</button>`).join('')}</div>
+    </div>
+  `;
+}
+function checkRecog(btn, val){
+  if(recogAnswered) return;
+  recogAnswered = true;
+  soundClick();
+  const correct = window.__recogCorrect;
+  const w = currentWord();
+  const ok = val === correct;
+  if(ok){
+    btn.classList.add('correct');
+    session.results[w.id].rec = true;
+    soundCorrect();
+    vibrate(50);
+    speak(correct);
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.opt-btn').forEach(b=>{ if(b.textContent===correct) b.classList.add('correct'); });
+    soundWrong();
+    setTimeout(()=>speak(correct), 350);
+  }
+  setTimeout(()=>showFeedback(ok, w), 450);
+}
+
+/* ---- ASSEMBLY ---- */
+let assemblyState = {};
+function renderAssembly(){
+  const w = currentWord();
+  const hasSpaces = w.en.includes(' ');
+  // Для словосочетаний с пробелом: каждое слово отдельно, между ними разделитель
+  const parts = hasSpaces ? w.en.split(' ') : [w.en];
+  let allLetters = [];
+  let slots = [];
+  parts.forEach((part, pi)=>{
+    part.split('').forEach((ch, ci)=>{
+      allLetters.push({l:ch, id:`${pi}_${ci}`});
+      slots.push({type:'letter', char:ch, id:`${pi}_${ci}`});
+    });
+    if(pi < parts.length - 1) slots.push({type:'space'});
+  });
+  const shuffled = shuffle(allLetters);
+  assemblyState = { slots, placed: new Array(slots.length).fill(null) };
+  const slotsHtml = slots.map((s,i)=> s.type==='space' ?
+    `<div class="slot space-sep"></div>` :
+    `<div class="slot" id="slot-${i}" onclick="removeLetterFromSlot(${i})"></div>`
+  ).join('');
+  const tilesHtml = shuffled.map((t,i)=>`<div class="letter-tile pop-in" style="animation-delay:${i*40}ms" id="tile-${t.id}" onclick="placeLetter('${t.id}', '${t.l}')">${t.l.toUpperCase()}</div>`).join('');
+  return `
+    <div class="stage ${allLetters.length > 7 ? 'many' : ''}">
+      ${promptHtml(w, true)}
+      <div class="slots-row" id="slots">${slotsHtml}</div>
+      <div class="letters-row" id="tiles">${tilesHtml}</div>
+      <div class="feedback" id="fb"></div>
+    </div>
+    <div class="stage-actions spread">
+      <button class="round-btn soft" onclick="removeLastLetter()" aria-label="Стереть последнюю букву">${icon('backspace',30)}</button>
+      <button class="round-btn soft" onclick="clearAssembly()" aria-label="Начать заново">${icon('reset',30)}</button>
+    </div>
+  `;
+}
+function placeLetter(tileId, letter){
+  soundClick();
+  vibrate(5);
+  const emptyIdx = assemblyState.placed.findIndex((p,i)=>p===null && assemblyState.slots[i].type==='letter');
+  if(emptyIdx === -1) return;
+  assemblyState.placed[emptyIdx] = {letter, tileId};
+  const slot = document.getElementById(`slot-${emptyIdx}`);
+  slot.textContent = letter.toUpperCase();
+  slot.classList.add('filled');
+  slot.classList.remove('wrong-slot');
+  document.getElementById(`tile-${tileId}`).classList.add('used');
+  document.getElementById('fb').textContent = '';
+  const allFilled = assemblyState.slots.every((s,i)=>s.type!=='letter' || assemblyState.placed[i]);
+  if(allFilled) checkAssembly();
+}
+function removeLetterFromSlot(slotIdx){
+  const p = assemblyState.placed[slotIdx];
+  if(!p) return;
+  soundClick();
+  document.getElementById(`tile-${p.tileId}`).classList.remove('used');
+  assemblyState.placed[slotIdx] = null;
+  const slot = document.getElementById(`slot-${slotIdx}`);
+  slot.textContent = '';
+  slot.classList.remove('filled', 'wrong-slot');
+  document.getElementById('fb').textContent = '';
+}
+function removeLastLetter(){
+  let lastIdx = -1;
+  assemblyState.placed.forEach((p,i)=>{ if(p && assemblyState.slots[i].type==='letter') lastIdx = i; });
+  if(lastIdx === -1) return;
+  removeLetterFromSlot(lastIdx);
+}
+function clearAssembly(){
+  assemblyState.placed.forEach((p,i)=>{
+    if(p) document.getElementById(`tile-${p.tileId}`).classList.remove('used');
+    if(assemblyState.slots[i].type==='letter'){
+      const slot = document.getElementById(`slot-${i}`);
+      slot.textContent=''; slot.classList.remove('filled', 'wrong-slot');
+    }
+  });
+  assemblyState.placed = new Array(assemblyState.slots.length).fill(null);
+  document.getElementById('fb').textContent='';
+}
+function checkAssembly(){
+  const fb = document.getElementById('fb');
+  const w = currentWord();
+  let allCorrect = true;
+  assemblyState.slots.forEach((s, i)=>{
+    if(s.type==='letter'){
+      const slot = document.getElementById(`slot-${i}`);
+      const p = assemblyState.placed[i];
+      if(p && p.letter.toLowerCase() === s.char.toLowerCase()){ slot.classList.remove('wrong-slot'); }
+      else { allCorrect = false; slot.classList.add('wrong-slot'); }
+    }
+  });
+  if(allCorrect){
+    session.results[w.id].asm = true;
+    soundCorrect();
+    vibrate(50);
+    speak(w.en);
+    setTimeout(()=>showFeedback(true, w), 350);
+  } else {
+    fb.textContent = "Убери красные буквы"; fb.className="feedback bad";
+    soundWrong();
+  }
+}
+
+/* ---- TYPING / DICTATION ---- */
+let typingState = {};
+function buildSlotsMeta(word){
+  const chars = word.split('');
+  return chars.map(ch => isLetter(ch) ? {type:'input', char:ch} : {type:'sep', char:ch});
+}
+function renderTyping(isDictation){
+  const w = currentWord();
+  const meta = buildSlotsMeta(w.en);
+  typingState = { meta, attempts:3, isDictation };
+  let cellsHtml = '';
+  meta.forEach((m, idx)=>{
+    if(m.type==='input'){
+      cellsHtml += `<input class="cell-input" maxlength="1" id="cell-${idx}" data-idx="${idx}" oninput="onCellInput(this, ${idx})" onkeydown="onCellKeydown(event, ${idx})" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">`;
+    } else { cellsHtml += `<div class="cell-sep"></div>`; }
+  });
+  const topPart = isDictation ? `
+    <div class="listen-wrap">
+      <button class="listen-btn" onclick="speak(${jsq(w.en)})" aria-label="Послушать слово">${icon('speaker',64)}</button>
+      <div class="word-ru small">${w.ru}</div>
+    </div>
+  ` : promptHtml(w, true);
+  const many = meta.filter(m=>m.type==='input').length > 7;
+  return `
+    <div class="stage">
+      ${topPart}
+      <div class="cells-row ${many ? 'many' : ''}">${cellsHtml}</div>
+      <div class="hearts" id="hearts" aria-label="Попыток осталось: 3">${heartsRow(3)}</div>
+      <div class="feedback" id="fb"></div>
+    </div>
+    <div class="stage-actions">
+      <button class="round-btn soft" onclick="revealFirstLetter()" aria-label="Подсказка: первая буква">${icon('bulb',34)}</button>
+      <button class="btn btn-primary grow" onclick="checkTyping(${isDictation})">Проверить</button>
+    </div>
+  `;
+}
+function getInputIdxs(){ return typingState.meta.map((m,i)=>m.type==='input'?i:null).filter(i=>i!==null); }
+function focusCell(idx){ const el = document.getElementById(`cell-${idx}`); if(el){ el.focus(); el.select && el.select(); } }
+function onCellInput(el, idx){
+  el.value = el.value.replace(/[^a-zA-Z]/g,'').slice(0,1);
+  const idxs = getInputIdxs(); const pos = idxs.indexOf(idx);
+  if(el.value && pos < idxs.length-1) focusCell(idxs[pos+1]);
+}
+function onCellKeydown(e, idx){
+  const idxs = getInputIdxs(); const pos = idxs.indexOf(idx);
+  if(e.key === 'Backspace'){
+    const el = document.getElementById(`cell-${idx}`);
+    if(!el.value && pos>0){ e.preventDefault(); const prevEl = document.getElementById(`cell-${idxs[pos-1]}`); prevEl.value=''; focusCell(idxs[pos-1]); }
+  } else if(e.key === 'ArrowLeft' && pos>0){ focusCell(idxs[pos-1]); }
+  else if(e.key === 'ArrowRight' && pos<idxs.length-1){ focusCell(idxs[pos+1]); }
+  else if(e.key === 'Enter'){ e.preventDefault(); checkTyping(typingState.isDictation); }
+}
+function revealFirstLetter(){
+  soundClick();
+  const idxs = getInputIdxs(); if(idxs.length===0) return;
+  const el = document.getElementById(`cell-${idxs[0]}`);
+  el.value = typingState.meta[idxs[0]].char; el.classList.add('correct');
+  focusCell(idxs[1] ?? idxs[0]);
+}
+function checkTyping(isDictation){
+  if(document.querySelector('.sheet-layer')) return; // ответ уже принят
+  soundClick();
+  const idxs = getInputIdxs();
+  let allCorrect = true;
+  idxs.forEach(i=>{
+    const el = document.getElementById(`cell-${i}`);
+    const expected = typingState.meta[i].char.toLowerCase();
+    const got = (el.value||'').toLowerCase();
+    el.classList.remove('wrong','correct');
+    if(got === expected) el.classList.add('correct'); else { el.classList.add('wrong'); allCorrect = false; }
+  });
+  const fb = document.getElementById('fb');
+  const w = currentWord();
+  if(allCorrect){
+    if(isDictation) session.results[w.id].dic = true; else session.results[w.id].typ = true;
+    soundCorrect();
+    vibrate(50);
+    speak(w.en);
+    setTimeout(()=>showFeedback(true, w), 350);
+  } else {
+    typingState.attempts--;
+    const hearts = document.getElementById('hearts');
+    hearts.innerHTML = heartsRow(Math.max(typingState.attempts,0));
+    hearts.setAttribute('aria-label', `Попыток осталось: ${Math.max(typingState.attempts,0)}`);
+    soundWrong();
+    if(typingState.attempts <= 0){
+      idxs.forEach(i=>{ const el = document.getElementById(`cell-${i}`); el.value = typingState.meta[i].char; el.classList.remove('wrong'); el.classList.add('correct'); el.disabled = true; });
+      speak(w.en);
+      setTimeout(()=>showFeedback(false, w), 500);
+    } else {
+      fb.textContent = "Попробуй ещё раз"; fb.className="feedback bad";
+      idxs.forEach(i=>{ const el = document.getElementById(`cell-${i}`); if(el.classList.contains('wrong')) el.value=''; });
+      focusCell(idxs.find(i=>!document.getElementById(`cell-${i}`).value) ?? idxs[0]);
+    }
+  }
+}
+
+/* ============================= СТАНЦИИ: движок ============================= */
+// Станции правил строятся из data/grammar.js, станции звуков — из data/sounds.js.
+// Станция «Один и много» (plural) — особая, собрана вручную ниже.
+const WORD_BY_ID = {}, WORD_BY_EN = {};
+SECTIONS.forEach(s=>s.lessons.forEach(l=>l.words.forEach(w=>{ WORD_BY_ID[w.id] = w; WORD_BY_EN[w.en.toLowerCase()] = w; })));
+function wordByEn(en){ return WORD_BY_EN[String(en).trim().toLowerCase()]; }
+const NUM_EN = ['', 'one', 'two', 'three', 'four', 'five'];
+// Текст в onclick="speak(...)": безопасно для апострофов (It's, don't)
+const jsq = s => "'" + String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;') + "'";
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+ICONS.bolt = `<path d="M41 6L14 40h18l-6 26 32-38H40z" fill="#FCD535" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/>`;
+ICONS.mic = `<rect x="26" y="8" width="20" height="34" rx="10" fill="currentColor"/><path d="M16 34a20 20 0 0040 0M36 54v10M26 64h20" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>`;
+ICONS.abc = `<path d="M12 14h48a6 6 0 016 6v26a6 6 0 01-6 6H34l-12 10V52H12a6 6 0 01-6-6V20a6 6 0 016-6z" fill="#E1F3FB" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><text x="36" y="42" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="900" font-size="22" fill="#2F8FBF">Aa</text>`;
+
+/* ---- Множественное число (станция «Один и много») ---- */
+const PLURAL_REGULAR = ['animals_1_cat','animals_1_dog','animals_1_rabbit','animals_2_bird','animals_3_horse','animals_3_cow','animals_3_pig'];
+const PLURAL_IRREGULAR = { animals_2_mouse:'mice', animals_3_sheep:'sheep', animals_2_fish:'fish' };
+// Слова-хитрецы: подсказка «почему» после задания и строчка на карточке слова
+const TRICKY = {
+  animals_2_mouse: 'слово-превращалка: <b>a mouse → two mice</b>',
+  animals_3_sheep: 'слово-упрямец, не меняется: <b>a sheep → two sheep</b>',
+  animals_2_fish:  'слово-упрямец, не меняется: <b>a fish → two fish</b>',
+};
+function trickyNote(id){ return TRICKY[id] ? `${icon('bolt',18)} <b>${WORD_BY_ID[id].en}</b> — ${TRICKY[id]}` : ''; }
+// Русские формы для счёта: [один, 2–4, 5+], род — для «два кота / две собаки / пять мышей»
+const RU_COUNT = {
+  animals_1_cat:    ['кот','кота','котов','m'],
+  animals_1_dog:    ['собака','собаки','собак','f'],
+  animals_1_rabbit: ['кролик','кролика','кроликов','m'],
+  animals_2_bird:   ['птичка','птички','птичек','f'],
+  animals_2_fish:   ['рыбка','рыбки','рыбок','f'],
+  animals_2_mouse:  ['мышь','мыши','мышей','f'],
+  animals_3_horse:  ['лошадь','лошади','лошадей','f'],
+  animals_3_cow:    ['корова','коровы','коров','f'],
+  animals_3_pig:    ['свинья','свиньи','свиней','f'],
+  animals_3_sheep:  ['овца','овцы','овец','f'],
+};
+// Множественное число любого существительного: особая форма из словаря (n:mice) или по правилам
+function pluralOfWord(w){
+  const m = /^n:(.+)$/.exec(w.pos || '');
+  if(m) return m[1];
+  const parts = w.en.toLowerCase().split(' ');
+  let last = parts.pop();
+  if(/(s|x|z|ch|sh)$/.test(last)) last += 'es';
+  else if(/[^aeiou]y$/.test(last)) last = last.slice(0, -1) + 'ies';
+  else last += 's';
+  return [...parts, last].join(' ');
+}
+function plural(id){ return PLURAL_IRREGULAR[id] || pluralOfWord(WORD_BY_ID[id]); }
+function countEn(id, n, art){ return n === 1 ? `${art || 'a'} ${WORD_BY_ID[id].en}` : `${NUM_EN[n]} ${plural(id)}`; }
+// С подсветкой: «a» — синим, окончание -s или особая форма — красным
+function countHtml(id, n, art){
+  if(n === 1) return `<b class="hl-a">${art || 'a'}</b> ${WORD_BY_ID[id].en}`;
+  const pl = PLURAL_IRREGULAR[id] ? `<b class="hl">${plural(id)}</b>` : `${WORD_BY_ID[id].en}<b class="hl">s</b>`;
+  return `${NUM_EN[n]} ${pl}`;
+}
+function ruCount(id, n){
+  const [one, few, many, g] = RU_COUNT[id];
+  const num = n === 1 ? (g === 'f' ? 'одна' : 'один') : n === 2 ? (g === 'f' ? 'две' : 'два') : ['', '', '', 'три', 'четыре', 'пять'][n];
+  return `${num} ${n === 1 ? one : n < 5 ? few : many}`;
+}
+
+/* ---- Сцены: картинки слов ---- */
+function sceneSize(n){ return n <= 1 ? 96 : n === 2 ? 80 : n === 3 ? 66 : 54; }
+function sceneHtml(id, n, size){
+  const w = WORD_BY_ID[id];
+  return `<span class="scene">${Array.from({length:n}, (_, i)=>`<span class="scene-item" style="animation-delay:${i*70}ms">${wImg(w, size)}</span>`).join('')}</span>`;
+}
+// Картинки по английским словам: 'cat,cat' — две кошки
+function picsHtml(list, size){
+  const ws = (Array.isArray(list) ? list : String(list || '').split(',')).map(s=>wordByEn(s)).filter(w=>w && w.emoji);
+  if(!ws.length) return '';
+  const sz = size || sceneSize(ws.length);
+  return `<span class="scene">${ws.map((w, i)=>`<span class="scene-item" style="animation-delay:${i*70}ms">${wImg(w, sz)}</span>`).join('')}</span>`;
+}
+function picsCard(list){ const h = picsHtml(list); return h ? `<div class="scene-card">${h}</div>` : ''; }
+
+/* ---- Задания станции «Один и много» ---- */
+const rnd25 = () => 2 + Math.floor(Math.random()*4); // 2..5
+const T = {
+  pickScene(id, n){
+    const options = shuffle([n, ...shuffle([1,2,3,4,5].filter(x=>x!==n)).slice(0,2)]);
+    return { type:'pickScene', scored:true, id, n, options, say:countEn(id,n), html:countHtml(id,n), fbEn:countEn(id,n), fbRu:ruCount(id,n), note:trickyNote(id) };
+  },
+  pickForm(id, n, opts){
+    const w = WORD_BY_ID[id];
+    const answer = n === 1 ? w.en : plural(id);
+    const options = shuffle(opts || [w.en, w.en + 's']);
+    return { type:'pickForm', scored:true, id, n, before: n === 1 ? 'a' : NUM_EN[n], options, answer, fbEn:countEn(id,n), fbRu:ruCount(id,n), note:trickyNote(id) };
+  },
+  yesNo(id, formMode){
+    const n = rnd25();
+    if(formMode){
+      const wrong = Math.random() < .5;
+      return { type:'yesNo', scored:true, id, n, phrase: wrong ? `${NUM_EN[n]} ${WORD_BY_ID[id].en}s` : countEn(id,n), answer: !wrong, fbEn:countEn(id,n), fbRu:ruCount(id,n), note:trickyNote(id) };
+    }
+    const shown = Math.random() < .5 ? n : shuffle([1,2,3,4,5].filter(x=>x!==n))[0];
+    return { type:'yesNo', scored:true, id, n:shown, phrase: countEn(id,n), answer: shown === n, fbEn:countEn(id,shown), fbRu:ruCount(id,shown) };
+  },
+  build(id, n){
+    const w = WORD_BY_ID[id];
+    const answer = n === 1 ? ['a', w.en] : [NUM_EN[n], plural(id)];
+    const extra = n === 1 ? [w.en + 's', NUM_EN[rnd25()]] : [w.en, 'a'];
+    return { type:'build', scored:true, id, n, ru:ruCount(id,n), answer, bank: shuffle([...answer, ...extra]), fbEn:countEn(id,n), fbRu:ruCount(id,n) };
+  },
+  typeWord(id, n){
+    return { type:'typeWord', scored:true, id, n, before:NUM_EN[n], answer:plural(id), hintRu:ruCount(id,n), fbEn:countEn(id,n), fbRu:ruCount(id,n), note:trickyNote(id) };
+  },
+  fixError(id, n){
+    const fixed = PLURAL_IRREGULAR[id] ? `<b class="hl">${plural(id)}</b>` : `${WORD_BY_ID[id].en}<b class="hl">s</b>`;
+    return { type:'fixError', scored:true, id, n, words:[NUM_EN[n], WORD_BY_ID[id].en], wrongIdx:1, fixed, fbEn:countEn(id,n), fbRu:ruCount(id,n) };
+  },
+};
+
+function exampleRow(say, picHtml, enHtml, ru){
+  return `<button class="ex-row" onclick="speak(${jsq(say)})">
+      ${picHtml ? `<span class="ex-scene">${picHtml}</span>` : ''}
+      <span class="ex-text"><span class="ex-en">${enHtml}</span>${ru ? `<span class="ex-ru">${ru}</span>` : ''}</span>
+      <span class="ex-say">${icon('speaker',22)}</span>
+    </button>`;
+}
+function countExample(id, n){ return exampleRow(countEn(id,n), sceneHtml(id, n, n === 1 ? 40 : 30), countHtml(id,n), ruCount(id,n)); }
+function trickyPair(id){
+  return `<div class="tricky">
+      <span class="tricky-side">${sceneHtml(id,1,34)}<span>a ${WORD_BY_ID[id].en}</span></span>
+      <span class="tricky-arrow">${icon('arrow',20)}</span>
+      <span class="tricky-side">${sceneHtml(id,3,24)}<span><b class="hl">${plural(id)}</b></span></span>
+      <button class="speak-btn small" onclick="speak(${jsq(`a ${WORD_BY_ID[id].en}. three ${plural(id)}`)})" aria-label="Послушать">${icon('speaker',20)}</button>
+    </div>`;
+}
+
+function buildPluralSteps(){
+  const r = shuffle(PLURAL_REGULAR);
+  return [
+    { type:'rule', title:'Сколько?',
+      text:'Ты уже знаешь счёт до пяти. Чтобы спросить «сколько?», англичане говорят <b class="hl-a">How many</b>…?',
+      body: exampleRow('How many cats? Three cats.', sceneHtml('animals_1_cat',3,30), '<b class="hl-a">How many</b> cats? — Three cats.', 'Сколько котов? — Три кота.')
+          + exampleRow('How many dogs? Two dogs.', sceneHtml('animals_1_dog',2,34), '<b class="hl-a">How many</b> dogs? — Two dogs.', 'Сколько собак? — Две собаки.') },
+    { type:'rule', title:'Один и много',
+      text:'Если зверь <b>один</b>, перед словом ставим <b class="hl-a">a</b>.<br>Если зверей <b>много</b>, в конце слова добавляем <b class="hl">-s</b>.',
+      body: countExample('animals_1_cat',1) + countExample('animals_1_cat',3) + countExample('animals_1_dog',2)
+        + `<div class="rule-note">Когда есть <b class="hl">-s</b>, слово <b class="hl-a">a</b> не нужно: <i>three cats</i>, а не <s>a cats</s>.</div>` },
+    { type:'rule', title:'В русском тоже есть хитрецы',
+      text:'Обычно мы говорим: <i>кот → коты</i>, <i>собака → собаки</i>. Но бывает иначе!',
+      body:`<div class="ru-tricks">
+          <div class="ru-trick"><div class="ru-trick-title">Слово меняется целиком</div><div>человек → <b>люди</b></div><div>ребёнок → <b>дети</b></div></div>
+          <div class="ru-trick"><div class="ru-trick-title">Слово не меняется</div><div>одно пальто → много <b>пальто</b></div><div>одно кенгуру → много <b>кенгуру</b></div></div>
+        </div>
+        <div class="rule-note">В английском тоже есть такие слова. Мы назовём их <b>хитрецами</b> ${icon('bolt',18)} — сейчас познакомимся!</div>` },
+    { type:'rule', title:'Слово-превращалка',
+      text:'<b>a mouse → two mice.</b> Это очень старое слово. Больше тысячи лет назад англичане, когда предметов много, иногда не добавляли <b class="hl">-s</b>, а <b>меняли звук внутри слова</b>. Так и осталось до сих пор.',
+      body:`<button class="morph" onclick="morphTap(this)" aria-label="Превратить слово">
+          <span class="morph-pic">${sceneHtml('animals_2_mouse',1,44)}</span>
+          <span class="morph-word">m<span class="mx"><span class="from">ou</span><span class="to">i</span></span><span class="mx"><span class="from">s</span><span class="to">c</span></span>e</span>
+          <span class="morph-hint">нажми — и мышка превратится!</span>
+        </button>
+        <div class="rule-note">Позже встретим и других превращалок: нога <i>foot → feet</i>, зуб <i>tooth → teeth</i>.</div>` },
+    { type:'rule', title:'Слова-упрямцы',
+      text:'Эти слова <b>не меняются совсем</b>, как наше «пальто». Что зверей много, понятно по числу: <i>two</i>, <i>five</i>.',
+      body: trickyPair('animals_3_sheep') + trickyPair('animals_2_fish')
+        + `<div class="rule-note">${icon('bulb',20)} <b>Интересный факт.</b> Слово <i>fishes</i> тоже бывает, но редко: так говорят про разные <b>виды</b> рыб. Если рыбки одинаковые — всегда <b>two fish</b>.</div>` },
+    T.pickScene(r[0], rnd25()),
+    T.pickForm(r[1], rnd25()),
+    T.pickForm(r[2], 1),
+    T.yesNo(r[3]),
+    T.build(r[4], rnd25()),
+    T.pickForm('animals_2_mouse', rnd25(), ['mouses','mice']),
+    T.typeWord(r[5], rnd25()),
+    T.fixError(r[6], rnd25()),
+    T.pickForm('animals_3_sheep', rnd25(), ['sheeps','sheep']),
+    T.pickScene('animals_2_fish', rnd25()),
+    T.build(r[0], 1),
+    T.yesNo('animals_2_mouse', true),
+    { type:'story', title:'Червячок на ферме', frame:0, frames:[
+      { id:'animals_3_horse', n:1, en:'A horse.', html:'<b class="hl-a">A</b> horse.', ru:'Лошадь.' },
+      { id:'animals_3_cow', n:1, en:'A cow.', html:'<b class="hl-a">A</b> cow.', ru:'Корова.' },
+      { id:'animals_3_pig', n:2, en:'Two pigs!', html:'Two pig<b class="hl">s</b>!', ru:'Две свиньи!' },
+      { id:'animals_3_sheep', n:3, en:'Three sheep.', html:'Three <b class="hl">sheep</b>.', ru:'Три овцы.' },
+      { id:'animals_2_mouse', n:5, en:'Five mice!', html:'Five <b class="hl">mice</b>!', ru:'Пять мышей!' },
+    ]},
+    { type:'question', scored:true, q:'How many pigs?', ru:'Сколько свиней видел червячок?', options:['one','two','three'], answer:'two', fbEn:'Two pigs.', fbRu:'Две свиньи.' },
+    { type:'question', scored:true, q:'How many mice?', ru:'А сколько мышей?', options:['three','four','five'], answer:'five', fbEn:'Five mice.', fbRu:'Пять мышей.', note:trickyNote('animals_2_mouse') },
+  ];
+}
+function morphTap(btn){
+  const done = btn.classList.toggle('done');
+  soundClick();
+  speak(done ? 'mice' : 'mouse');
+  btn.querySelector('.morph-pic').innerHTML = sceneHtml('animals_2_mouse', done ? 3 : 1, done ? 34 : 44);
+  btn.querySelector('.morph-hint').textContent = done ? 'нажми ещё раз — и снова одна мышка' : 'нажми — и мышка превратится!';
+}
+function pluralChips(){
+  return [['animals_1_cat',1],['animals_1_dog',2],['animals_1_rabbit',3],['animals_3_sheep',4],['animals_2_mouse',5],['animals_2_fish',2]]
+    .map(([id, n])=>`<button class="word-chip phrase-chip" onclick="speak(${jsq(countEn(id, n))})" aria-label="Послушать">${sceneHtml(id, n, 22)}<span>${countHtml(id, n)}</span></button>`).join('');
+}
+
+/* ---- Станции правил из data/grammar.js ---- */
+// Найти пропуск в предложении как отдельное слово (не часть другого слова)
+function findGap(en, gap){
+  const isL = ch => /[A-Za-z']/.test(ch || '');
+  for(const hay of [en, en.toLowerCase()]){
+    const needle = hay === en ? gap : gap.toLowerCase();
+    let i = hay.indexOf(needle);
+    while(i > -1){
+      if(!isL(hay[i-1]) && !isL(hay[i + needle.length])) return i;
+      i = hay.indexOf(needle, i + 1);
+    }
+  }
+  return -1;
+}
+function hlText(en, hl){
+  const i = hl ? findGap(en, hl) : -1;
+  if(i < 0) return esc(en);
+  return esc(en.slice(0, i)) + `<b class="hl">${esc(en.slice(i, i + hl.length))}</b>` + esc(en.slice(i + hl.length));
+}
+const isOneWord = s => /^[A-Za-z']+$/.test(s);
+const sentenceTokens = en => en.replace(/[.,!?…]/g, '').split(/\s+/).filter(Boolean);
+function grammarItem([en, ru, gap, ...opts]){
+  const at = findGap(en, gap);
+  return { en, ru, gap, opts, pre: en.slice(0, at), post: en.slice(at + gap.length), ok: at > -1 };
+}
+function buildGrammarSteps(spec){
+  const items = shuffle(spec.items.map(grammarItem).filter(it=>it.ok && it.opts.length));
+  const steps = spec.rules.map(r=>({ type:'rule', title:r.title, text:r.text,
+    body: r.ex.map(([en, ru, hl])=>exampleRow(en, '', hlText(en, hl), ru)).join('') }));
+  // Задания по кругу: разные типы, разные предложения
+  const plan = ['pickGap', 'isRight', 'build', 'fixWord', 'typeGap', 'pickGap', 'build', 'isRight', 'fixWord', 'typeGap', 'pickGap'];
+  let k = 0;
+  const takeItem = test => {
+    for(let tries = 0; tries < items.length; tries++){
+      const it = items[(k + tries) % items.length];
+      if(test(it)){ k = (k + tries + 1) % items.length; return it; }
+    }
+    return null;
+  };
+  plan.forEach(type=>{
+    let it, step;
+    if(type === 'pickGap' && (it = takeItem(()=>true)))
+      step = { type, pre:it.pre, post:it.post, options:shuffle([it.gap, ...it.opts]), answer:it.gap, ru:it.ru };
+    if(type === 'typeGap' && (it = takeItem(x=>isOneWord(x.gap))))
+      step = { type, pre:it.pre, post:it.post, answer:it.gap, ru:it.ru };
+    if(type === 'build' && (it = takeItem(x=>sentenceTokens(x.en).length <= 8))){
+      const answer = sentenceTokens(it.en);
+      const extra = it.opts.filter(isOneWord).slice(0, 2).filter(o=>!answer.includes(o));
+      step = { type, ru:it.ru, answer, bank:shuffle([...answer, ...extra]) };
+    }
+    if(type === 'fixWord' && (it = takeItem(x=>isOneWord(x.gap) && isOneWord(x.opts[0])))){
+      const words = sentenceTokens(it.pre + it.opts[0] + it.post);
+      step = { type, words, wrongIdx: sentenceTokens(it.pre).length, fixed: esc(it.gap), ru:it.ru };
+    }
+    if(type === 'isRight' && (it = takeItem(()=>true))){
+      const right = Math.random() < .5;
+      step = { type, phrase: right ? it.en : it.pre + it.opts[0] + it.post, answer: right, ru:it.ru };
+    }
+    if(step) steps.push({ ...step, scored:true, fbEn:it.en, fbRu:it.ru });
+  });
+  if(spec.story){
+    steps.push({ type:'story', title:spec.story.title, frame:0,
+      frames: spec.story.frames.map(([en, ru, pics])=>({ en, ru, pics, html:esc(en) })) });
+    spec.story.questions.forEach(([q, ru, options, answer, pics])=>{
+      steps.push({ type:'question', scored:true, q, ru, options:shuffle(options), answer, pics, fbEn:answer, fbRu:'' });
+    });
+  }
+  return steps;
+}
+function grammarChips(spec){
+  return spec.items.slice(0, 6).map(([en])=>
+    `<button class="word-chip phrase-chip" onclick="speak(${jsq(en)})" aria-label="Послушать"><span>${esc(en)}</span></button>`).join('');
+}
+
+/* ---- Станции звуков из data/sounds.js ---- */
+// Подсветить буквы звука в слове (первое или последнее вхождение)
+function soundAt(w, side){
+  const en = w.en.toLowerCase(), lab = side.label.toLowerCase();
+  return side.last ? en.lastIndexOf(lab) : en.indexOf(lab);
+}
+function soundHtml(w, side, cls){
+  const i = soundAt(w, side);
+  if(i < 0) return esc(w.en);
+  return esc(w.en.slice(0, i)) + `<b class="${cls}">${esc(w.en.slice(i, i + side.label.length))}</b>` + esc(w.en.slice(i + side.label.length));
+}
+const MOUTHS = {
+  relaxed: `<ellipse cx="60" cy="40" rx="30" ry="15" fill="#C9445A" stroke="${INK}" stroke-width="3.5"/><path d="M36 33Q60 28 84 33L82 38Q60 35 38 38z" fill="#fff"/>`,
+  smile:   `<path d="M12 36Q60 26 108 36Q60 70 12 36z" fill="#C9445A" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><path d="M22 37Q60 30 98 37L94 44Q60 39 26 44z" fill="#fff"/>`,
+  open:    `<ellipse cx="60" cy="42" rx="26" ry="26" fill="#8E2E3F" stroke="${INK}" stroke-width="3.5"/><path d="M40 26Q60 20 80 26L78 32Q60 28 42 32z" fill="#fff"/><ellipse cx="60" cy="58" rx="16" ry="8" fill="#E57A8A"/>`,
+  round:   `<ellipse cx="60" cy="40" rx="16" ry="18" fill="#C9445A" stroke="${INK}" stroke-width="5"/><ellipse cx="60" cy="40" rx="7" ry="9" fill="#5A1C28"/>`,
+  tongue:  `<ellipse cx="60" cy="40" rx="30" ry="16" fill="#8E2E3F" stroke="${INK}" stroke-width="3.5"/><rect x="38" y="28" width="44" height="8" rx="2" fill="#fff"/><rect x="38" y="44" width="44" height="7" rx="2" fill="#fff"/><path d="M46 38h28v7q-14 6-28 0z" fill="#E57A8A" stroke="${INK}" stroke-width="2"/>`,
+  lip:     `<path d="M24 44Q60 64 96 44" fill="#C9445A" stroke="${INK}" stroke-width="3.5"/><path d="M24 30Q60 22 96 30L92 44Q60 50 28 44z" fill="#C9445A" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><rect x="40" y="36" width="40" height="10" rx="2" fill="#fff" stroke="${INK}" stroke-width="2"/>`,
+};
+function mouthSvg(kind){
+  return `<svg viewBox="0 0 120 80" class="mouth" aria-hidden="true"><rect x="2" y="2" width="116" height="76" rx="22" fill="#FFE2C6"/>${MOUTHS[kind] || MOUTHS.relaxed}</svg>`;
+}
+function durBar(kind){
+  return kind ? `<span class="dur ${kind}"><span></span></span><span class="dur-label">${kind === 'long' ? 'долго' : 'коротко'}</span>` : '';
+}
+// Слова, изученные на тропе до станции (и только они попадают в задания)
+function learnedBefore(stationId){
+  const ids = new Set();
+  for(const { lesson } of flatLessons()){
+    if(lesson.id === stationId) break;
+    lesson.words.forEach(w=>ids.add(w.id));
+  }
+  return ids;
+}
+function soundWords(st){
+  const learned = learnedBefore(st.id);
+  const pick = side => st.spec[side].words.map(wordByEn).filter(w=>w && learned.has(w.id) && soundAt(w, st.spec[side]) > -1);
+  return { a: pick('a'), b: pick('b') };
+}
+function soundCard(spec, side, words, cls){
+  const s = spec[side];
+  return { type:'rule', title:s.name, text:s.text,
+    body:`<div class="mouth-row">${mouthSvg(s.mouth)}${s.dur ? `<div class="dur-wrap">${durBar(s.dur)}</div>` : `<div class="sound-tag">${s.tag}</div>`}</div>`
+      + words.slice(0, 5).map(w=>exampleRow(w.en, w.emoji ? wImg(w, 40) : '', soundHtml(w, s, cls), w.ru)).join('') };
+}
+function buildSoundSteps(st){
+  const spec = st.spec;
+  const { a, b } = soundWords(st);
+  const steps = [soundCard(spec, 'a', a, 'ph-i'), soundCard(spec, 'b', b, 'ph-ee')];
+  const learned = new Set([...a, ...b].map(w=>w.id));
+  const pairs = (spec.pairs || []).map(p=>p.map(wordByEn)).filter(p=>p.every(w=>w && learned.has(w.id)));
+  const showcase = pairs[0] || [a[0], b[0]];
+  steps.push({ type:'rule', title:spec.title, text:spec.compare || '',
+    body:`<div class="pair-cards">${showcase.map((w, i)=>{
+      const side = i === 0 ? spec.a : spec.b;
+      return `<button class="pair-card" onclick="speak(${jsq(w.en)})">
+          ${w.emoji ? wImg(w, 70) : ''}
+          <span class="pair-word">${soundHtml(w, side, i === 0 ? 'ph-i' : 'ph-ee')}</span>
+          <span class="dur-wrap">${side.dur ? durBar(side.dur) : `<span class="sound-tag">${side.tag}</span>`}</span>
+        </button>`;
+    }).join('')}</div>` });
+
+  const both = [...a.map(w=>({ w, side:'a' })), ...b.map(w=>({ w, side:'b' }))];
+  const sample = n => { const out = []; let pool = []; while(out.length < n){ if(!pool.length) pool = shuffle(both); out.push(pool.pop()); } return out; };
+  const fb = w => ({ fbEn:w.en, fbRu:w.ru });
+  const pickSound = ({ w, side }) => ({ type:'pickSound', scored:true, id:w.id, say:w.en, answer:side,
+    sides:[['a', spec.a], ['b', spec.b]].map(([key, s])=>({ key, label:s.label, tag:s.tag, dur:s.dur, cls: key === 'a' ? 'ph-i' : 'ph-ee' })), ...fb(w) });
+  const spellGap = ({ w, side }) => {
+    const s = spec[side], at = soundAt(w, s);
+    return { type:'spellGap', scored:true, id:w.id, pre:w.en.slice(0, at), post:w.en.slice(at + s.label.length),
+      answer:s.label, options:shuffle([spec.a.label, spec.b.label]), ...fb(w) };
+  };
+  if(pairs.length){
+    for(let i = 0; i < 4; i++){
+      const p = pairs[i % pairs.length], w = p[Math.random() < .5 ? 0 : 1];
+      steps.push({ type:'pickPic', scored:true, say:w.en, options:shuffle(p.map(x=>x.id)), answer:w.id, ...fb(w) });
+    }
+  }
+  const sameLetters = spec.a.label === spec.b.label;
+  if(spec.kind === 'letters' && !sameLetters) sample(10).forEach(x=>steps.push(spellGap(x)));
+  else if(spec.kind === 'reading' || sameLetters) sample(10).forEach(x=>steps.push(pickSound(x)));
+  else { sample(5).forEach(x=>steps.push(pickSound(x))); sample(5).forEach(x=>steps.push(spellGap(x))); }
+
+  const line = (ws, side, cls) => ({ en: ws.map(w=>w.en).join(', ') + '!', html: ws.map(w=>soundHtml(w, side, cls)).join(', ') + '!', ru: ws.map(w=>w.ru).join(', ') });
+  steps.push({ type:'twister', lines:[line(shuffle(a).slice(0, 3), spec.a, 'ph-i'), line(shuffle(b).slice(0, 3), spec.b, 'ph-ee')] });
+  return steps;
+}
+function soundChips(st){
+  const { a, b } = soundWords(st);
+  return [...a.slice(0, 5).map(w=>[w, st.spec.a, 'ph-i']), ...b.slice(0, 5).map(w=>[w, st.spec.b, 'ph-ee'])].map(([w, s, cls])=>
+    `<button class="word-chip" onclick="speak(${jsq(w.en)})" aria-label="Послушать">${wImg(w, 40)}<span>${soundHtml(w, s, cls)}</span></button>`).join('');
+}
+
+/* ---- Общее для всех станций ---- */
+function buildStationSteps(st){
+  if(st.topic === 'plural') return buildPluralSteps();
+  return st.type === 'sound' ? buildSoundSteps(st) : buildGrammarSteps(st.spec);
+}
+function stationChips(st){
+  if(st.topic === 'plural') return pluralChips();
+  return st.type === 'sound' ? soundChips(st) : grammarChips(st.spec);
+}
+// Картинка станции на тропе
+function stationPicWords(st){
+  if(st.topic === 'plural') return [WORD_BY_ID.animals_1_cat, WORD_BY_ID.animals_1_cat];
+  if(st.type === 'sound'){
+    const first = side => st.spec[side].words.map(wordByEn).find(w=>w && w.emoji);
+    return [first('a'), first('b')].filter(Boolean);
+  }
+  const fr = (st.spec.story && st.spec.story.frames) || [];
+  for(const f of fr){
+    const ws = String(f[2] || '').split(',').map(wordByEn).filter(w=>w && w.emoji);
+    if(ws.length) return ws.slice(0, 2);
+  }
+  return [];
+}
+
+/* ---- Запись своего голоса (скороговорка) ---- */
+async function recordSelf(btn){
+  if(!navigator.mediaDevices || !window.MediaRecorder){ btn.textContent = 'Запись не поддерживается'; btn.disabled = true; return; }
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+    const rec = new MediaRecorder(stream), chunks = [];
+    rec.ondataavailable = e => chunks.push(e.data);
+    rec.onstop = () => {
+      stream.getTracks().forEach(t=>t.stop());
+      if(session) session.recordingUrl = URL.createObjectURL(new Blob(chunks, { type: rec.mimeType }));
+      btn.classList.remove('rec'); btn.innerHTML = `${icon('mic',22)} Записать ещё раз`;
+      const play = document.getElementById('playSelf'); if(play) play.hidden = false;
+    };
+    stopAllSpeech();
+    rec.start();
+    btn.classList.add('rec'); btn.textContent = 'Говори… 4 секунды';
+    setTimeout(()=>rec.state !== 'inactive' && rec.stop(), 4000);
+  }catch(e){
+    btn.textContent = 'Нет доступа к микрофону'; btn.disabled = true;
+  }
+}
+function playSelf(){ if(session && session.recordingUrl){ stopAllSpeech(); new Audio(session.recordingUrl).play(); } }
+
+/* ---- Экран станции ---- */
+function currentStep(){ return session.steps[session.stepIdx]; }
+function taskLabel(text){ return `<div class="task-label">${text}</div>`; }
+function phraseBtn(say, html){
+  return `<button class="phrase-btn" onclick="speak(${jsq(say)})" aria-label="Послушать">${icon('speaker',24)}<span class="phrase">${html}</span></button>`;
+}
+function sceneCard(id, n){ return `<div class="scene-card">${sceneHtml(id, n, sceneSize(n))}</div>`; }
+function bigListen(say){ return `<button class="listen-btn" onclick="speak(${jsq(say)})" aria-label="Послушать">${icon('speaker',60)}</button>`; }
+function wordPicCard(id){ const w = WORD_BY_ID[id]; return w && w.emoji ? `<div class="scene-card">${wImg(w, 110)}</div>` : ''; }
+function optionsClass(options){ return options.some(o=>String(o).length > 12) ? 'options stack' : options.length === 3 ? 'options three' : 'options'; }
+function yesNoButtons(answer){
+  return `<div class="yn">
+      <button class="yn-btn yes" data-ok="${answer === true}" onclick="gramChoose(this)" aria-label="Да">${icon('check',44)}<span>Да</span></button>
+      <button class="yn-btn no" data-ok="${answer === false}" onclick="gramChoose(this)" aria-label="Нет">${icon('close',38)}<span>Нет</span></button>
+    </div>`;
+}
+
+const GRAM_RENDER = {
+  rule: s => `
+    <div class="stage rule-stage">
+      <div class="rule-card">
+        <div class="rule-head"><span class="rule-worm">${wormSvg('happy')}</span><div class="rule-title">${s.title}</div></div>
+        <div class="rule-text">${s.text}</div>
+        <div class="rule-body">${s.body}</div>
+      </div>
+    </div>
+    <div class="stage-actions"><button class="btn btn-primary" onclick="gramNext()"><span class="btn-label">Понятно ${icon('arrow',22)}</span></button></div>`,
+
+  pickScene: s => `
+    <div class="stage">
+      ${taskLabel('Послушай и выбери картинку')}
+      ${phraseBtn(s.say, s.html)}
+      <div class="scene-opts">${s.options.map(n=>`<button class="scene-opt" data-ok="${n === s.n}" onclick="gramChoose(this)">${sceneHtml(s.id, n, 40)}</button>`).join('')}</div>
+    </div>`,
+
+  pickForm: s => `
+    <div class="stage">
+      ${taskLabel('Выбери правильное слово')}
+      ${sceneCard(s.id, s.n)}
+      <div class="phrase">${s.before} <span class="gap" id="gap">?</span></div>
+      <div class="options">${s.options.map(o=>`<button class="opt-btn" data-ok="${o === s.answer}" onclick="gramChoose(this)">${o}</button>`).join('')}</div>
+    </div>`,
+
+  yesNo: s => `
+    <div class="stage">
+      ${taskLabel('Фраза подходит к картинке?')}
+      ${sceneCard(s.id, s.n)}
+      ${phraseBtn(s.phrase, s.phrase)}
+      ${yesNoButtons(s.answer)}
+    </div>`,
+
+  build: s => `
+    <div class="stage">
+      ${taskLabel('Переведи на английский')}
+      <div class="ru-prompt ${s.ru.length > 24 ? 'long' : ''}">${s.ru}</div>
+      <div class="build-line" id="buildLine"><span class="build-hint">нажимай на слова по порядку</span></div>
+      <div class="build-bank">${s.bank.map((w,i)=>`<button class="wblock" id="wb-${i}" onclick="buildTap(${i})">${esc(w)}</button>`).join('')}</div>
+    </div>
+    <div class="stage-actions">
+      <button class="round-btn soft" onclick="buildReset()" aria-label="Начать заново">${icon('reset',30)}</button>
+      <button class="btn btn-primary grow" id="buildCheckBtn" disabled onclick="buildCheck()">Проверить</button>
+    </div>`,
+
+  typeWord: s => `
+    <div class="stage">
+      ${taskLabel('Напиши слово')}
+      ${sceneCard(s.id, s.n)}
+      <div class="type-line">
+        <span class="phrase">${s.before}</span>
+        <input id="gramInput" class="gram-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          onkeydown="if(event.key==='Enter'){event.preventDefault(); gramTypeCheck();}">
+      </div>
+      <div class="ru-hint">${s.hintRu}</div>
+    </div>
+    <div class="stage-actions"><button class="btn btn-primary grow" onclick="gramTypeCheck()">Проверить</button></div>`,
+
+  fixError: s => `
+    <div class="stage">
+      ${taskLabel('Найди ошибку и нажми на неё')}
+      ${sceneCard(s.id, s.n)}
+      <div class="fix-words">${s.words.map((w,i)=>`<button class="wblock plain" data-ok="${i === s.wrongIdx}" onclick="gramFix(this)">${w}</button>`).join('')}</div>
+    </div>`,
+
+  // Станции правил: выбери слово в пропуск
+  pickGap: s => `
+    <div class="stage">
+      ${taskLabel('Выбери, что пропущено')}
+      <div class="phrase sentence">${esc(s.pre)}<span class="gap" id="gap">?</span>${esc(s.post)}</div>
+      <div class="ru-hint">${s.ru}</div>
+      <div class="${optionsClass(s.options)}">${s.options.map(o=>`<button class="opt-btn" data-ok="${o === s.answer}" onclick="gramChoose(this)">${esc(o)}</button>`).join('')}</div>
+    </div>`,
+
+  typeGap: s => `
+    <div class="stage">
+      ${taskLabel('Впиши пропущенное слово')}
+      <div class="phrase sentence">${esc(s.pre)}<input id="gramInput" class="gram-input inline" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="width:${Math.max(3, s.answer.length + 1)}ch"
+        onkeydown="if(event.key==='Enter'){event.preventDefault(); gramTypeCheck();}">${esc(s.post)}</div>
+      <div class="ru-hint">${s.ru}</div>
+    </div>
+    <div class="stage-actions"><button class="btn btn-primary grow" onclick="gramTypeCheck()">Проверить</button></div>`,
+
+  fixWord: s => `
+    <div class="stage">
+      ${taskLabel('Найди ошибку и нажми на неё')}
+      <div class="ru-hint">${s.ru}</div>
+      <div class="fix-words">${s.words.map((w,i)=>`<button class="wblock plain small" data-ok="${i === s.wrongIdx}" onclick="gramFix(this)">${esc(w)}</button>`).join('')}</div>
+    </div>`,
+
+  isRight: s => `
+    <div class="stage">
+      ${taskLabel('Так можно сказать?')}
+      ${phraseBtn(s.phrase, esc(s.phrase))}
+      ${yesNoButtons(s.answer)}
+    </div>`,
+
+  story: s => {
+    const f = s.frames[s.frame];
+    const pic = f.pics !== undefined ? picsCard(f.pics) : sceneCard(f.id, f.n);
+    return `
+      <div class="stage story-stage">
+        ${taskLabel(s.title)}
+        <div class="story-frame">
+          ${pic}
+          ${phraseBtn(f.en, f.html)}
+          <div class="story-ru">${f.ru}</div>
+        </div>
+        <div class="story-dots">${s.frames.map((_,i)=>`<span class="${i <= s.frame ? 'on' : ''}"></span>`).join('')}</div>
+      </div>
+      <div class="stage-actions"><button class="btn btn-primary" onclick="storyNext()"><span class="btn-label">Дальше ${icon('arrow',22)}</span></button></div>`;
+  },
+
+  question: s => `
+    <div class="stage">
+      ${taskLabel('Вопрос по истории')}
+      ${s.pics ? picsCard(s.pics) : ''}
+      ${phraseBtn(s.q, esc(s.q))}
+      <div class="ru-hint">${s.ru}</div>
+      <div class="${optionsClass(s.options)}">${s.options.map(o=>`<button class="opt-btn" data-ok="${o === s.answer}" onclick="gramChoose(this)">${esc(o)}</button>`).join('')}</div>
+    </div>`,
+
+  // Звуки: пара слов на слух — только картинки, без подписей
+  pickPic: s => `
+    <div class="stage">
+      ${taskLabel('Послушай и выбери картинку')}
+      ${bigListen(s.say)}
+      <div class="pic-opts">${s.options.map(id=>`<button class="pic-opt" data-ok="${id === s.answer}" onclick="gramChoose(this)">${wImg(WORD_BY_ID[id], 96)}</button>`).join('')}</div>
+    </div>`,
+
+  pickSound: s => `
+    <div class="stage">
+      ${taskLabel('Какой звук в этом слове?')}
+      ${wordPicCard(s.id)}
+      ${bigListen(s.say)}
+      <div class="sound-opts">${s.sides.map(x=>`
+        <button class="sound-opt" data-ok="${x.key === s.answer}" onclick="gramChoose(this)">
+          <b class="${x.cls}">${esc(x.label)}</b>
+          <span class="dur-wrap">${x.dur ? durBar(x.dur) : `<span class="sound-tag">${x.tag}</span>`}</span>
+        </button>`).join('')}</div>
+    </div>`,
+
+  spellGap: s => `
+    <div class="stage">
+      ${taskLabel('Какие буквы пропущены?')}
+      ${wordPicCard(s.id)}
+      ${bigListen(s.fbEn)}
+      <div class="phrase spell">${esc(s.pre)}<span class="gap" id="gap">?</span>${esc(s.post)}</div>
+      <div class="options">${s.options.map(o=>`<button class="opt-btn" data-ok="${o === s.answer}" onclick="gramChoose(this)">${esc(o)}</button>`).join('')}</div>
+    </div>`,
+
+  twister: s => `
+    <div class="stage">
+      ${taskLabel('Скороговорка: скажи вслух!')}
+      ${s.lines.map(l=>`
+        <div class="twister">
+          <div class="phrase">${l.html}</div>
+          <div class="story-ru">${l.ru}</div>
+          <div class="twister-btns">
+            <button class="seg-btn" onclick="speak(${jsq(l.en)})">${icon('speaker',20)} Обычно</button>
+            <button class="seg-btn" onclick="speakSlow(${jsq(l.en)})">${icon('speaker',20)} Медленно</button>
+          </div>
+        </div>`).join('')}
+      <div class="record-row">
+        <button class="btn btn-blue" onclick="recordSelf(this)">${icon('mic',22)} Записать себя</button>
+        <button class="btn btn-outline" id="playSelf" hidden onclick="playSelf()">${icon('speaker',22)} Послушать себя</button>
+      </div>
+    </div>
+    <div class="stage-actions"><button class="btn btn-primary" onclick="gramNext()"><span class="btn-label">Готово ${icon('arrow',22)}</span></button></div>`,
+};
+
+function renderGrammarScreen(){
+  const step = currentStep();
+  const pct = Math.round(session.stepIdx / session.steps.length * 100);
+  const lesson = SECTIONS.find(s=>s.id===session.sectionId).lessons.find(l=>l.id===session.lessonId);
+  return `
+    <div class="lesson-top">
+      <button class="round-btn" onclick="exitLesson()" aria-label="Выйти со станции">${icon('close',26)}</button>
+      <div class="lprogress"><div class="lprogress-fill" style="width:${pct}%"></div></div>
+      <div class="lesson-pic">${lessonPicHtml(lesson, 44)}</div>
+    </div>
+    ${step.retry ? `<div class="retry-tag">${icon('reset',16)} Повторим ещё раз</div>` : ''}
+    ${GRAM_RENDER[step.type](step)}
+  `;
+}
+function grammarAfterRender(){
+  const step = currentStep();
+  const sayLater = text => setTimeout(()=>{ if(session && currentStep() === step) speak(text); }, 400);
+  if(['pickScene', 'pickPic', 'pickSound'].includes(step.type)) sayLater(step.say);
+  if(step.type === 'story') sayLater(step.frames[step.frame].en);
+  if(step.type === 'question') sayLater(step.q);
+  if(step.type === 'typeWord' || step.type === 'typeGap'){ const el = document.getElementById('gramInput'); if(el) el.focus(); }
+}
+
+// Общий итог любого задания: запоминаем результат, ошибку ставим на повтор в конец
+function gramResult(ok){
+  const step = currentStep();
+  if(step.done) return;
+  step.done = true;
+  if(step.scored) step.result = ok;
+  if(!ok && !step.retry){
+    const again = step.type === 'build' ? { ...step, bank: shuffle(step.bank) } : { ...step };
+    session.steps.push({ ...again, done:false, retry:true, scored:false });
+  }
+  if(ok){ soundCorrect(); vibrate(50); speak(step.fbEn); }
+  else { soundWrong(); setTimeout(()=>speak(step.fbEn), 350); }
+  setTimeout(()=>showFeedback(ok, { en: step.fbEn, ru: step.fbRu, note: step.note }), 450);
+}
+function gramChoose(btn){
+  const step = currentStep();
+  if(step.done) return;
+  const ok = btn.dataset.ok === 'true';
+  btn.classList.add(ok ? 'correct' : 'wrong');
+  if(!ok){ const right = [...btn.parentElement.children].find(b=>b.dataset.ok === 'true'); if(right) right.classList.add('correct'); }
+  const gap = document.getElementById('gap');
+  if(gap){ gap.textContent = step.answer; gap.classList.add(ok ? 'ok' : 'bad'); }
+  gramResult(ok);
+}
+function gramFix(btn){
+  const step = currentStep();
+  if(step.done) return;
+  const ok = btn.dataset.ok === 'true';
+  const right = [...btn.parentElement.children].find(b=>b.dataset.ok === 'true');
+  if(!ok) btn.classList.add('wrong');
+  // Ошибочное слово превращается в правильное
+  right.innerHTML = step.fixed;
+  right.classList.add('correct');
+  gramResult(ok);
+}
+const normAnswer = s => String(s).trim().toLowerCase().replace(/[’`]/g, "'").replace(/\s+/g, ' ');
+function gramTypeCheck(){
+  const step = currentStep();
+  if(step.done) return;
+  const el = document.getElementById('gramInput');
+  const val = normAnswer(el.value);
+  if(!val){ el.focus(); return; }
+  const ok = val === normAnswer(step.answer);
+  el.classList.add(ok ? 'correct' : 'wrong');
+  if(!ok) el.value = step.answer;
+  el.disabled = true;
+  gramResult(ok);
+}
+
+/* ---- Сборка фразы из блоков ---- */
+function buildOrder(){ return session.buildOrder || (session.buildOrder = []); }
+function buildDraw(){
+  const step = currentStep();
+  const order = buildOrder();
+  const line = document.getElementById('buildLine');
+  line.innerHTML = order.length
+    ? order.map(i=>`<button class="wblock in-line" onclick="buildTap(${i})">${esc(step.bank[i])}</button>`).join('')
+    : `<span class="build-hint">нажимай на слова по порядку</span>`;
+  step.bank.forEach((_, i)=>document.getElementById(`wb-${i}`).classList.toggle('used', order.includes(i)));
+  document.getElementById('buildCheckBtn').disabled = order.length === 0;
+}
+function buildTap(i){
+  const step = currentStep();
+  if(step.done) return;
+  soundClick();
+  const order = buildOrder();
+  const at = order.indexOf(i);
+  if(at > -1) order.splice(at, 1); else { order.push(i); speak(step.bank[i]); }
+  buildDraw();
+}
+function buildReset(){ if(currentStep().done) return; session.buildOrder = []; buildDraw(); }
+function buildCheck(){
+  const step = currentStep();
+  if(step.done) return;
+  const ok = normAnswer(buildOrder().map(i=>step.bank[i]).join(' ')) === normAnswer(step.answer.join(' '));
+  document.getElementById('buildLine').classList.add(ok ? 'ok' : 'bad');
+  gramResult(ok);
+}
+
+/* ---- История ---- */
+function storyNext(){
+  const step = currentStep();
+  soundClick();
+  if(step.frame < step.frames.length - 1){ step.frame++; render(); }
+  else gramNext();
+}
+
+function gramNext(){
+  if(!session || session.kind !== 'station') return;
+  session.buildOrder = [];
+  session.stepIdx++;
+  if(session.stepIdx >= session.steps.length){ finishSession(); return; }
+  render();
+}
+
+// Звёзды станции: доля заданий, решённых с первой попытки (повторы не считаются)
+function applyGrammarResult(){
+  const scored = session.steps.filter(s=>s.scored);
+  const r = scored.length ? scored.filter(s=>s.result === true).length / scored.length : 1;
+  const stars = r >= 0.9 ? 3 : r >= 0.7 ? 2 : 1;
+  const key = 'g_' + session.lessonId;
+  const prev = appState.progress[key] || 0;
+  if(stars > prev){ appState.progress[key] = stars; return stars - prev; }
+  return 0;
+}
+
+/* ---- Карточки слов: подсветка ee и строчка про хитреца ---- */
+function phonicsHtml(en){ return esc(en).replace(/ee/g, '<b class="ph-ee">ee</b>'); }
+function trickyLine(w){
+  if(!TRICKY[w.id] || !appState.progress['g_animals_plural']) return '';
+  return `<div class="tricky-line">${icon('bolt',18)} много: <b>${plural(w.id)}</b></div>`;
+}
+
+/* ---- Автопроверка: в станциях только изученные слова ---- */
+// Слово в станции допустимо, если оно изучено на тропе раньше, объяснено в этой или прошлой станции (explains)
+// или это форма изученного слова, которую уже объяснили: множественное число, he eats, played, playing.
+const STATION_FLAGS = { plural:['plurals'], present_simple:['verbS'], past_regular:['verbEd'], want_to:['verbIng'] };
+function wordForms(w, flags){
+  const forms = [];
+  const base = w.en.toLowerCase();
+  if(base.includes(' ')) return forms;
+  const pos = (w.pos || '').split(':')[0];
+  if(flags.has('plurals') && pos === 'n') forms.push(pluralOfWord(w));
+  if(pos === 'v'){
+    const cons = /[^aeiou][aeiou][bdgmnprt]$/.test(base);
+    const e = base.endsWith('e');
+    if(flags.has('verbS')) forms.push(/(s|x|z|ch|sh|o)$/.test(base) ? base + 'es' : /[^aeiou]y$/.test(base) ? base.slice(0, -1) + 'ies' : base + 's');
+    if(flags.has('verbEd')) forms.push(e ? base + 'd' : /[^aeiou]y$/.test(base) ? base.slice(0, -1) + 'ied' : cons ? base + base.slice(-1) + 'ed' : base + 'ed', base + 'ed');
+    if(flags.has('verbIng')) forms.push(e && !base.endsWith('ee') ? base.slice(0, -1) + 'ing' : cons ? base + base.slice(-1) + 'ing' : base + 'ing', base + 'ing');
+  }
+  return forms;
+}
+function stationTexts(st, steps){
+  const texts = [];
+  if(st.topic !== 'plural' && st.type === 'grammar'){
+    st.spec.items.forEach(([en])=>texts.push(en));
+    st.spec.rules.forEach(r=>r.ex.forEach(([en])=>texts.push(en)));
+    if(st.spec.story){
+      st.spec.story.frames.forEach(([en])=>texts.push(en));
+      st.spec.story.questions.forEach(([q, , options])=>texts.push(q, ...options));
+    }
+    return texts;
+  }
+  steps.forEach(s=>{
+    if(s.fbEn) texts.push(s.fbEn);
+    if(s.q) texts.push(s.q, ...s.options);
+    if(s.answer && Array.isArray(s.answer)) texts.push(...s.answer);
+    if(s.frames) s.frames.forEach(f=>texts.push(f.en));
+    if(s.lines) s.lines.forEach(l=>texts.push(l.en));
+  });
+  return texts;
+}
+function stationProblems(){
+  const known = new Set(), learned = [], flags = new Set();
+  const problems = [];
+  const tokens = text => text.toLowerCase().replace(/[’`]/g, "'").replace(/[^a-z'\s-]/g, ' ').split(/[\s-]+/).map(t=>t.replace(/^'+|'+$/g, '')).filter(Boolean);
+  const okToken = tok => {
+    if(known.has(tok)) return true;
+    if(tok.endsWith("'s") && known.has(tok.slice(0, -2))) return true;
+    return learned.some(w=>wordForms(w, flags).includes(tok));
+  };
+  flatLessons().forEach(({lesson})=>{
+    if(lesson.kind !== 'station'){
+      lesson.words.forEach(w=>{ learned.push(w); tokens(w.en).forEach(t=>known.add(t)); });
+      // Примеры для слов без картинки — по тому же правилу: только изученные к этому уроку слова
+      lesson.words.filter(w=>!w.emoji).forEach(w=>{
+        const ex = exampleOf(w);
+        if(!ex){ problems.push({ station: 'Примеры', words: [`нет примера для «${w.en}»`] }); return; }
+        const bad = tokens(examplePlain(ex[0])).filter(tok=>!okToken(tok));
+        if(bad.length) problems.push({ station: `пример к «${w.en}»`, words: bad });
+      });
+      return;
+    }
+    const st = lesson.station;
+    (st.spec.explains || []).forEach(t=>known.add(t.toLowerCase()));
+    (STATION_FLAGS[st.topic] || []).forEach(f=>flags.add(f));
+    if(st.type === 'sound'){
+      const ids = new Set(learned.map(w=>w.id));
+      ['a', 'b'].forEach(side=>{
+        const words = st.spec[side].words;
+        const missing = words.filter(en=>!wordByEn(en));
+        const ok = words.map(wordByEn).filter(w=>w && ids.has(w.id) && soundAt(w, st.spec[side]) > -1);
+        if(missing.length) problems.push({ station: st.title, words: missing.map(m=>`нет в словаре: ${m}`) });
+        if(ok.length < 3) problems.push({ station: st.title, words: [`мало изученных слов для «${st.spec[side].label}»: ${ok.length}`] });
+      });
+      return;
+    }
+    const bad = new Set();
+    stationTexts(st, buildStationSteps(st)).forEach(t=>tokens(t).forEach(tok=>{ if(!okToken(tok)) bad.add(tok); }));
+    if(bad.size) problems.push({ station: st.title, words: [...bad] });
+  });
+  return problems;
+}
+function stationCheckHtml(){
+  const p = stationProblems();
+  if(!p.length) return `<div class="check-note ok">${icon('check',16)} Проверка: во всех ${STATIONS.length} станциях и примерах только изученные слова</div>`;
+  return `<div class="check-note bad">Проверка слов: ${p.map(x=>`«${esc(x.station)}»: ${esc(x.words.join(', '))}`).join('; ')}</div>`;
+}
+
+/* ---- ПЕРЕХОДЫ ---- */
+function afterRender(){
+  popupAfterRender();
+  if(screen==='map'){
+    // Прокручиваем тропу к текущему уроку, чтобы не листать 100+ кружков
+    const scroller = document.querySelector('.screen');
+    if(mapRestore !== null) scroller.scrollTop = mapRestore;
+    else { const top = currentNodeTop(scroller); if(top !== null) scroller.scrollTop = top; }
+    scroller.addEventListener('scroll', updateMapButtons, { passive:true });
+    updateMapButtons();
+  }
+  if(screen==='lesson' && session.kind === 'station') grammarAfterRender();
+  if(screen==='lesson' && session.kind !== 'station'){
+    const stageKey = session.stages[session.stageIdx];
+    if(stageKey === 'typing' || stageKey === 'dictation'){
+      const idxs = getInputIdxs(); if(idxs.length) focusCell(idxs[0]);
+    }
+    // В диктанте слово звучит сразу — читать ребёнку не нужно
+    if(stageKey === 'dictation'){
+      const w = currentWord();
+      setTimeout(()=>{ if(session && currentWord() === w) speak(w.en); }, 400);
+    }
+  }
+}
+function nextInStage(){
+  if(!session || screen !== 'lesson') return;
+  if(session.kind === 'station'){ gramNext(); return; }
+  if(session.wordIdx < session.words.length - 1){ session.wordIdx++; }
+  else {
+    session.wordIdx = 0;
+    session.stageIdx++;
+    if(session.stageIdx >= session.stages.length){ finishSession(); return; }
+  }
+  render();
+}
+
+// Переносит звёзды из текущей сессии в прогресс (только если стало больше). Возвращает прирост.
+function applySessionResults(){
+  let gained = 0;
+  session.words.forEach(w=>{
+    const r = session.results[w.id];
+    const stars = (r.rec?1:0) + (r.asm?1:0) + ((r.typ && r.dic) ? 1 : 0);
+    const prevStars = appState.progress[w.id] || 0;
+    if(stars > prevStars){ gained += (stars - prevStars); appState.progress[w.id] = stars; }
+  });
+  return gained;
+}
+
+function finishSession(){
+  const sessionStarsGained = session.kind === 'station' ? applyGrammarResult() : applySessionResults();
+  markActiveToday();
+  saveState();
+  screen = 'sessionEnd';
+  session.lastGained = sessionStarsGained;
+  render();
+  fireConfetti();
+  // Каждая звезда «выпрыгивает» со своим звуком, потом общий праздничный аккорд
+  const lesson = SECTIONS.find(s=>s.id===session.sectionId).lessons.find(l=>l.id===session.lessonId);
+  const n = lessonStarCount(lesson);
+  for(let i=0; i<n; i++) setTimeout(()=>playTone(660 + i*130, 0.16), 350 + i*350);
+  setTimeout(soundCelebrate, 400 + n*350);
+}
+
+function fireConfetti(){
+  const app = document.getElementById('app');
+  const colors = ['#5DB043','#4FB3E3','#FFC83D','#EF5F57','#F2AE1F','#B98AE0'];
+  for(let i=0;i<46;i++){
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    const size = 7 + Math.random()*7;
+    piece.style.width = size+'px';
+    piece.style.height = (Math.random() < .5 ? size : size*0.5)+'px';
+    piece.style.left = Math.random()*100+'%';
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animationDuration = (1.6 + Math.random()*1.6)+'s';
+    piece.style.animationDelay = (Math.random()*0.4)+'s';
+    app.appendChild(piece);
+    setTimeout(()=>piece.remove(), 3800);
+  }
+}
+
+/* ============================= ФИНАЛ УРОКА ============================= */
+function renderSessionEnd(){
+  const section = SECTIONS.find(s=>s.id===session.sectionId);
+  const lesson = section.lessons.find(l=>l.id===session.lessonId);
+  const starCount = lessonStarCount(lesson);
+  const gained = session.lastGained || 0;
+  const flat = flatLessons();
+  const nextIdx = flat.findIndex(f=>f.lesson.id===lesson.id) + 1;
+  const nextEntry = nextIdx < flat.length && isLessonUnlocked(nextIdx) ? flat[nextIdx] : null;
+  const next = nextEntry && lessonStarCount(nextEntry.lesson) < 3 ? nextEntry.lesson : null;
+  const nextIsNew = next && lessonStars(next) === 0;
+
+  const starsHtml = [0,1,2].map(i=>
+    `<span class="end-star" style="animation-delay:${0.3 + i*0.35}s">${icon(i < starCount ? 'star' : 'starEmpty', i===1 ? 86 : 66)}</span>`
+  ).join('');
+  const isGrammar = lesson.kind === 'station';
+  const isSound = isGrammar && lesson.station.type === 'sound';
+  const wordsHtml = isGrammar
+    ? stationChips(lesson.station)
+    : lesson.words.map(w=>
+        `<button class="word-chip" onclick="speak(${jsq(w.en)})" aria-label="Послушать ${w.en}">${wImg(w,46)}<span>${w.en}</span></button>`
+      ).join('');
+
+  return `
+    <div class="end-wrap">
+      <div class="end-hero">
+        <div class="end-stars">${starsHtml}</div>
+        <div class="end-worm">${wormSvg('celebrate')}</div>
+        <h1 class="end-title">${isSound ? 'Звуки пойманы!' : isGrammar ? 'Станция пройдена!' : 'Урок пройден!'}</h1>
+        <div class="end-sub">${lesson.title}</div>
+        <div class="end-chip ${gained > 0 ? 'gain' : ''}">${gained > 0 ? `${icon('star',28)} +${gained}` : 'Отличное повторение!'}</div>
+      </div>
+      ${nextIsNew ? `
+        <div class="unlock-card" style="--c:${nextEntry.section.color};">
+          <div class="unlock-pic">${lessonPicHtml(next, 38)}</div>
+          <div>
+            <div class="unlock-title">${next.kind === 'station' ? (next.station.type === 'sound' ? 'Открыта станция звуков!' : 'Открыта станция правил!') : 'Открыт новый урок!'}</div>
+            <div class="unlock-sub">${next.title}</div>
+          </div>
+        </div>` : ''}
+      <div class="section-label">${isSound ? 'Слова станции' : isGrammar ? 'Фразы станции' : 'Слова урока'}</div>
+      <div class="word-chips">${wordsHtml}</div>
+    </div>
+    <div class="end-actions">
+      ${next ? `<button class="btn btn-primary" onclick="openLesson('${next.id}')"><span class="btn-label">Следующий урок ${icon('arrow',22)}</span></button>` : ''}
+      <button class="btn ${next ? 'btn-outline' : 'btn-primary'}" onclick="session=null; goTo('map')"><span class="btn-label">${icon('map',26)} На тропу</span></button>
+      <button class="btn btn-ghost" onclick="session=null; goTo('pet')">К другу</button>
+    </div>
+  `;
+}
+
+/* ============================= ПИТОМЕЦ ============================= */
+// Аксессуары нарисованы вокруг точки (0,0) в квадрате ~50×50 — так их можно и «надеть», и показать в шкафу
+const ACC_ART = {
+  bow: `<path d="M0 0L-19-12Q-25 0-19 12Z" fill="#F48FB1" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><path d="M0 0L19-12Q25 0 19 12Z" fill="#F48FB1" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><circle r="6" fill="#EC6A97" stroke="${INK}" stroke-width="3"/>`,
+  glasses: `<circle cx="-11" r="9" fill="#2B2118" fill-opacity=".88" stroke="${INK}" stroke-width="3"/><circle cx="11" r="9" fill="#2B2118" fill-opacity=".88" stroke="${INK}" stroke-width="3"/><path d="M-2 0h4" stroke="${INK}" stroke-width="3"/><path d="M-15-3l3-3M7-3l3-3" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".8"/>`,
+  hat: `<rect x="-14" y="-30" width="28" height="28" rx="3" fill="#3E3B52" stroke="${INK}" stroke-width="3"/><rect x="-14" y="-11" width="28" height="6" fill="#EF5F57"/><rect x="-23" y="-4" width="46" height="8" rx="4" fill="#3E3B52" stroke="${INK}" stroke-width="3"/>`,
+  crown: `<path d="M-21 4V-15l10 9 11-15 11 15 10-9V4z" fill="#FCD535" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><circle cx="0" cy="-4" r="3.5" fill="#EF5F57"/><circle cx="-12" cy="-2" r="2.5" fill="#4FB3E3"/><circle cx="12" cy="-2" r="2.5" fill="#4FB3E3"/>`,
+  medal: `<path d="M-11-24L0-4l11-20" fill="none" stroke="#4FB3E3" stroke-width="7" stroke-linejoin="round"/><circle cy="7" r="12" fill="#F2AE1F" stroke="${INK}" stroke-width="3"/><path d="M0 0l2.4 4.8 5.3.8-3.8 3.7.9 5.2L0 12l-4.8 2.5.9-5.2-3.8-3.7 5.3-.8z" fill="#FFE98A"/>`,
+  trophy: `<path d="M-14-22h28v10a14 14 0 01-28 0z" fill="#FCD535" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><path d="M-14-18h-6a6 6 0 006 9M14-18h6a6 6 0 01-6 9" fill="none" stroke="${INK}" stroke-width="3"/><rect x="-4" y="1" width="8" height="9" fill="#F2AE1F" stroke="${INK}" stroke-width="3"/><rect x="-12" y="10" width="24" height="8" rx="2" fill="#B97E4B" stroke="${INK}" stroke-width="3"/>`,
+};
+function accSvg(id, size){
+  return `<svg viewBox="-26 -26 52 52" width="${size}" height="${size}" aria-hidden="true">${ACC_ART[id]}</svg>`;
+}
+function wornAccessories(total){
+  const worn = ACCESSORIES.filter(a=>total >= a.req && !appState.petOff.includes(a.id)).map(a=>a.id);
+  // На голове только один убор: корона важнее шляпы
+  if(worn.includes('crown')) return worn.filter(id=>id!=='hat');
+  return worn;
+}
+function toggleWear(id, btn){
+  const a = ACCESSORIES.find(a=>a.id===id);
+  if(totalStarsEarned() < a.req){
+    soundClick();
+    btn.classList.remove('nope'); void btn.offsetWidth; btn.classList.add('nope');
+    return;
+  }
+  const worn = wornAccessories(totalStarsEarned());
+  if(worn.includes(id)){
+    appState.petOff = [...new Set([...appState.petOff, id])];
+  } else {
+    appState.petOff = appState.petOff.filter(x=>x!==id);
+    // Надели головной убор — другой снимаем
+    if(a.head) ACCESSORIES.filter(o=>o.head && o.id!==id).forEach(o=>{ if(!appState.petOff.includes(o.id)) appState.petOff.push(o.id); });
+  }
+  saveState();
+  soundCorrect();
+  render();
+  petTap(false);
+}
+
+// Все друзья нарисованы от земли вверх: (0,0) — точка между лапками, тело — круг r52 с центром (0,-58).
+// Одинаковое тело у всех — поэтому наряды садятся одинаково.
+const PET_SCALE = [0, .62, .74, .84, .92, 1, 1];
+const FOX = '#F4A04A', FOX_DARK = '#E27022', EAGLE = '#A0673A', EAGLE_DARK = '#7A4A26';
+const NEST = `<path d="M-64-26Q-58 6 0 6Q58 6 64-26Q32-12 0-12Q-32-12-64-26z" fill="#A57939" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/><path d="M-50-16l22 8M-12-6l26 2M26-10l24-8M-36-6l14-2" stroke="#6A462F" stroke-width="3" stroke-linecap="round"/>`;
+const PET_EGG = {
+  chick: `<path d="M0-114C30-114 52-62 52-40 52-10 30 2 0 2S-52-10-52-40C-52-62-30-114 0-114z" fill="#FFF3D6" stroke="${INK}" stroke-width="4"/>
+    <circle cx="-16" cy="-62" r="7" fill="#F4C76A"/><circle cx="18" cy="-40" r="9" fill="#F4C76A"/><circle cx="-12" cy="-24" r="5" fill="#F4C76A"/>
+    <path d="M-30-88q8-10 14-6" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>`,
+  // Лисёнок спит клубочком, укрывшись хвостом
+  fox: `<path d="M-42-66L-32-98-12-76z" fill="${FOX_DARK}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M-12-76L2-102 14-74z" fill="${FOX_DARK}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+    <ellipse cx="0" cy="-40" rx="58" ry="40" fill="${FOX}" stroke="${INK}" stroke-width="4"/>
+    <path d="M-36-64q10-10 24-8" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".6"/>
+    <path d="M-34-48q6 5 12 0M-10-48q6 5 12 0" fill="none" stroke="${INK}" stroke-width="3.5" stroke-linecap="round"/>
+    <ellipse cx="-46" cy="-38" rx="5" ry="4" fill="${INK}"/>
+    <path d="M58-40C62-4 20 4-20-2-42-4-56-14-54-26-32-14 10-14 30-26 42-32 50-36 58-40z" fill="${FOX_DARK}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M-54-26C-56-14-42-4-24-2-28-10-34-16-38-22z" fill="#fff" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M30-100h10l-10 10h10M48-118h7l-7 7h7" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="pet-zzz"/>`,
+  // Орлиное яйцо лежит в гнезде
+  eagle: `<g transform="translate(0 -6) scale(.8)"><path d="M0-114C30-114 52-62 52-40 52-10 30 2 0 2S-52-10-52-40C-52-62-30-114 0-114z" fill="#EEF2F5" stroke="${INK}" stroke-width="5"/>
+    <circle cx="-16" cy="-70" r="6" fill="#B98A5E"/><circle cx="20" cy="-56" r="8" fill="#B98A5E"/><circle cx="-8" cy="-40" r="5" fill="#B98A5E"/>
+    <path d="M-30-88q8-10 14-6" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/></g>${NEST}`,
+};
+function petBody(species, stageIdx, hasHead){
+  const eyes = `<g class="pet-eyes">
+      <circle cx="-18" cy="-70" r="6.5" fill="${INK}"/><circle cx="-16" cy="-72.5" r="2.2" fill="#fff"/>
+      <circle cx="18" cy="-70" r="6.5" fill="${INK}"/><circle cx="20" cy="-72.5" r="2.2" fill="#fff"/>
+    </g>`;
+  const cheeks = `<circle cx="-33" cy="-54" r="6.5" fill="#FF8FA3" opacity=".55"/><circle cx="33" cy="-54" r="6.5" fill="#FF8FA3" opacity=".55"/>`;
+  const shine = `<path d="M-30-90q10-12 22-10" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".7"/>`;
+  const claw = (x, color) => `<path d="M${x}-8l-9 9M${x}-8v11M${x}-8l9 9" stroke="${color}" stroke-width="5" stroke-linecap="round"/>`;
+  // Хохолок растёт с «Пушистика»; под шляпой и короной его не видно
+  const tuft = hasHead ? '' : stageIdx >= 3
+    ? `<path d="M-4-108q-8-18 4-24M4-108q6-20 18-18M-10-107q-16-10-14-22" fill="none" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>`
+    : `<path d="M0-108q-2-12 8-14" fill="none" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>`;
+
+  if(species === 'fox'){
+    const ear = side => `<path d="M${-48*side}-82L${-40*side}-128 ${-12*side}-104z" fill="${FOX}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/><path d="M${-40*side}-92L${-37*side}-116 ${-23*side}-103z" fill="#FFE0C2"/>`;
+    const tail = stageIdx >= 3
+      ? `<path d="M30-22C74-6 104-44 90-88 84-106 64-110 58-96 70-74 62-48 26-44z" fill="${FOX_DARK}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/><path d="M90-88C84-106 64-110 58-96 66-92 78-88 90-88z" fill="#fff" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`
+      : `<path d="M30-22C64-10 86-36 78-68 74-80 62-82 58-72 64-58 56-44 26-44z" fill="${FOX_DARK}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/><path d="M78-68C74-80 62-82 58-72 64-70 72-68 78-68z" fill="#fff" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`;
+    return `${tail}
+      <ellipse cx="-20" cy="-4" rx="13" ry="7" fill="${FOX_DARK}" stroke="${INK}" stroke-width="4"/>
+      <ellipse cx="20" cy="-4" rx="13" ry="7" fill="${FOX_DARK}" stroke="${INK}" stroke-width="4"/>
+      ${ear(1)}${ear(-1)}
+      <circle cx="0" cy="-58" r="52" fill="${FOX}" stroke="${INK}" stroke-width="4"/>
+      <ellipse cx="0" cy="-26" rx="28" ry="18" fill="#FFF3E4"/>
+      <ellipse cx="0" cy="-50" rx="25" ry="14" fill="#fff"/>
+      ${shine}
+      ${hasHead ? '' : `<path d="M-8-108q2-12 10-14M2-108q8-8 16-4" fill="none" stroke="${INK}" stroke-width="4" stroke-linecap="round"/>`}
+      ${eyes}${cheeks}
+      <ellipse cx="0" cy="-57" rx="6.5" ry="5" fill="${INK}"/>
+      <path d="M-7-48q3.5 4 7 0q3.5 4 7 0" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`;
+  }
+  if(species === 'eagle'){
+    // Белая «шапочка» из перьев поверх коричневого тела
+    const hood = `<path d="M-50-72A52 52 0 0 1 50-72Q38-60 28-68Q16-54 0-64Q-16-54-28-68Q-38-60-50-72z" fill="#fff"/>`;
+    return `${claw(-18, '#F2AE1F')}${claw(18, '#F2AE1F')}
+      <ellipse cx="-52" cy="-50" rx="15" ry="27" transform="rotate(22 -52 -50)" fill="${EAGLE_DARK}" stroke="${INK}" stroke-width="4"/>
+      <ellipse cx="52" cy="-50" rx="15" ry="27" transform="rotate(-22 52 -50)" fill="${EAGLE_DARK}" stroke="${INK}" stroke-width="4"/>
+      <circle cx="0" cy="-58" r="52" fill="${EAGLE}"/>
+      ${hood}
+      <circle cx="0" cy="-58" r="52" fill="none" stroke="${INK}" stroke-width="4"/>
+      <ellipse cx="0" cy="-28" rx="28" ry="19" fill="#C9925A"/>
+      <path d="M-14-34l4 4 4-4M6-34l4 4 4-4M-4-24l4 4 4-4" fill="none" stroke="${EAGLE_DARK}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      ${tuft}
+      ${eyes}
+      ${stageIdx >= 4 ? `<path d="M-27-82l14 4M27-82l-14 4" stroke="${INK}" stroke-width="3.5" stroke-linecap="round"/>` : ''}
+      <path d="M-11-62H11Q15-50 4-43Q5-50 0-52Q-7-52-11-62z" fill="#FCD535" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`;
+  }
+  return `${claw(-18, '#F08A24')}${claw(18, '#F08A24')}
+    <ellipse cx="-50" cy="-52" rx="13" ry="22" transform="rotate(22 -50 -52)" fill="#F5BE1E" stroke="${INK}" stroke-width="4"/>
+    <ellipse cx="50" cy="-52" rx="13" ry="22" transform="rotate(-22 50 -52)" fill="#F5BE1E" stroke="${INK}" stroke-width="4"/>
+    <circle cx="0" cy="-58" r="52" fill="#FCD535" stroke="${INK}" stroke-width="4"/>
+    <ellipse cx="0" cy="-34" rx="30" ry="21" fill="#FFE98A"/>
+    ${shine}${tuft}${eyes}${cheeks}
+    <path d="M-9-61H9L0-49z" fill="#F08A24" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`;
+}
+function petSvg(stageIdx, worn, species = 'chick'){
+  const has = id => worn.includes(id);
+  const label = FRIENDS.find(f=>f.species === species).names[stageIdx];
+  const trophy = has('trophy') ? `<g transform="translate(190 150) scale(1.2)">${ACC_ART.trophy}</g>` : '';
+  const shadowW = stageIdx === 0 ? 50 : 22 + 52*PET_SCALE[stageIdx];
+  const shadow = `<ellipse cx="100" cy="172" rx="${shadowW}" ry="8" fill="rgba(50,90,30,.25)"/>`;
+
+  if(stageIdx === 0){
+    return `<svg viewBox="0 0 200 190" class="pet-svg ${species === 'fox' ? 'pet-sleep' : 'pet-egg'}" aria-label="${label}">${shadow}${trophy}
+      <g transform="translate(100 170)"><g class="pet-bob">${PET_EGG[species]}</g></g></svg>`;
+  }
+
+  const s = PET_SCALE[stageIdx];
+  const head = has('crown') ? `<g transform="translate(0 -104) scale(1.25)">${ACC_ART.crown}</g>`
+             : has('hat')   ? `<g transform="translate(0 -103) scale(1.25)">${ACC_ART.hat}</g>` : '';
+  // Чем старше стадия, тем наряднее: шарфик у 5-й стадии, плащ у «Чемпиона», фиолетовый плащ и сияние у «Короля»
+  const cape = stageIdx >= 5
+    ? `<path d="M-30-100Q-62-104-78-58-88-22-74 4H74Q88-22 78-58 62-104 30-100z" fill="${stageIdx >= 6 ? '#8E5CC8' : '#4FB3E3'}" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`
+    : '';
+  const scarf = stageIdx >= 4
+    ? `<path d="M12-24l10 24 11-5-9-22" fill="#EF5F57" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/><path d="M-36-32Q0-14 36-32l1 9Q0-4-37-23z" fill="#EF5F57" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`
+    : '';
+  const sparkles = stageIdx >= 6
+    ? [[28,40,1],[170,62,.8],[40,120,.7],[160,22,.6]].map(([x,y,k])=>`<path d="M${x} ${y-12*k}l${3*k} ${9*k} ${9*k} ${3*k}-${9*k} ${3*k}-${3*k} ${9*k}-${3*k}-${9*k}-${9*k}-${3*k} ${9*k}-${3*k}z" fill="#FCD535" stroke="${INK}" stroke-width="2" class="pet-sparkle"/>`).join('')
+    : '';
+  const body = `
+    ${cape}
+    ${petBody(species, stageIdx, !!head)}
+    ${scarf}
+    ${has('medal') ? `<g transform="translate(0 -22) scale(.9)">${ACC_ART.medal}</g>` : ''}
+    ${has('glasses') ? `<g transform="translate(0 -70) scale(1.6)">${ACC_ART.glasses}</g>` : ''}
+    ${has('bow') ? `<g transform="translate(36 -96) rotate(20) scale(.85)">${ACC_ART.bow}</g>` : ''}
+    ${head}`;
+  // Птенчик ещё сидит в скорлупке, орлёнок — в гнезде
+  const front = stageIdx !== 1 ? ''
+    : species === 'chick' ? `<path d="M-46-30l12-12 12 12 12-12 12 12 12-12 12 12 12-12 8 12C46-6 26 4 0 4S-46-6-46-30z" transform="translate(100 172) scale(1.05)" fill="#FFF3D6" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/>`
+    : species === 'eagle' ? `<g transform="translate(100 168) scale(1.05)">${NEST}</g>` : '';
+  return `<svg viewBox="0 0 200 190" class="pet-svg" aria-label="${label}">${shadow}${sparkles}${trophy}
+    <g transform="translate(100 170) scale(${s})"><g class="pet-bob">${body}</g></g>${front}</svg>`;
+}
+
+/* ---- Друг говорит по-английски: только слова, которые ребёнок уже начал учить ---- */
+// [фраза, перевод, с какой стадии, только для этого друга]
+const FRIEND_PHRASES = [
+  ['Hello!', 'Привет!', 1], ['Goodbye!', 'Пока!', 1], ['Yes!', 'Да!', 1], ['Good!', 'Хорошо!', 1],
+  ['Thank you!', 'Спасибо!', 2], ['Good morning!', 'Доброе утро!', 2], ['Good night!', 'Спокойной ночи!', 2],
+  ['I am happy!', 'Я счастлив!', 2], ['Look at me!', 'Посмотри на меня!', 2], ['Well done!', 'Молодец!', 2],
+  ['I love you!', 'Я тебя люблю!', 3], ['Play with me!', 'Поиграй со мной!', 3], ['You are my friend!', 'Ты мой друг!', 3],
+  ['I can jump!', 'Я умею прыгать!', 3], ['I can run!', 'Я умею бегать!', 3, 'fox'], ['I can fly!', 'Я умею летать!', 3, 'eagle'],
+  ['I like apples!', 'Я люблю яблоки!', 3], ['I like school!', 'Я люблю школу!', 3],
+  ['I am big now!', 'Я теперь большой!', 4], ['You are a star!', 'Ты звезда!', 4],
+  ['I like books!', 'Я люблю книги!', 4], ['I like new words!', 'Я люблю новые слова!', 4],
+  ['Have a good day!', 'Хорошего дня!', 5], ['I am the king of the forest!', 'Я король леса!', 6, 'fox'],
+  ['I am the king of the mountains!', 'Я король гор!', 6, 'eagle'], ['I am the king of words!', 'Я король слов!', 6, 'chick'],
+];
+function learnedTokens(){
+  const set = new Set();
+  Object.values(WORD_BY_ID).forEach(w=>{ if((appState.progress[w.id] || 0) > 0) w.en.toLowerCase().split(/[\s-]+/).forEach(t=>set.add(t)); });
+  STATIONS.forEach(st=>{ if((appState.progress['g_' + st.id] || 0) > 0) (st.spec.explains || []).forEach(t=>set.add(t.toLowerCase())); });
+  return set;
+}
+function phraseKnown(en, known){
+  return en.toLowerCase().replace(/[!?.,]/g, '').split(/\s+/).every(t=>known.has(t) || (t.endsWith('s') && known.has(t.slice(0, -1))) || (t === "let's" && known.has('let')));
+}
+// Что скажет друг: фраза из выученных слов, а если таких нет — одно выученное слово
+let lastSaid = '';
+function friendLine(info){
+  if(info.idx === 0) return null; // яйцо и спящий клубочек молчат
+  const known = learnedTokens();
+  const phrases = FRIEND_PHRASES.filter(([en, , st, sp])=>st <= info.idx && (!sp || sp === info.friend.species) && phraseKnown(en, known))
+    .map(([en, ru])=>({ en, ru }));
+  const words = Object.values(WORD_BY_ID).filter(w=>(appState.progress[w.id] || 0) > 0).map(w=>({ en: w.en, ru: w.ru }));
+  // Взрослый друг чаще говорит фразами, малыш — словами
+  const pool = phrases.length && (Math.random() < .35 + info.idx * .1 || !words.length) ? phrases : words;
+  const options = pool.filter(p=>p.en !== lastSaid);
+  const pick = (options.length ? options : pool)[Math.floor(Math.random() * (options.length ? options : pool).length)];
+  if(pick) lastSaid = pick.en;
+  return pick || null;
+}
+function petTap(talk = true){
+  const svg = document.querySelector('.pet-scene .pet-svg');
+  const scene = document.querySelector('.pet-scene');
+  if(!svg || !scene) return;
+  if(talk){
+    const line = friendLine(friendsState().show);
+    scene.querySelectorAll('.pet-bubble').forEach(b=>b.remove());
+    if(line){
+      const b = document.createElement('div');
+      b.className = 'pet-bubble';
+      b.innerHTML = `<div class="pet-bubble-en">${esc(line.en)}</div><div class="pet-bubble-ru">${esc(line.ru)}</div>`;
+      scene.appendChild(b);
+      setTimeout(()=>b.remove(), 3200);
+      setTimeout(()=>speak(line.en), 250);
+    }
+  }
+  svg.classList.remove('happy'); void svg.getBoundingClientRect(); svg.classList.add('happy');
+  playTone(880, 0.08); setTimeout(()=>playTone(1175, 0.1), 90);
+  vibrate(15);
+  for(let i=0; i<3; i++){
+    const h = document.createElement('div');
+    h.className = 'float-heart';
+    h.innerHTML = icon('heart', 22 + Math.random()*10);
+    h.style.left = (40 + Math.random()*20) + '%';
+    h.style.top = (30 + Math.random()*15) + '%';
+    h.style.animationDelay = (i*0.12) + 's';
+    scene.appendChild(h);
+    setTimeout(()=>h.remove(), 1500);
+  }
+}
+
+// Какого друга показывать на полянке: выбранного в «Лесном домике» или того, кто растёт сейчас
+function friendsState(){
+  const infos = FRIENDS.map(friendInfo);
+  const cur = infos.filter(i=>i.met).pop() || infos[0];
+  const show = infos.find(i=>i.met && i.friend.level === appState.petShow) || cur;
+  return { infos, cur, show };
+}
+function showFriend(level){
+  appState.petShow = level;
+  saveState();
+  soundClick();
+  render();
+  document.querySelector('.screen').scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(petTap, 250);
+}
+
+function renderPet(){
+  const total = totalStarsEarned();
+  const { infos, cur, show } = friendsState();
+  const { friend, idx, name, min, next, stars } = show;
+  const pct = next ? Math.round((stars - min) / (next.min - min) * 100) : 100;
+  const worn = wornAccessories(total);
+  const level = LEVELS.find(l=>l.num === friend.level);
+
+  const wardrobe = ACCESSORIES.map(a=>{
+    const unlocked = total >= a.req;
+    const on = worn.includes(a.id);
+    return `
+      <button class="ward ${unlocked ? '' : 'locked'} ${on ? 'worn' : ''}" onclick="toggleWear('${a.id}', this)" aria-pressed="${on}" aria-label="${a.name}">
+        ${accSvg(a.id, 44)}
+        ${unlocked ? `<span class="ward-name">${a.name}</span>` : `<span class="ward-req">${icon('star',14)} ${a.req}</span><span class="ward-lock">${icon('lock',18)}</span>`}
+      </button>`;
+  }).join('');
+
+  // Лесной домик: встреченные друзья — какими выросли, будущие — загадочный силуэт
+  const house = infos.map(i=>{
+    const lv = LEVELS.find(l=>l.num === i.friend.level);
+    if(!i.met) return `
+      <div class="friend-card mystery" aria-label="Друг откроется на уровне ${lv.num}">
+        <div class="friend-pic" aria-hidden="true">${petSvg(3, [], i.friend.species)}<span class="friend-q">?</span></div>
+        <div class="friend-name">Кто это?</div>
+        <div class="friend-sub">${icon('lock',14)} ${lv.title}</div>
+      </div>`;
+    return `
+      <button class="friend-card ${i === show ? 'on' : ''}" onclick="showFriend(${i.friend.level})" aria-label="Показать: ${i.name}">
+        <div class="friend-pic">${petSvg(i.idx, [], i.friend.species)}</div>
+        <div class="friend-name">${i.name}</div>
+        <div class="friend-sub">${i.idx === FRIEND_STEPS.length - 1 ? 'Совсем вырос!' : i === cur ? 'Растёт сейчас' : lv.title}</div>
+      </button>`;
+  }).join('');
+
+  const badges = SECTIONS.map(s=>{
+    const p = Math.round(sectionStars(s) / maxStarsForSection(s) * 100);
+    return `
+      <div class="badge ${p === 100 ? 'done' : ''} ${p === 0 ? 'empty' : ''}" style="--c:${s.color}; --p:${p}%;">
+        <div class="badge-ring"><div class="badge-pic">${wImg(sectionPicWord(s), 34)}</div></div>
+        <div class="badge-name">${s.title}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="map-top">
+      <div class="chip">${icon('flame',28)} ${currentStreak()}</div>
+      <div class="map-top-title">Мой друг</div>
+      <div class="chip">${icon('star',28)} ${total}</div>
+      ${goalPillHtml(true)}
+    </div>
+    <div class="pet-scene" onclick="petTap()" role="button" aria-label="Погладить друга">
+      <div class="pet-sun"></div>
+      <div class="pet-cloud" style="left:8%; top:30px; width:70px;"></div>
+      <div class="pet-cloud" style="left:52%; top:62px; width:50px; animation-delay:-6s;"></div>
+      <div class="pet-ground"></div>
+      <img class="deco" src="assets/images/nature_3_tree.svg" alt="" style="left:11%; top:62%; width:76px; height:76px;" onerror="this.remove()">
+      <img class="deco" src="assets/images/nature_3_tree.svg" alt="" style="left:90%; top:58%; width:62px; height:62px;" onerror="this.remove()">
+      <img class="deco" src="assets/images/nature_3_flower.svg" alt="" style="left:24%; top:88%; width:34px; height:34px;" onerror="this.remove()">
+      <img class="deco" src="assets/images/fruits_veg_5_mushroom.svg" alt="" style="left:78%; top:89%; width:34px; height:34px;" onerror="this.remove()">
+      <div class="pet-stage">${petSvg(idx, worn, friend.species)}</div>
+    </div>
+    <div class="pet-info">
+      <div class="pet-name">${name}</div>
+      <div class="pet-kind">${friend.title} · ${level.title}</div>
+      <div class="pet-bar"><div class="pet-bar-fill" style="width:${pct}%"></div></div>
+      <div class="pet-next">${next ? `${icon('star',20)} ещё ${next.min - stars} до стадии «${next.name}»` : 'Самый большой и мудрый!'}</div>
+      ${next && show !== cur ? `<div class="pet-hint">Растёт от звёзд за уроки уровня «${level.title}»</div>` : ''}
+      <div class="pet-steps">${friend.names.map((p,i)=>`<span class="${i < idx ? 'on' : i === idx ? 'on cur' : ''}"></span>`).join('')}</div>
+    </div>
+    <div class="section-label">Лесной домик</div>
+    <div class="house">${house}</div>
+    <div class="section-label">Наряды</div>
+    <div class="wardrobe">${wardrobe}</div>
+    <div class="section-label">Мои полянки</div>
+    <div class="badges">${badges}</div>
+  `;
+}
+
+/* ============================= ЦЕЛИ ОТ РОДИТЕЛЕЙ ============================= */
+// Родитель задаёт награду и сколько звёзд собрать; считаем звёзды, полученные после постановки цели
+function goalProgress(){
+  const g = appState.goal;
+  if(!g) return null;
+  const got = Math.max(0, Math.min(g.target, totalStarsEarned() - g.start));
+  return { got, target: g.target, pct: Math.round(got / g.target * 100), reached: got >= g.target };
+}
+function goalPillHtml(slim){
+  const gp = goalProgress();
+  if(!gp) return '';
+  return `
+    <div class="goal-pill ${slim ? 'slim' : ''} ${gp.reached ? 'done' : ''}">
+      <img src="assets/images/gift.svg" alt="" width="42" height="42" onerror="this.remove()">
+      <div class="goal-main">
+        <div class="goal-text">${gp.reached ? 'Цель достигнута! Покажи родителям' : esc(appState.goal.text)}</div>
+        <div class="goal-bar"><div class="goal-bar-fill" style="width:${gp.pct}%"></div></div>
+      </div>
+      <div class="goal-num">${gp.reached ? icon('check', 24) : `${icon('star', 16)} ${gp.got}/${gp.target}`}</div>
+    </div>`;
+}
+const GOAL_SIZES = [50, 100, 200, 300, 500];
+let goalDraft = { text: '', target: 100 };
+function goalCardHtml(){
+  const g = appState.goal;
+  if(g){
+    const gp = goalProgress();
+    return `
+      <div class="dash-card">
+        <div class="goal-reward">${icon('star', 18)} Награда: <b>${esc(g.text)}</b></div>
+        ${goalPillHtml()}
+        <p class="dash-empty">${gp.reached ? 'Цель достигнута — пора вручать награду!' : `Осталось собрать ${g.target - gp.got} звёзд. Ребёнок видит цель на тропе и у друга.`}</p>
+        <button class="btn btn-outline" onclick="clearGoal()">${gp.reached ? 'Поставить новую цель' : 'Убрать цель'}</button>
+      </div>`;
+  }
+  const perLesson = Math.round(FLAT_LESSONS.filter(f=>f.lesson.kind !== 'station').reduce((a, f)=>a + maxStarsForLesson(f.lesson), 0) / FLAT_LESSONS.filter(f=>f.lesson.kind !== 'station').length);
+  return `
+    <div class="dash-card">
+      <div class="setting-row stack">
+        <span class="setting-label">Награда</span>
+        <input class="goal-input" type="text" maxlength="60" placeholder="Например: поход в кино" value="${esc(goalDraft.text).replace(/"/g, '&quot;')}" oninput="goalDraft.text = this.value" aria-label="Награда">
+      </div>
+      <div class="setting-row stack">
+        <span class="setting-label">Сколько звёзд собрать</span>
+        <div class="seg">${GOAL_SIZES.map(n=>`<button class="${goalDraft.target === n ? 'on' : ''}" aria-pressed="${goalDraft.target === n}" onclick="setGoalSize(${n})">${n}</button>`).join('')}</div>
+      </div>
+      <p class="dash-empty">За один урок можно получить до ${perLesson} звёзд, за станцию — до 3.</p>
+      <button class="btn btn-primary" onclick="setGoal()">Поставить цель</button>
+    </div>`;
+}
+function setGoalSize(n){ soundClick(); goalDraft.target = n; render(); }
+function setGoal(){
+  const text = goalDraft.text.trim() || 'Сюрприз';
+  appState.goal = { start: totalStarsEarned(), target: goalDraft.target, text, done: false };
+  goalDraft.text = '';
+  saveState(); soundCorrect(); render();
+}
+function clearGoal(){
+  appState.goal = null;
+  saveState(); soundClick(); render();
+}
+
+/* ---- Праздничные окна на тропе: цель достигнута, новый друг ---- */
+function popupHtml(){
+  if(screen !== 'map' && screen !== 'pet') return '';
+  const g = appState.goal, gp = goalProgress();
+  if(g && gp.reached && !g.done) return `
+    <div class="pop-layer" role="dialog" aria-label="Цель достигнута">
+      <div class="pop-card goal">
+        <img class="pop-gift" src="assets/images/gift.svg" alt="" onerror="this.remove()">
+        <div class="pop-title">Цель достигнута!</div>
+        <div class="pop-text">Собрано ${g.target} звёзд! Твоя награда:</div>
+        <div class="pop-reward">${esc(g.text)}</div>
+        <div class="pop-show">Покажи родителям!</div>
+        <button class="btn btn-primary" onclick="closeGoalPopup()">Ура!</button>
+      </div>
+    </div>`;
+  const grown = grownFriend();
+  if(grown) return grownPopupHtml(grown);
+  const lv = currentLevel();
+  if(appState.friendsSeen.includes(lv)) return '';
+  const i = friendInfo(FRIENDS.find(f=>f.level === lv));
+  const level = LEVELS.find(l=>l.num === lv);
+  const prev = FRIENDS.find(f=>f.level === lv - 1);
+  const text = prev
+    ? `${prev.title} теперь живёт в Лесном домике. А на уровне «${level.title}» тебя ждёт новый друг — ${i.friend.title.toLowerCase()}! Собирай звёзды, и он вырастет.`
+    : `Это твой друг. Пока он в яйце. Учи слова, собирай звёзды — и он вылупится и вырастет!`;
+  return `
+    <div class="pop-layer" role="dialog" aria-label="Новый друг">
+      <div class="pop-card">
+        <div class="pop-title">${prev ? 'Новый друг!' : 'Знакомься!'}</div>
+        <div class="pop-pet">${petSvg(i.idx, [], i.friend.species)}</div>
+        <div class="pop-text">${text}</div>
+        <button class="btn btn-primary" onclick="closeFriendPopup(${lv})">Привет!</button>
+      </div>
+    </div>`;
+}
+let popupShown = '';
+function popupAfterRender(){
+  const pop = document.querySelector('.pop-layer');
+  const key = pop ? pop.getAttribute('aria-label') : '';
+  if(key && key !== popupShown){
+    fireConfetti();
+    setTimeout(soundCelebrate, 200);
+  }
+  popupShown = key;
+}
+function closeGoalPopup(){
+  appState.goal.done = true;
+  saveState(); soundClick(); render();
+}
+// Какой встреченный друг подрос с прошлого раза (null — никто)
+function grownFriend(){
+  const infos = FRIENDS.map(friendInfo).filter(i=>i.met);
+  if(!appState.friendStages){
+    // Первый запуск этой версии: запоминаем, как есть, без поздравлений
+    appState.friendStages = {};
+    infos.forEach(i=>{ appState.friendStages[i.friend.level] = i.idx; });
+    saveState();
+    return null;
+  }
+  // Друга нового уровня сначала знакомим — его рост считаем с этого момента
+  return infos.find(i=>appState.friendsSeen.includes(i.friend.level) && i.idx > (appState.friendStages[i.friend.level] ?? i.idx)) || null;
+}
+function grownPopupHtml(i){
+  const from = appState.friendStages[i.friend.level];
+  const first = from === 0;
+  const verb = !first ? 'подрос' : i.friend.species === 'fox' ? 'проснулся' : 'вылупился';
+  return `
+    <div class="pop-layer" role="dialog" aria-label="Друг вырос ${i.friend.level}-${i.idx}">
+      <div class="pop-card">
+        <div class="pop-title">${i.friend.title} ${verb}!</div>
+        <div class="grow-row">
+          <div class="grow-old">${petSvg(from, [], i.friend.species)}</div>
+          <div class="grow-arrow">${icon('star', 30)}</div>
+          <div class="grow-new">${petSvg(i.idx, [], i.friend.species)}</div>
+        </div>
+        <div class="pop-reward">${i.name}</div>
+        <div class="pop-text">${i.next ? `До стадии «${i.next.name}» — ещё ${i.next.min - i.stars} звёзд.` : 'Это самая большая стадия. Ты молодец!'}</div>
+        <button class="btn btn-primary" onclick="closeGrownPopup(${i.friend.level}, ${i.idx})">Ура!</button>
+      </div>
+    </div>`;
+}
+function closeGrownPopup(level, idx){
+  appState.friendStages[level] = idx;
+  appState.petShow = level;
+  saveState(); soundClick();
+  goTo('pet');
+  setTimeout(petTap, 500);
+}
+function closeFriendPopup(lv){
+  if(appState.friendStages) FRIENDS.forEach(f=>{ if(f.level <= lv && appState.friendStages[f.level] === undefined) appState.friendStages[f.level] = friendInfo(f).idx; });
+  // Отмечаем и все прошлые уровни — если ребёнок перепрыгнул через уровень, второе окно не нужно
+  FRIENDS.forEach(f=>{ if(f.level <= lv && !appState.friendsSeen.includes(f.level)) appState.friendsSeen.push(f.level); });
+  appState.petShow = null;
+  saveState(); soundClick(); render();
+}
+
+/* ============================= PARENT GATE ============================= */
+let gateQuestion = null;
+function parentTop(title){
+  return `
+    <div class="parent-top">
+      <button class="round-btn" onclick="goTo('map')" aria-label="Закрыть">${icon('close',26)}</button>
+      <div class="parent-title">${title}</div>
+      <span style="width:48px;"></span>
+    </div>`;
+}
+function renderParentGate(){
+  // Умножение 6–9 × 6–9: дошкольнику не по силам, взрослому — пара секунд
+  const a = Math.floor(Math.random()*4)+6;
+  const b = Math.floor(Math.random()*4)+6;
+  const correct = a*b;
+  gateQuestion = {a, b, correct};
+  const opts = [correct];
+  for(const d of shuffle([-a, a, -b, b, 1, -1, 10, -10])){
+    if(opts.length >= 3) break;
+    if(!opts.includes(correct+d)) opts.push(correct+d);
+  }
+  return `
+    ${parentTop('Для родителей')}
+    <div class="gate-card" id="gateCard">
+      <div class="gate-lock">${icon('lock',68)}</div>
+      <p class="gate-text">Решите пример, чтобы войти.<br>Так мы проверяем, что это взрослый.</p>
+      <div class="gate-q">${a} × ${b} = ?</div>
+      <div class="gate-options">${shuffle(opts).map(o=>`<button class="gate-opt" onclick="checkGate(${o})">${o}</button>`).join('')}</div>
+      <div class="feedback" id="fb"></div>
+    </div>
+  `;
+}
+function checkGate(val){
+  soundClick();
+  if(val === gateQuestion.correct){ screen = 'parentDashboard'; render(); return; }
+  const fb = document.getElementById('fb');
+  fb.textContent = 'Неверно, вот другой пример'; fb.className = 'feedback bad';
+  document.getElementById('gateCard').classList.add('nope');
+  setTimeout(()=>{ if(screen === 'parentGate') render(); }, 900);
+}
+
+/* ============================= PARENT DASHBOARD ============================= */
+function segmented(key, options){
+  return `<div class="seg" role="group">${options.map(([val, label])=>
+    `<button class="${appState.settings[key] === val ? 'on' : ''}" aria-pressed="${appState.settings[key] === val}" onclick="setSetting('${key}', ${JSON.stringify(val).replace(/"/g, '&quot;')})">${label}</button>`
+  ).join('')}</div>`;
+}
+function renderParentDashboard(){
+  const total = totalStarsEarned();
+  const wordsLearned = Object.entries(appState.progress).filter(([id, s])=>!id.startsWith('g_') && s>=3).length;
+  const totalWords = SECTIONS.reduce((a,s)=>a+s.lessons.reduce((b,l)=>b+l.words.length,0),0);
+  const imgIcon = id => `<img src="assets/images/${id}.svg" alt="" width="36" height="36" onerror="this.remove()">`;
+
+  const topicRows = SECTIONS.map(s=>{
+    const pct = Math.round(sectionStars(s)/maxStarsForSection(s)*100);
+    return `
+      <div class="topic-row">
+        <div class="topic-pic">${wImg(sectionPicWord(s), 30)}</div>
+        <div class="topic-main">
+          <div class="topic-bar-name"><span>${s.title}</span><span>${pct}%</span></div>
+          <div class="topic-bar-track"><div class="topic-bar-fill" style="width:${pct}%; background:${s.color};"></div></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const allWordsFlat = SECTIONS.flatMap(s=>s.lessons.flatMap(l=>l.words.map(w=>({...w, stars: appState.progress[w.id]||0}))));
+  const struggling = allWordsFlat.filter(w=>w.stars>0 && w.stars<3).sort((a,b)=>a.stars-b.stars).slice(0,6);
+  const struggleHtml = struggling.length
+    ? struggling.map(w=>`
+        <div class="struggle-word">
+          ${wImg(w,34)}
+          <div class="sw-text"><div class="sw-en">${w.en}</div><div class="sw-ru">${w.ru}</div></div>
+          <div class="sw-stars">${starsRow(w.stars, 18)}</div>
+          <button class="speak-btn small" onclick="speak(${jsq(w.en)})" aria-label="Послушать ${w.en}">${icon('speaker',20)}</button>
+        </div>`).join('')
+    : '<p class="dash-empty">Пока рано говорить о трудных словах — ребёнок только начал.</p>';
+
+  const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+  const dayPills = dayNames.map(d=>`<button class="day-pill ${appState.settings.reminderDays.includes(d)?'on':''}" aria-pressed="${appState.settings.reminderDays.includes(d)}" onclick="toggleDay('${d}')">${d}</button>`).join('');
+
+  return `
+    ${parentTop('Родителям')}
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-icon">${imgIcon('school_1_book')}</div><div><div class="stat-val">${wordsLearned}<small> / ${totalWords}</small></div><div class="stat-label">слов выучено</div></div></div>
+      <div class="stat"><div class="stat-icon">${icon('star',36)}</div><div><div class="stat-val">${total}</div><div class="stat-label">звёзд собрано</div></div></div>
+      <div class="stat"><div class="stat-icon">${icon('flame',36)}</div><div><div class="stat-val">${currentStreak()}</div><div class="stat-label">дней подряд</div></div></div>
+      <div class="stat"><div class="stat-icon">${imgIcon('nature_2_snow')}</div><div><div class="stat-val">${appState.streak.freezeAvailable ? 'есть' : 'нет'}</div><div class="stat-label">заморозка серии</div></div></div>
+    </div>
+
+    <div class="section-label">Прогресс по темам</div>
+    <div class="dash-card">${topicRows}</div>
+
+    <div class="section-label">Слова, которые даются труднее</div>
+    <div class="dash-card">${struggleHtml}</div>
+
+    <div class="section-label">Цель и награда</div>
+    ${goalCardHtml()}
+
+    <div class="section-label">Настройки</div>
+    <div class="dash-card">
+      <div class="setting-row stack">
+        <span class="setting-label">Голос озвучки</span>
+        ${segmented('voice', [['US','Американский'],['UK','Британский']])}
+      </div>
+      <div class="setting-row stack">
+        <span class="setting-label">Лимит времени в день</span>
+        ${segmented('timeLimit', [[15,'15 мин'],[30,'30 мин'],[45,'45 мин'],[60,'60 мин']])}
+      </div>
+      <div class="setting-row">
+        <span class="setting-label">Звуки</span>
+        <label class="switch"><input type="checkbox" ${appState.settings.soundOn?'checked':''} onchange="toggleSound(this.checked)" aria-label="Звуки"><span></span></label>
+      </div>
+      <div class="setting-row stack">
+        <span class="setting-label">Дни напоминаний</span>
+        <div class="day-pills">${dayPills}</div>
+      </div>
+    </div>
+
+    <div class="section-label">Для проверки</div>
+    <div class="dash-card">
+      <div class="setting-row">
+        <span class="setting-label">Открыть все уроки и станции</span>
+        <label class="switch"><input type="checkbox" ${appState.settings.unlockAll ? 'checked' : ''} onchange="setUnlockAll(this.checked)" aria-label="Открыть все уроки"><span></span></label>
+      </div>
+      <p class="dash-empty">В курсе ${LEVELS.length} уровня, ${SECTIONS.length} тем, ${STATIONS.length} станций и ${Object.keys(WORD_BY_ID).length} слов.</p>
+      ${stationCheckHtml()}
+    </div>
+
+    <details class="dash-details">
+      <summary>Приватность и данные</summary>
+      <p>Это демо-прототип: весь прогресс хранится локально в браузере (localStorage), ничего не отправляется на сервер. В реальном приложении:</p>
+      <p>• Данные будут храниться на серверах в РФ (требование 152-ФЗ для пользователей из России)<br>
+      • Про ребёнка собираем только никнейм и аватар — без фамилии, даты рождения, фото<br>
+      • Родитель сможет удалить аккаунт и все данные прямо из приложения<br>
+      • Без сторонней рекламы и поведенческого трекинга (требование App Store Kids Category и Google Play Families)</p>
+    </details>
+    <details class="dash-details">
+      <summary>Авторы картинок</summary>
+      <p>Картинки: <a href="https://openmoji.org" target="_blank" rel="noopener">OpenMoji</a> — открытый проект эмодзи и иконок. Лицензия: CC BY-SA 4.0</p>
+    </details>
+  `;
+}
+function toggleDay(d){
+  soundClick();
+  const arr = appState.settings.reminderDays;
+  const i = arr.indexOf(d);
+  if(i>-1) arr.splice(i,1); else arr.push(d);
+  saveState(); render();
+}
+function setSetting(key, val){
+  soundClick();
+  appState.settings[key] = val;
+  saveState(); render();
+}
+function setUnlockAll(on){
+  appState.settings.unlockAll = on;
+  saveState();
+  soundClick();
+}
+function toggleSound(on){
+  appState.settings.soundOn = on;
+  saveState();
+  if(on) soundCorrect();
+}
+
+/* ============================= СТАРТ ============================= */
+stationProblems().forEach(p=>console.warn(`Станция «${p.station}»: неизученные слова — ${p.words.join(', ')}`));
+render();
+</script>
+</body>
+</html>
