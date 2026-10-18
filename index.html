@@ -323,6 +323,14 @@ button.friend-card:active{top:3px; box-shadow:0 1px 0 var(--line);}
 .goal-pill.done .goal-bar-fill{background:var(--leaf);}
 @keyframes pulse-goal{50%{transform:scale(1.025);}}
 .goal-reward{display:flex; align-items:center; gap:6px; font-size:15px; font-weight:800; color:var(--ink); margin-bottom:10px;}
+.support-card{background:#FFF1EF; border-color:#F8CFCA;}
+.support-head{display:flex; align-items:center; gap:8px;}
+.support-title{font-size:18px; font-weight:900; color:var(--berry-shadow);}
+.support-text{font-size:14px; font-weight:700; color:var(--ink-soft); line-height:1.4; margin:8px 0 4px;}
+.support-card .btn{text-decoration:none;}
+.support-btn{flex-direction:column; gap:1px; padding:12px 18px;}
+.support-btn-main{display:flex; align-items:center; gap:8px;}
+.support-btn-note{font-size:12px; font-weight:800; opacity:.8;}
 .install-why{font-size:14px; font-weight:800; color:var(--ink); margin:0 0 8px;}
 .install-steps{margin:0; padding-left:20px; font-size:14px; font-weight:700; color:var(--ink-soft); line-height:1.5;}
 .install-card .btn{margin-top:4px;}
@@ -3160,6 +3168,8 @@ function renderParentDashboard(){
       ${stationCheckHtml()}
     </div>
 
+    ${supportCardHtml()}
+
     <details class="dash-details">
       <summary>Приватность и данные</summary>
       <p>Весь прогресс ребёнка хранится только в этом браузере (localStorage) и никуда не отправляется. Для статистики мы считаем анонимно, сколько раз открывают приложение и проходят уроки (сервис GoatCounter, без cookies и без личных данных). В будущей версии:</p>
@@ -3195,6 +3205,30 @@ function toggleSound(on){
   appState.settings.soundOn = on;
   saveState();
   if(on) soundCorrect();
+}
+
+/* ============================= ПОДДЕРЖАТЬ ПРОЕКТ ============================= */
+// Страницы пожертвований: кнопка показывается, только если у неё есть ссылка; нет ни одной — нет и карточки.
+// Если ссылка одна, кнопка называется просто «Поддержать проект».
+// Карточка живёт только в разделе «Родителям» (за проверкой-вопросом), чтобы дети не нажимали на неё.
+const SUPPORT_LINKS = [
+  { label: 'Из России',        note: 'карта или СБП',            url: '' },
+  { label: 'Из других стран',  note: 'карты банков других стран', url: 'https://boosty.to/englishkids/donate' },
+];
+function supportCardHtml(){
+  const links = SUPPORT_LINKS.filter(l=>l.url);
+  if(!links.length) return '';
+  const buttons = links.map((l, i)=>`
+      <a class="btn ${i === 0 ? 'btn-berry' : 'btn-outline'} support-btn" href="${l.url}" target="_blank" rel="noopener" onclick="track('поддержать: переход', ${jsq(l.label)})">
+        <span class="support-btn-main">${icon('heart', 22)} ${links.length > 1 ? l.label : 'Поддержать проект'}</span>
+        ${links.length > 1 ? `<span class="support-btn-note">${l.note}</span>` : ''}
+      </a>`).join('');
+  return `
+    <div class="dash-card support-card">
+      <div class="support-head">${icon('heart', 34)}<div class="support-title">Нравится приложение?</div></div>
+      <p class="support-text">Его делает один человек, без рекламы и платных подписок. Если приложение помогает вашему ребёнку, можно поддержать проект — это поможет добавить озвучку, новые уроки и игры.</p>
+      ${buttons}
+    </div>`;
 }
 
 /* ============================= СТАТИСТИКА ============================= */
