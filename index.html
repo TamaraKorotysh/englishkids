@@ -331,6 +331,10 @@ button.friend-card:active{top:3px; box-shadow:0 1px 0 var(--line);}
 .support-btn{flex-direction:column; gap:1px; padding:12px 18px;}
 .support-btn-main{display:flex; align-items:center; gap:8px;}
 .support-btn-note{font-size:12px; font-weight:800; opacity:.8;}
+.crypto-net{font-size:14px; font-weight:800; color:var(--ink-soft); line-height:1.35; margin-top:4px;}
+.crypto-qr{display:block; width:200px; height:200px; margin:10px auto 6px; border-radius:12px; border:2px solid var(--line);}
+.crypto-addr{font-family:ui-monospace, Consolas, monospace; font-size:14px; font-weight:700; color:var(--ink); background:#F6EEDF; border-radius:12px; padding:8px 10px; overflow-wrap:anywhere; user-select:all; -webkit-user-select:all;}
+.crypto-warn{font-size:12px; font-weight:800; color:var(--berry-shadow); margin:8px 0 0; line-height:1.35;}
 .install-why{font-size:14px; font-weight:800; color:var(--ink); margin:0 0 8px;}
 .install-steps{margin:0; padding-left:20px; font-size:14px; font-weight:700; color:var(--ink-soft); line-height:1.5;}
 .install-card .btn{margin-top:4px;}
@@ -906,6 +910,7 @@ const ICONS = {
   star: `<path d="${STAR_PATH}" fill="#FCD535" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/>`,
   starEmpty: `<path d="${STAR_PATH}" fill="#EADBC2" stroke="#CDB894" stroke-width="3.5" stroke-linejoin="round"/>`,
   heart: `<path d="${HEART_PATH}" fill="#EF5F57" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/>`,
+  coin: `<circle cx="36" cy="36" r="24" fill="#FCD535" stroke="${INK}" stroke-width="3.5"/><circle cx="36" cy="36" r="16" fill="none" stroke="#F2AE1F" stroke-width="3"/><path d="M29 29h14M36 29v16" stroke="${INK}" stroke-width="3.5" stroke-linecap="round"/>`,
   heartEmpty: `<path d="${HEART_PATH}" fill="#EADBC2" stroke="#CDB894" stroke-width="3.5" stroke-linejoin="round"/>`,
   flame: `<path d="M36 64c-12 0-20-8-20-19 0-10 7-15 9-24 5 4 7 9 7 13 3-4 4-10 3-18 11 6 21 17 21 30 0 11-8 18-20 18z" fill="#F4A13A" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><path d="M36 62c-6 0-10-4-10-9 0-5 4-8 6-12 3 3 4 5 4 8 2-2 3-4 3-6 4 3 7 6 7 11 0 5-4 8-10 8z" fill="#FCD535"/>`,
   lock: `<path d="M25 32v-7a11 11 0 0122 0v7" fill="none" stroke="${INK}" stroke-width="4.5"/><rect x="16" y="31" width="40" height="30" rx="8" fill="#F1B31C" stroke="${INK}" stroke-width="4"/><circle cx="36" cy="46" r="4.5" fill="${INK}"/>`,
@@ -3215,9 +3220,22 @@ const SUPPORT_LINKS = [
   { label: 'Из России',        note: 'карта или СБП',            url: '' },
   { label: 'Из других стран',  note: 'карты банков других стран', url: 'https://boosty.to/englishkids/donate' },
 ];
+// Криптокошелёк: показываем адрес, QR-код (icons/crypto-qr.svg — проверен сканером) и кнопку «Скопировать».
+// Пустой address — кнопки нет.
+const SUPPORT_CRYPTO = {
+  address: '0x5dada8c724dA1c469B7Ec8f9530ebaB35DB08051',
+  network: 'BNB Smart Chain (BEP-20)',
+  coins: 'USDT, USDC или BNB',
+  qr: 'icons/crypto-qr.svg',
+};
 function supportCardHtml(){
   const links = SUPPORT_LINKS.filter(l=>l.url);
-  if(!links.length) return '';
+  const crypto = SUPPORT_CRYPTO.address ? `
+      <button class="btn btn-outline support-btn" onclick="openCrypto()">
+        <span class="support-btn-main">${icon('coin', 22)} Криптовалютой</span>
+        <span class="support-btn-note">${SUPPORT_CRYPTO.coins} · сеть BNB Smart Chain</span>
+      </button>` : '';
+  if(!links.length && !crypto) return '';
   const buttons = links.map((l, i)=>`
       <a class="btn ${i === 0 ? 'btn-berry' : 'btn-outline'} support-btn" href="${l.url}" target="_blank" rel="noopener" onclick="track('поддержать: переход', ${jsq(l.label)})">
         <span class="support-btn-main">${icon('heart', 22)} ${links.length > 1 ? l.label : 'Поддержать проект'}</span>
@@ -3227,8 +3245,36 @@ function supportCardHtml(){
     <div class="dash-card support-card">
       <div class="support-head">${icon('heart', 34)}<div class="support-title">Нравится приложение?</div></div>
       <p class="support-text">Его делает один человек, без рекламы и платных подписок. Если приложение помогает вашему ребёнку, можно поддержать проект — это поможет добавить озвучку, новые уроки и игры.</p>
-      ${buttons}
+      ${buttons}${crypto}
     </div>`;
+}
+function openCrypto(){
+  soundClick();
+  track('поддержать: криптовалюта');
+  const c = SUPPORT_CRYPTO;
+  const layer = document.createElement('div');
+  layer.className = 'pop-layer crypto-layer';
+  layer.setAttribute('role', 'dialog');
+  layer.setAttribute('aria-label', 'Поддержать криптовалютой');
+  layer.onclick = e => { if(e.target === layer) closeCrypto(); };
+  layer.innerHTML = `
+    <div class="pop-card crypto-card">
+      <div class="pop-title">Криптовалютой</div>
+      <div class="crypto-net">${c.coins}<br>сеть <b>${c.network}</b></div>
+      <img class="crypto-qr" src="${c.qr}" alt="QR-код адреса кошелька">
+      <div class="crypto-addr">${c.address}</div>
+      <button class="btn btn-primary" onclick="copyCrypto(this)">Скопировать адрес</button>
+      <p class="crypto-warn">Отправляйте только в сети ${c.network}. Перевод из другой сети может потеряться.</p>
+      <button class="btn btn-ghost" onclick="closeCrypto()">Закрыть</button>
+    </div>`;
+  document.getElementById('app').appendChild(layer);
+}
+function closeCrypto(){ document.querySelectorAll('.crypto-layer').forEach(l=>l.remove()); }
+function copyCrypto(btn){
+  const done = () => { btn.textContent = 'Адрес скопирован ✓'; soundCorrect(); };
+  // Если копирование запрещено (старый браузер), выделяем адрес — его можно скопировать вручную
+  const fallback = () => { const r = document.createRange(); r.selectNodeContents(document.querySelector('.crypto-addr')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'Адрес выделен — скопируйте его'; };
+  if(navigator.clipboard) navigator.clipboard.writeText(SUPPORT_CRYPTO.address).then(done, fallback); else fallback();
 }
 
 /* ============================= СТАТИСТИКА ============================= */
