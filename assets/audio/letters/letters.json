@@ -1,0 +1,704 @@
+[
+ {
+  "file": "a-name.mp3",
+  "letter": "A",
+  "kind": "name",
+  "word": "",
+  "start": 0.02,
+  "dur": 0.51,
+  "gain": 5.9
+ },
+ {
+  "file": "b-name.mp3",
+  "letter": "B",
+  "kind": "name",
+  "word": "",
+  "start": 0.89,
+  "dur": 0.62,
+  "gain": 7.6
+ },
+ {
+  "file": "c-name.mp3",
+  "letter": "C",
+  "kind": "name",
+  "word": "",
+  "start": 1.83,
+  "dur": 0.69,
+  "gain": 8.5
+ },
+ {
+  "file": "d-name.mp3",
+  "letter": "D",
+  "kind": "name",
+  "word": "",
+  "start": 2.82,
+  "dur": 0.66,
+  "gain": 7.7
+ },
+ {
+  "file": "e-name.mp3",
+  "letter": "E",
+  "kind": "name",
+  "word": "",
+  "start": 3.87,
+  "dur": 0.56,
+  "gain": 8.3
+ },
+ {
+  "file": "f-name.mp3",
+  "letter": "F",
+  "kind": "name",
+  "word": "",
+  "start": 4.8,
+  "dur": 0.5,
+  "gain": 7.3
+ },
+ {
+  "file": "g-name.mp3",
+  "letter": "G",
+  "kind": "name",
+  "word": "",
+  "start": 5.66,
+  "dur": 0.7,
+  "gain": 7.3
+ },
+ {
+  "file": "h-name.mp3",
+  "letter": "H",
+  "kind": "name",
+  "word": "",
+  "start": 6.67,
+  "dur": 0.73,
+  "gain": 10.3
+ },
+ {
+  "file": "i-name.mp3",
+  "letter": "I",
+  "kind": "name",
+  "word": "",
+  "start": 7.62,
+  "dur": 0.64,
+  "gain": 2
+ },
+ {
+  "file": "j-name.mp3",
+  "letter": "J",
+  "kind": "name",
+  "word": "",
+  "start": 8.5,
+  "dur": 0.73,
+  "gain": 7.8
+ },
+ {
+  "file": "k-name.mp3",
+  "letter": "K",
+  "kind": "name",
+  "word": "",
+  "start": 9.5,
+  "dur": 0.65,
+  "gain": 8.2
+ },
+ {
+  "file": "l-name.mp3",
+  "letter": "L",
+  "kind": "name",
+  "word": "",
+  "start": 10.42,
+  "dur": 0.59,
+  "gain": 9.5
+ },
+ {
+  "file": "m-name.mp3",
+  "letter": "M",
+  "kind": "name",
+  "word": "",
+  "start": 11.3,
+  "dur": 0.62,
+  "gain": 10.6
+ },
+ {
+  "file": "n-name.mp3",
+  "letter": "N",
+  "kind": "name",
+  "word": "",
+  "start": 12.17,
+  "dur": 0.65,
+  "gain": 8.5
+ },
+ {
+  "file": "o-name.mp3",
+  "letter": "O",
+  "kind": "name",
+  "word": "",
+  "start": 13.05,
+  "dur": 0.59,
+  "gain": 5.8
+ },
+ {
+  "file": "p-name.mp3",
+  "letter": "P",
+  "kind": "name",
+  "word": "",
+  "start": 13.85,
+  "dur": 0.64,
+  "gain": 6.2
+ },
+ {
+  "file": "q-name.mp3",
+  "letter": "Q",
+  "kind": "name",
+  "word": "",
+  "start": 14.64,
+  "dur": 0.68,
+  "gain": 9
+ },
+ {
+  "file": "r-name.mp3",
+  "letter": "R",
+  "kind": "name",
+  "word": "",
+  "start": 15.47,
+  "dur": 0.66,
+  "gain": 6.4
+ },
+ {
+  "file": "s-name.mp3",
+  "letter": "S",
+  "kind": "name",
+  "word": "",
+  "start": 16.3,
+  "dur": 0.72,
+  "gain": 5.7
+ },
+ {
+  "file": "t-name.mp3",
+  "letter": "T",
+  "kind": "name",
+  "word": "",
+  "start": 17.1,
+  "dur": 0.65,
+  "gain": 9.2
+ },
+ {
+  "file": "u-name.mp3",
+  "letter": "U",
+  "kind": "name",
+  "word": "",
+  "start": 17.82,
+  "dur": 0.7,
+  "gain": 4.1
+ },
+ {
+  "file": "v-name.mp3",
+  "letter": "V",
+  "kind": "name",
+  "word": "",
+  "start": 18.64,
+  "dur": 0.72,
+  "gain": 7.2
+ },
+ {
+  "file": "w-name.mp3",
+  "letter": "W",
+  "kind": "name",
+  "word": "",
+  "start": 19.45,
+  "dur": 0.78,
+  "gain": 6.3
+ },
+ {
+  "file": "x-name.mp3",
+  "letter": "X",
+  "kind": "name",
+  "word": "",
+  "start": 20.32,
+  "dur": 0.74,
+  "gain": 6
+ },
+ {
+  "file": "y-name.mp3",
+  "letter": "Y",
+  "kind": "name",
+  "word": "",
+  "start": 21.04,
+  "dur": 0.72,
+  "gain": 6.7
+ },
+ {
+  "file": "z-name.mp3",
+  "letter": "Z",
+  "kind": "name",
+  "word": "",
+  "start": 21.84,
+  "dur": 0.61,
+  "gain": 9.4
+ },
+ {
+  "file": "a-sound.mp3",
+  "letter": "A",
+  "kind": "sound",
+  "word": "",
+  "start": 0.02,
+  "dur": 0.59,
+  "gain": 5.2
+ },
+ {
+  "file": "b-sound.mp3",
+  "letter": "B",
+  "kind": "sound",
+  "word": "",
+  "start": 0.98,
+  "dur": 0.54,
+  "gain": 12.9
+ },
+ {
+  "file": "c-sound.mp3",
+  "letter": "C",
+  "kind": "sound",
+  "word": "",
+  "start": 1.96,
+  "dur": 0.35,
+  "gain": 7.6
+ },
+ {
+  "file": "d-sound.mp3",
+  "letter": "D",
+  "kind": "sound",
+  "word": "",
+  "start": 2.76,
+  "dur": 0.47,
+  "gain": 14.3
+ },
+ {
+  "file": "e-sound.mp3",
+  "letter": "E",
+  "kind": "sound",
+  "word": "",
+  "start": 3.72,
+  "dur": 0.55,
+  "gain": 5.8
+ },
+ {
+  "file": "f-sound.mp3",
+  "letter": "F",
+  "kind": "sound",
+  "word": "",
+  "start": 4.65,
+  "dur": 0.5,
+  "gain": 18
+ },
+ {
+  "file": "g-sound.mp3",
+  "letter": "G",
+  "kind": "sound",
+  "word": "",
+  "start": 5.43,
+  "dur": 0.5,
+  "gain": 11
+ },
+ {
+  "file": "h-sound.mp3",
+  "letter": "H",
+  "kind": "sound",
+  "word": "",
+  "start": 6.36,
+  "dur": 0.43,
+  "gain": 18
+ },
+ {
+  "file": "i-sound.mp3",
+  "letter": "I",
+  "kind": "sound",
+  "word": "",
+  "start": 7.2,
+  "dur": 0.48,
+  "gain": 3.8
+ },
+ {
+  "file": "j-sound.mp3",
+  "letter": "J",
+  "kind": "sound",
+  "word": "",
+  "start": 7.96,
+  "dur": 0.56,
+  "gain": 8.1
+ },
+ {
+  "file": "k-sound.mp3",
+  "letter": "K",
+  "kind": "sound",
+  "word": "",
+  "start": 8.85,
+  "dur": 0.38,
+  "gain": 7
+ },
+ {
+  "file": "l-sound.mp3",
+  "letter": "L",
+  "kind": "sound",
+  "word": "",
+  "start": 9.62,
+  "dur": 0.67,
+  "gain": 8.2
+ },
+ {
+  "file": "m-sound.mp3",
+  "letter": "M",
+  "kind": "sound",
+  "word": "",
+  "start": 10.57,
+  "dur": 0.7,
+  "gain": 7.7
+ },
+ {
+  "file": "n-sound.mp3",
+  "letter": "N",
+  "kind": "sound",
+  "word": "",
+  "start": 11.49,
+  "dur": 0.75,
+  "gain": 7.8
+ },
+ {
+  "file": "o-sound.mp3",
+  "letter": "O",
+  "kind": "sound",
+  "word": "",
+  "start": 12.49,
+  "dur": 0.64,
+  "gain": 3.2
+ },
+ {
+  "file": "p-sound.mp3",
+  "letter": "P",
+  "kind": "sound",
+  "word": "",
+  "start": 13.36,
+  "dur": 0.41,
+  "gain": 9.9
+ },
+ {
+  "file": "q-sound.mp3",
+  "letter": "Q",
+  "kind": "sound",
+  "word": "",
+  "start": 14.06,
+  "dur": 0.45,
+  "gain": 12.7
+ },
+ {
+  "file": "r-sound.mp3",
+  "letter": "R",
+  "kind": "sound",
+  "word": "",
+  "start": 14.83,
+  "dur": 0.63,
+  "gain": 8.4
+ },
+ {
+  "file": "s-sound.mp3",
+  "letter": "S",
+  "kind": "sound",
+  "word": "",
+  "start": 15.7,
+  "dur": 0.67,
+  "gain": 8.5
+ },
+ {
+  "file": "t-sound.mp3",
+  "letter": "T",
+  "kind": "sound",
+  "word": "",
+  "start": 16.57,
+  "dur": 0.36,
+  "gain": 7.2
+ },
+ {
+  "file": "u-sound.mp3",
+  "letter": "U",
+  "kind": "sound",
+  "word": "",
+  "start": 17.29,
+  "dur": 0.59,
+  "gain": 4.9
+ },
+ {
+  "file": "v-sound.mp3",
+  "letter": "V",
+  "kind": "sound",
+  "word": "",
+  "start": 18.1,
+  "dur": 0.65,
+  "gain": 16.2
+ },
+ {
+  "file": "w-sound.mp3",
+  "letter": "W",
+  "kind": "sound",
+  "word": "",
+  "start": 18.99,
+  "dur": 0.52,
+  "gain": 8.1
+ },
+ {
+  "file": "x-sound.mp3",
+  "letter": "X",
+  "kind": "sound",
+  "word": "",
+  "start": 19.81,
+  "dur": 0.66,
+  "gain": 4.7
+ },
+ {
+  "file": "y-sound.mp3",
+  "letter": "Y",
+  "kind": "sound",
+  "word": "",
+  "start": 20.58,
+  "dur": 0.56,
+  "gain": 7.8
+ },
+ {
+  "file": "z-sound.mp3",
+  "letter": "Z",
+  "kind": "sound",
+  "word": "",
+  "start": 21.4,
+  "dur": 0.64,
+  "gain": 5.8
+ },
+ {
+  "file": "a-word.mp3",
+  "letter": "A",
+  "kind": "word",
+  "word": "apple",
+  "start": 0.02,
+  "dur": 0.59,
+  "gain": 2.7
+ },
+ {
+  "file": "b-word.mp3",
+  "letter": "B",
+  "kind": "word",
+  "word": "ball",
+  "start": 0.97,
+  "dur": 0.79,
+  "gain": 3.6
+ },
+ {
+  "file": "c-word.mp3",
+  "letter": "C",
+  "kind": "word",
+  "word": "cat",
+  "start": 2.06,
+  "dur": 0.68,
+  "gain": 5
+ },
+ {
+  "file": "d-word.mp3",
+  "letter": "D",
+  "kind": "word",
+  "word": "dog",
+  "start": 3.05,
+  "dur": 0.61,
+  "gain": 6.3
+ },
+ {
+  "file": "e-word.mp3",
+  "letter": "E",
+  "kind": "word",
+  "word": "egg",
+  "start": 4.05,
+  "dur": 0.62,
+  "gain": 7.8
+ },
+ {
+  "file": "f-word.mp3",
+  "letter": "F",
+  "kind": "word",
+  "word": "fish",
+  "start": 5,
+  "dur": 0.75,
+  "gain": 4
+ },
+ {
+  "file": "g-word.mp3",
+  "letter": "G",
+  "kind": "word",
+  "word": "goat",
+  "start": 5.97,
+  "dur": 0.74,
+  "gain": 4.2
+ },
+ {
+  "file": "h-word.mp3",
+  "letter": "H",
+  "kind": "word",
+  "word": "hat",
+  "start": 7.02,
+  "dur": 0.69,
+  "gain": 6.5
+ },
+ {
+  "file": "i-word.mp3",
+  "letter": "I",
+  "kind": "word",
+  "word": "insect",
+  "start": 7.98,
+  "dur": 0.85,
+  "gain": 5
+ },
+ {
+  "file": "j-word.mp3",
+  "letter": "J",
+  "kind": "word",
+  "word": "juice",
+  "start": 9.09,
+  "dur": 0.89,
+  "gain": 7.4
+ },
+ {
+  "file": "k-word.mp3",
+  "letter": "K",
+  "kind": "word",
+  "word": "kite",
+  "start": 10.18,
+  "dur": 0.67,
+  "gain": 5.7
+ },
+ {
+  "file": "l-word.mp3",
+  "letter": "L",
+  "kind": "word",
+  "word": "lion",
+  "start": 11.1,
+  "dur": 0.82,
+  "gain": 7.2
+ },
+ {
+  "file": "m-word.mp3",
+  "letter": "M",
+  "kind": "word",
+  "word": "milk",
+  "start": 12.21,
+  "dur": 0.7,
+  "gain": 7.1
+ },
+ {
+  "file": "n-word.mp3",
+  "letter": "N",
+  "kind": "word",
+  "word": "nose",
+  "start": 13.18,
+  "dur": 0.87,
+  "gain": 8.9
+ },
+ {
+  "file": "o-word.mp3",
+  "letter": "O",
+  "kind": "word",
+  "word": "octopus",
+  "start": 14.29,
+  "dur": 0.96,
+  "gain": 2.9
+ },
+ {
+  "file": "p-word.mp3",
+  "letter": "P",
+  "kind": "word",
+  "word": "pig",
+  "start": 15.43,
+  "dur": 0.66,
+  "gain": 6.4
+ },
+ {
+  "file": "q-word.mp3",
+  "letter": "Q",
+  "kind": "word",
+  "word": "queen",
+  "start": 16.29,
+  "dur": 0.78,
+  "gain": 9.2
+ },
+ {
+  "file": "r-word.mp3",
+  "letter": "R",
+  "kind": "word",
+  "word": "red",
+  "start": 17.29,
+  "dur": 0.71,
+  "gain": 7.5
+ },
+ {
+  "file": "s-word.mp3",
+  "letter": "S",
+  "kind": "word",
+  "word": "sun",
+  "start": 18.2,
+  "dur": 0.8,
+  "gain": 7.1
+ },
+ {
+  "file": "t-word.mp3",
+  "letter": "T",
+  "kind": "word",
+  "word": "tree",
+  "start": 19.23,
+  "dur": 0.71,
+  "gain": 7.6
+ },
+ {
+  "file": "u-word.mp3",
+  "letter": "U",
+  "kind": "word",
+  "word": "umbrella",
+  "start": 20.18,
+  "dur": 0.81,
+  "gain": 5
+ },
+ {
+  "file": "v-word.mp3",
+  "letter": "V",
+  "kind": "word",
+  "word": "van",
+  "start": 21.2,
+  "dur": 0.8,
+  "gain": 7.2
+ },
+ {
+  "file": "w-word.mp3",
+  "letter": "W",
+  "kind": "word",
+  "word": "window",
+  "start": 22.2,
+  "dur": 0.79,
+  "gain": 7
+ },
+ {
+  "file": "x-word.mp3",
+  "letter": "X",
+  "kind": "word",
+  "word": "box",
+  "start": 23.18,
+  "dur": 0.86,
+  "gain": 5
+ },
+ {
+  "file": "y-word.mp3",
+  "letter": "Y",
+  "kind": "word",
+  "word": "yellow",
+  "start": 24.2,
+  "dur": 0.69,
+  "gain": 5.4
+ },
+ {
+  "file": "z-word.mp3",
+  "letter": "Z",
+  "kind": "word",
+  "word": "zebra",
+  "start": 25.12,
+  "dur": 0.74,
+  "gain": 7.1
+ }
+]

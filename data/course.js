@@ -4,6 +4,18 @@
 // pn — имя, v — глагол, a — прилагательное, adv — наречие, num — число, prep — предлог, det, x — фраза.
 // id старых слов сохранены — по ним хранится прогресс, картинки и озвучка.
 window.COURSE_TEXT = String.raw`
+LEVEL 0 | Полянка букв | Алфавит
+UNIT abc | Полянка букв | #8E5CC8
+STATION letters abcd | letters_abcd
+STATION letters efgh | letters_efgh
+STATION letters ijkl | letters_ijkl
+STATION letters mnop | letters_mnop
+STATION letters qrst | letters_qrst
+STATION letters uvw | letters_uvw
+STATION letters xyz | letters_xyz
+STATION letters tricky | letters_tricky
+STATION letters all | letters_all
+
 LEVEL 1 | Лесная опушка | Starters
 
 UNIT animals | Ферма | #ff9f43

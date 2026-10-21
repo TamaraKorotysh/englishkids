@@ -2,11 +2,11 @@
 // Страница и данные курса: сначала из сети (чтобы обновления приходили сразу), без сети — из запаса.
 // Картинки, звуки и шрифты: сначала из запаса, иначе из сети с сохранением в запас.
 // Список всех картинок присылает страница (сообщение 'precache'), и они докачиваются в фоне.
-const CORE = 'ek-core-v2';
+const CORE = 'ek-core-v3';
 const MEDIA = 'ek-media-v1';
 const CORE_FILES = [
   './', 'index.html', 'manifest.webmanifest',
-  'data/course.js', 'data/grammar.js', 'data/sounds.js', 'data/examples.js',
+  'data/course.js', 'data/grammar.js', 'data/sounds.js', 'data/examples.js', 'data/letters.js',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png', 'icons/favicon-32.png',
   'fonts/nunito.css', 'fonts/nunito-latin.woff2', 'fonts/nunito-latin-ext.woff2', 'fonts/nunito-cyrillic.woff2', 'fonts/nunito-cyrillic-ext.woff2',
 ];

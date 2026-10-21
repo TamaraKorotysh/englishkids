@@ -598,6 +598,49 @@ button.friend-card:active{top:3px; box-shadow:0 1px 0 var(--line);}
 
 /* ===== Курс на 1400 слов ===== */
 .level-banner{margin:18px 0 16px; padding:16px 14px; border-radius:28px; text-align:center; color:#fff; box-shadow:0 6px 0 rgba(0,0,0,.15);}
+.level-banner.lv0{background:linear-gradient(160deg,#A57FD8,#6B3FA8);}
+.level-skip{font-family:inherit; margin-top:10px; display:inline-flex; align-items:center; gap:6px; border:none; border-radius:100px; padding:8px 16px; font-size:15px; font-weight:900; color:#6B3FA8; background:#fff; box-shadow:0 3px 0 rgba(0,0,0,.18); cursor:pointer;}
+.node-tag.letters{background:#7A4FB8;}
+.node-letters{font-weight:900; color:#6B3FA8; letter-spacing:-1px; line-height:1;}
+.letter-card{text-align:center;}
+.letter-big{font-size:110px; font-weight:900; line-height:1; color:#6B3FA8; letter-spacing:2px;}
+.letter-big span{color:#A57FD8;}
+.letter-says{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;}
+.letter-say{font-family:inherit; display:flex; align-items:center; justify-content:center; gap:8px; padding:10px 8px; border-radius:20px; border:3px solid var(--sky); background:var(--sky-light); color:var(--sky-shadow); font-size:22px; font-weight:900; cursor:pointer;}
+.letter-say span{display:flex; flex-direction:column; align-items:flex-start; line-height:1.1;}
+.letter-say b{font-size:13px; font-weight:800; opacity:.85; white-space:nowrap;}
+.letter-say.sound{border-color:#A57FD8; background:#F1EAFB; color:#6B3FA8;}
+.letter-word{font-family:inherit; width:100%; margin-top:12px; display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:22px; border:3px solid var(--line); background:#FBF4E8; cursor:pointer; color:var(--sky-shadow); text-align:left;}
+.letter-word > span{flex:1; display:flex; flex-direction:column;}
+.lw-en{font-size:30px; font-weight:900; color:var(--ink);}
+.lw-en b{color:#6B3FA8;}
+.lw-ru{font-size:15px; font-weight:800; color:var(--muted);}
+.letter-tip{margin-top:12px; padding:10px 12px; border-radius:16px; background:#FFF0CC; color:#9A6411; font-size:15px; font-weight:800; line-height:1.35; text-align:left;}
+.letter-opts{display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%;}
+.letter-opts.three{grid-template-columns:1fr 1fr 1fr;}
+.letter-opt{font-family:inherit; background:var(--paper); border:3px solid var(--line); border-radius:22px; padding:14px 6px; font-size:44px; font-weight:900; color:var(--ink); cursor:pointer; box-shadow:0 5px 0 var(--line); position:relative; top:0; line-height:1.1;}
+.letter-opts.two .letter-opt{font-size:40px;}
+.letter-opt:active{top:3px; box-shadow:0 2px 0 var(--line);}
+.letter-opt.correct{background:var(--leaf-light); border-color:var(--leaf); color:var(--leaf-dark); box-shadow:0 5px 0 var(--leaf);}
+.letter-opt.wrong{background:var(--berry-light); border-color:var(--berry); color:var(--berry-shadow); box-shadow:0 5px 0 var(--berry); animation:shake .3s;}
+.letter-show{font-family:inherit; width:150px; height:150px; border-radius:36px; border:3px solid var(--line); background:var(--paper); box-shadow:0 6px 0 var(--line); font-size:96px; font-weight:900; color:#6B3FA8; display:flex; align-items:center; justify-content:center; cursor:pointer;}
+.letter-show.static{cursor:default;}
+.letter-input{width:110px; font-size:52px; padding:4px;}
+.first-pic{cursor:pointer; font-family:inherit;}
+.letter-row{display:flex; gap:10px; justify-content:center;}
+.letter-cell, .letter-gap{width:64px; height:74px; display:flex; align-items:center; justify-content:center; border-radius:18px; font-size:44px; font-weight:900;}
+.letter-cell{background:var(--paper); border:3px solid var(--line); color:var(--ink);}
+.gap.letter-gap{min-width:0; padding:0; border:3px dashed var(--line-dark); border-radius:18px;}
+.gap.letter-gap.ok{border:3px solid var(--leaf); background:var(--leaf-light);}
+.gap.letter-gap.bad{border:3px solid var(--berry); background:var(--berry-light);}
+.abc-board{display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-top:12px;}
+.abc-key{font-family:inherit; padding:8px 0; border-radius:12px; border:2px solid var(--line); background:#FBF4E8; font-size:18px; font-weight:900; color:#6B3FA8; cursor:pointer;}
+.tricky-list{display:flex; flex-direction:column; gap:6px; margin-top:12px;}
+.tricky-row{font-family:inherit; display:flex; align-items:center; gap:10px; padding:6px 10px; border-radius:16px; border:2px solid var(--line); background:#FBF4E8; cursor:pointer; text-align:left; color:var(--ink);}
+.tricky-letter{font-size:32px; font-weight:900; color:#6B3FA8; width:34px; text-align:center;}
+.tricky-text{flex:1; font-size:15px; font-weight:700;}
+.tricky-word{display:flex; align-items:center; gap:4px; font-size:14px; font-weight:800; color:var(--muted);}
+.rule-text.small{font-size:14px; margin-top:10px;}
 .level-banner.lv1{background:linear-gradient(160deg,#7CCB55,#3F8A2A);}
 .level-banner.lv2{background:linear-gradient(160deg,#3F8A6B,#1E5631);}
 .level-banner.lv3{background:linear-gradient(160deg,#6C8EBF,#3B4F7A);}
@@ -644,6 +687,7 @@ button.friend-card:active{top:3px; box-shadow:0 1px 0 var(--line);}
 <script src="data/grammar.js"></script>
 <script src="data/sounds.js"></script>
 <script src="data/examples.js"></script>
+<script src="data/letters.js"></script>
 <script>
 // Картинка слова: SVG из OpenMoji (assets/images/<id>.svg); нет файла — эмодзи; нет эмодзи — плашка «Aa»
 function wImg(w, px){
@@ -670,7 +714,7 @@ const LEVELS = [], SECTIONS = [], STATIONS = [];
     if(line.startsWith('STATION ')){
       const [head, explicitId] = parts(line.slice(8));
       const [type, topic] = head.split(/\s+/);
-      const spec = topic === 'plural' ? PLURAL_SPEC : (type === 'grammar' ? window.GRAMMAR : window.SOUNDS)[topic];
+      const spec = topic === 'plural' ? PLURAL_SPEC : type === 'letters' ? window.LETTERS.topics[topic] : (type === 'grammar' ? window.GRAMMAR : window.SOUNDS)[topic];
       if(!spec){ console.warn('Нет описания станции', topic); return; }
       const st = { id: explicitId || `${type === 'grammar' ? 'gr' : 'snd'}_${topic}`, type, topic, spec, title: spec.title };
       STATIONS.push(st);
@@ -797,10 +841,16 @@ function sectionStars(section){
 const FLAT_LESSONS = [];
 SECTIONS.forEach(s => s.lessons.forEach(l => FLAT_LESSONS.push({section:s, lesson:l})));
 function flatLessons(){ return FLAT_LESSONS; }
+// Полянку букв добавили позже: у тех, кто уже начал учить слова, она не должна закрывать тропу
+if(appState.lettersSkipped === undefined){
+  appState.lettersSkipped = Object.keys(appState.progress).some(k=>!k.startsWith('g_letters_'));
+  saveState();
+}
 // realOnly — по настоящему прогрессу, без демо-режима «Открыть все уроки»
 function isLessonUnlocked(flatIdx, realOnly){
   if(flatIdx === 0 || (!realOnly && appState.settings.unlockAll)) return true;
   const flat = flatLessons();
+  if(appState.lettersSkipped && (flat[flatIdx].section.level === 0 || flat[flatIdx-1].section.level === 0)) return true;
   // Уже начатый урок не закрываем — например, если станцию добавили перед ним позже
   if(lessonStars(flat[flatIdx].lesson) > 0) return true;
   const prev = flat[flatIdx-1].lesson;
@@ -816,10 +866,12 @@ function frontierIdx(){
 function levelStars(num){ return SECTIONS.filter(s=>s.level === num).reduce((a, s)=>a + sectionStars(s), 0); }
 function levelMaxStars(num){ return SECTIONS.filter(s=>s.level === num).reduce((a, s)=>a + maxStarsForSection(s), 0); }
 // Уровень, до которого ребёнок дошёл: его друг сейчас растёт
-function currentLevel(){ return FLAT_LESSONS[frontierIdx()].section.level; }
+function currentLevel(){ return Math.max(1, FLAT_LESSONS[frontierIdx()].section.level); }
 function friendInfo(friend){
-  const max = levelMaxStars(friend.level);
-  const stars = levelStars(friend.level);
+  // Цыплёнок растёт и от Полянки букв: за алфавит он почти вылупляется
+  const levels = friend.level === 1 ? [0, 1] : [friend.level];
+  const max = levels.reduce((a, n)=>a + levelMaxStars(n), 0);
+  const stars = levels.reduce((a, n)=>a + levelStars(n), 0);
   const mins = FRIEND_STEPS.map(p=>Math.round(p * max));
   let idx = 0;
   mins.forEach((m, i)=>{ if(stars >= m) idx = i; });
@@ -1091,12 +1143,22 @@ function nodeLocked(btn){
 }
 
 function sectionPicWord(section){
+  if(section.level === 0) return WORD_BY_ID.fruits_veg_1_apple;
   for(const l of section.lessons) for(const w of l.words) if(w.emoji) return w;
   return section.lessons[0].words[0];
 }
 // Табличка уровня на тропе
 function levelBanner(num){
   const lv = LEVELS.find(l=>l.num === num);
+  if(num === 0){
+    const done = SECTIONS.filter(s=>s.level === 0).every(s=>s.lessons.every(l=>lessonStars(l) >= 2));
+    return `<div class="level-banner lv0">
+      <div class="level-num">Начало пути</div>
+      <div class="level-title">${lv.title}</div>
+      <div class="level-sub">Английский алфавит · 26 букв</div>
+      ${!appState.lettersSkipped && !done ? `<button class="level-skip" onclick="openLetterTest()">Я уже знаю буквы ${icon('arrow',18)}</button>` : ''}
+    </div>`;
+  }
   const words = SECTIONS.filter(s=>s.level === num).reduce((a, s)=>a + s.lessons.reduce((b, l)=>b + l.words.length, 0), 0);
   return `<div class="level-banner lv${num}">
       <div class="level-num">Уровень ${num}</div>
@@ -1130,7 +1192,7 @@ function renderMap(){
       const isCurrent = idx === currentIdx;
       return `
         <div class="node ${state} ${isCurrent?'current':''} ${lesson.kind==='station'?'station':''}" style="left:${x}%; top:${y}px; --c:${section.color}; --p:${pct}%;">
-          ${lesson.kind==='station' ? `<div class="node-tag ${lesson.station.type}">${lesson.station.type === 'sound' ? 'звуки' : 'правило'}</div>` : ''}
+          ${lesson.kind==='station' ? `<div class="node-tag ${lesson.station.type}">${lesson.station.type === 'sound' ? 'звуки' : lesson.station.type === 'letters' ? 'буквы' : 'правило'}</div>` : ''}
           <button class="node-btn" onclick="${unlocked ? `openLesson('${lesson.id}')` : 'nodeLocked(this)'}" aria-label="${lesson.title}">
             <span class="node-pic">${lessonPicHtml(lesson, 46)}</span>
             ${state==='locked' ? `<span class="node-badge">${icon('lock',22)}</span>` : ''}
@@ -1240,6 +1302,7 @@ function renderLessonScreen(){
 }
 // Картинка урока: у обычного — первое слово, у станции — маленькая сцена по её теме
 function lessonPicHtml(lesson, px){
+  if(lesson.kind === 'station' && lesson.station.type === 'letters') return letterPicHtml(lesson.station, px);
   if(lesson.kind === 'station') return `<span class="station-pic">${stationPicWords(lesson.station).map(w=>wImg(w, Math.round(px*0.5))).join('')}</span>`;
   return wImg(lesson.words.find(w=>w.emoji) || lesson.words[0], px);
 }
@@ -1294,7 +1357,7 @@ function showFeedback(ok, w){
         <div>
           <div class="sheet-title">${ok ? PRAISE[Math.floor(Math.random()*PRAISE.length)] : 'Почти!'}</div>
           <div class="sheet-word">${w.en}
-            <button class="speak-btn small" onclick="speak(${jsq(w.en)})" aria-label="Послушать">${icon('speaker',22)}</button>
+            <button class="speak-btn small" onclick="${w.audio ? `playLetter('${w.audio}')` : `speak(${jsq(w.en)})`}" aria-label="Послушать">${icon('speaker',22)}</button>
           </div>
           <div class="sheet-ru">${w.ru}</div>
           ${w.note ? `<div class="sheet-note">${w.note}</div>` : ''}
@@ -1975,10 +2038,12 @@ function soundChips(st){
 
 /* ---- Общее для всех станций ---- */
 function buildStationSteps(st){
+  if(st.type === 'letters') return buildLetterSteps(st);
   if(st.topic === 'plural') return buildPluralSteps();
   return st.type === 'sound' ? buildSoundSteps(st) : buildGrammarSteps(st.spec);
 }
 function stationChips(st){
+  if(st.type === 'letters') return letterChips(st);
   if(st.topic === 'plural') return pluralChips();
   return st.type === 'sound' ? soundChips(st) : grammarChips(st.spec);
 }
@@ -2209,6 +2274,255 @@ const GRAM_RENDER = {
     <div class="stage-actions"><button class="btn btn-primary" onclick="gramNext()"><span class="btn-label">Готово ${icon('arrow',22)}</span></button></div>`,
 };
 
+/* ---- «Полянка букв»: алфавит (данные — data/letters.js, звуки — assets/audio/letters) ---- */
+const LET = window.LETTERS;
+const LETTER = Object.fromEntries(LET.letters.map(x=>[x.l, x]));
+const ALPHA = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const LETTER_GROUPS = Object.entries(LET.topics).filter(([, t])=>t.letters).map(([key, t])=>({ key, letters: t.letters.split('') }));
+const LETTER_TEST_PASS = 0.8; // «Я уже знаю буквы»: нужно 8 из 10
+
+// Звук буквы из записи: <буква>-name | -sound | -word
+function playLetter(id){
+  stopAllSpeech();
+  const a = new Audio(`assets/audio/letters/${id}.mp3`);
+  currentAudio = a;
+  a.play().catch(()=>{});
+}
+const glyph = l => `${l.toUpperCase()}${l}`;
+const letterWord = l => WORD_BY_ID[LETTER[l].word];
+// Буквы, которые ребёнок уже видел к этому уроку (включая новые буквы урока)
+function lettersUpTo(topic){
+  const out = [];
+  for(const g of LETTER_GROUPS){ out.push(...g.letters); if(g.key === topic) break; }
+  return out;
+}
+// Ответ + (n-1) других вариантов из пула, в случайном порядке
+function letterOptions(answer, pool, n){
+  return shuffle([answer, ...shuffle(pool.filter(x=>x !== answer)).slice(0, n - 1)]);
+}
+const letterFb = (l, audio) => ({
+  fbEn: `${glyph(l)} — ${letterWord(l).en}`,
+  fbRu: `называется «${LETTER[l].nameRu}», звучит «${LETTER[l].soundRu}»`,
+  fbAudio: audio || `${l}-word`,
+});
+
+// Задания (scored — идут в звёзды)
+const letterTasks = {
+  hear: (l, pool, mode) => ({ type:'hearLetter', scored:true, l, mode, answer:l, options:letterOptions(l, pool, 4), ...letterFb(l, `${l}-${mode}`) }),
+  first: (l, pool) => ({ type:'firstLetter', scored:true, l, id:LETTER[l].word, answer:l, options:letterOptions(l, pool, 3), ...letterFb(l) }),
+  pair: (l, pool) => ({ type:'casePair', scored:true, l, answer:l, options:letterOptions(l, pool, 4), ...letterFb(l, `${l}-name`) }),
+  type: l => ({ type:'typeLetter', scored:true, l, answer:l, ...letterFb(l, `${l}-name`) }),
+  // Пропущенная буква в ряду из четырёх подряд; ряд берём только из уже знакомых букв
+  missing: (l, pool) => {
+    const i = ALPHA.indexOf(l), last = ALPHA.indexOf(pool[pool.length - 1]);
+    const lo = Math.max(0, i - 3), hi = Math.max(lo, Math.min(i, last - 3));
+    const start = lo + Math.floor(Math.random() * (hi - lo + 1));
+    const seq = ALPHA.slice(start, start + 4);
+    // Варианты — не из букв, которые уже видны в ряду (если есть другие знакомые буквы)
+    const outside = pool.filter(x=>!seq.includes(x));
+    return { type:'missingLetter', scored:true, l, seq, at:i - start, answer:l.toUpperCase(),
+      options:letterOptions(l.toUpperCase(), (outside.length >= 2 ? outside : pool).map(x=>x.toUpperCase()), 3), ...letterFb(l, `${l}-name`) };
+  },
+};
+
+function buildLetterSteps(st){
+  const spec = st.spec;
+  if(spec.special === 'tricky') return buildTrickySteps();
+  if(spec.special === 'all') return [{ type:'alphabet' }, ...buildAlphabetQuiz(14)];
+  const fresh = spec.letters.split('');
+  const pool = lettersUpTo(st.topic);
+  const cycle = n => { const out = []; let bag = []; while(out.length < n){ if(!bag.length) bag = shuffle(fresh); out.push(bag.pop()); } return out; };
+  const steps = fresh.map(l=>({ type:'letterCard', l }));
+  const h = cycle(4);
+  steps.push(letterTasks.hear(h[0], pool, 'name'), letterTasks.hear(h[1], pool, 'sound'), letterTasks.hear(h[2], pool, 'name'), letterTasks.hear(h[3], pool, 'sound'));
+  cycle(3).forEach(l=>steps.push(letterTasks.first(l, pool)));
+  cycle(2).forEach(l=>steps.push(letterTasks.pair(l, pool)));
+  cycle(2).forEach(l=>steps.push(letterTasks.type(l)));
+  steps.push(letterTasks.missing(cycle(1)[0], pool));
+  return steps;
+}
+// Смешанные задания по всему алфавиту — итоговая станция и проверка «Я уже знаю буквы»
+function buildAlphabetQuiz(n){
+  const kinds = ['hearName', 'hearSound', 'first', 'pair', 'missing', 'type'];
+  const letters = shuffle(ALPHA).slice(0, n);
+  return letters.map((l, i)=>{
+    const k = kinds[i % kinds.length];
+    if(k === 'hearName') return letterTasks.hear(l, ALPHA, 'name');
+    if(k === 'hearSound') return letterTasks.hear(l, ALPHA, 'sound');
+    if(k === 'first') return letterTasks.first(l, ALPHA);
+    if(k === 'pair') return letterTasks.pair(l, ALPHA);
+    if(k === 'missing') return letterTasks.missing(l, ALPHA);
+    return letterTasks.type(l);
+  });
+}
+// «Буквы-обманщики»: похожи на русские, а читаются иначе + зеркальные b d p q
+function buildTrickySteps(){
+  const steps = [{ type:'trickyRule' }];
+  shuffle(LET.tricky).forEach(([L, right, wrong])=>{
+    const l = L.toLowerCase();
+    steps.push({ type:'trickyRead', scored:true, l, answer:right, options:shuffle([right, wrong]),
+      fbEn:`${glyph(l)} — ${letterWord(l).en}`, fbRu:`читается «${right}», а не «${wrong}»`, fbAudio:`${l}-word` });
+  });
+  shuffle(['b', 'd', 'p', 'q']).forEach(l=>steps.push({ type:'mirror', scored:true, l, answer:l, options:['b', 'd', 'p', 'q'], ...letterFb(l, `${l}-sound`) }));
+  return steps;
+}
+function letterChips(st){
+  const spec = st.spec;
+  const list = spec.letters ? spec.letters.split('') : spec.special === 'tricky' ? LET.tricky.map(t=>t[0].toLowerCase()) : ALPHA;
+  return list.map(l=>`<button class="word-chip" onclick="playLetter('${l}-word')" aria-label="Послушать">${wImg(letterWord(l), 40)}<span><b>${glyph(l)}</b> ${letterWord(l).en}</span></button>`).join('');
+}
+// Значок урока букв на тропе
+function letterPicHtml(st, px){
+  const text = st.spec.letters ? glyph(st.spec.letters[0]) : st.spec.special === 'tricky' ? 'B≠В' : 'ABC';
+  return `<span class="node-letters" style="font-size:${Math.round(px * (text.length > 2 ? 0.5 : 0.7))}px">${text}</span>`;
+}
+
+// Отрисовка шагов
+const letterBtn = (value, label, ok) => `<button class="letter-opt" data-ok="${ok}" onclick="gramChoose(this)">${label}</button>`;
+const letterListen = id => `<button class="listen-btn" onclick="playLetter('${id}')" aria-label="Послушать">${icon('speaker',60)}</button>`;
+function letterWordHtml(l){
+  const w = letterWord(l);
+  return `<span class="lw-en"><b>${esc(w.en[0])}</b>${esc(w.en.slice(1))}</span>`;
+}
+Object.assign(GRAM_RENDER, {
+  letterCard: s => {
+    const L = LETTER[s.l], w = letterWord(s.l);
+    return `
+      <div class="stage rule-stage">
+        <div class="rule-card letter-card">
+          <div class="letter-big">${s.l.toUpperCase()}<span>${s.l}</span></div>
+          <div class="letter-says">
+            <button class="letter-say" onclick="playLetter('${s.l}-name')">${icon('speaker',24)}<span><b>Как называется</b>«${L.nameRu}»</span></button>
+            <button class="letter-say sound" onclick="playLetter('${s.l}-sound')">${icon('speaker',24)}<span><b>Как звучит</b>«${L.soundRu}»</span></button>
+          </div>
+          <button class="letter-word" onclick="playLetter('${s.l}-word')">${wImg(w, 76)}<span>${letterWordHtml(s.l)}<span class="lw-ru">${esc(w.ru)}</span></span>${icon('speaker',22)}</button>
+          ${L.tip ? `<div class="letter-tip">${L.tip}</div>` : ''}
+        </div>
+      </div>
+      <div class="stage-actions"><button class="btn btn-primary" onclick="gramNext()"><span class="btn-label">Понятно ${icon('arrow',22)}</span></button></div>`;
+  },
+
+  alphabet: () => `
+    <div class="stage rule-stage">
+      <div class="rule-card">
+        <div class="rule-head"><span class="rule-worm">${wormSvg('happy')}</span><div class="rule-title">Весь алфавит</div></div>
+        <div class="rule-text">В английском алфавите 26 букв. Нажимай на буквы — они назовут себя. А потом проверим, всё ли ты запомнил!</div>
+        <div class="abc-board">${ALPHA.map(l=>`<button class="abc-key" onclick="playLetter('${l}-name')">${glyph(l)}</button>`).join('')}</div>
+      </div>
+    </div>
+    <div class="stage-actions"><button class="btn btn-primary" onclick="gramNext()"><span class="btn-label">Начать ${icon('arrow',22)}</span></button></div>`,
+
+  hearLetter: s => `
+    <div class="stage">
+      ${taskLabel(s.mode === 'name' ? 'Послушай, как называется буква. Какая это?' : 'Послушай звук. Какая буква так звучит?')}
+      ${letterListen(`${s.l}-${s.mode}`)}
+      <div class="letter-opts">${s.options.map(o=>letterBtn(o, glyph(o), o === s.answer)).join('')}</div>
+    </div>`,
+
+  firstLetter: s => `
+    <div class="stage">
+      ${taskLabel('С какой буквы начинается слово?')}
+      <button class="scene-card first-pic" onclick="playLetter('${s.l}-word')">${wImg(WORD_BY_ID[s.id], 110)}</button>
+      <div class="phrase spell"><span class="gap" id="gap">?</span>${esc(WORD_BY_ID[s.id].en.slice(1))}</div>
+      <div class="letter-opts three">${s.options.map(o=>letterBtn(o, o, o === s.answer)).join('')}</div>
+    </div>`,
+
+  casePair: s => `
+    <div class="stage">
+      ${taskLabel('Найди маленькую букву для большой')}
+      <button class="letter-show" onclick="playLetter('${s.l}-name')">${s.l.toUpperCase()}</button>
+      <div class="letter-opts">${s.options.map(o=>letterBtn(o, o, o === s.answer)).join('')}</div>
+    </div>`,
+
+  typeLetter: s => `
+    <div class="stage">
+      ${taskLabel('Послушай и напиши эту букву')}
+      ${letterListen(`${s.l}-name`)}
+      <input id="gramInput" class="gram-input letter-input" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        onkeydown="if(event.key==='Enter'){event.preventDefault(); gramTypeCheck();}">
+      <div class="ru-hint">большую или маленькую — как хочешь</div>
+    </div>
+    <div class="stage-actions"><button class="btn btn-primary grow" onclick="gramTypeCheck()">Проверить</button></div>`,
+
+  missingLetter: s => `
+    <div class="stage">
+      ${taskLabel('Какая буква пропущена?')}
+      <div class="letter-row">${s.seq.map((l, i)=>i === s.at ? `<span class="gap letter-gap" id="gap">?</span>` : `<span class="letter-cell">${l.toUpperCase()}</span>`).join('')}</div>
+      <div class="letter-opts three">${s.options.map(o=>letterBtn(o, o, o === s.answer)).join('')}</div>
+    </div>`,
+
+  trickyRule: () => `
+    <div class="stage rule-stage">
+      <div class="rule-card">
+        <div class="rule-head"><span class="rule-worm">${wormSvg('happy')}</span><div class="rule-title">Буквы-обманщики</div></div>
+        <div class="rule-text">Некоторые английские буквы похожи на русские, но читаются <b>по-другому</b>. Не дай себя обмануть!</div>
+        <div class="tricky-list">${LET.tricky.map(([L, right, wrong])=>`
+          <button class="tricky-row" onclick="playLetter('${L.toLowerCase()}-word')">
+            <span class="tricky-letter">${L}</span>
+            <span class="tricky-text">читается <b>«${right}»</b>, а не «${wrong}»</span>
+            <span class="tricky-word">${wImg(letterWord(L.toLowerCase()), 34)} ${letterWord(L.toLowerCase()).en}</span>
+          </button>`).join('')}</div>
+        <div class="rule-text small">А вот ${LET.honest.join(', ')} — честные: читаются почти как русские.</div>
+      </div>
+    </div>
+    <div class="stage-actions"><button class="btn btn-primary" onclick="gramNext()"><span class="btn-label">Понятно ${icon('arrow',22)}</span></button></div>`,
+
+  trickyRead: s => `
+    <div class="stage">
+      ${taskLabel('Как читается эта английская буква?')}
+      <div class="letter-show static">${s.l.toUpperCase()}</div>
+      <div class="letter-opts two">${s.options.map(o=>letterBtn(o, `«${o}»`, o === s.answer)).join('')}</div>
+    </div>`,
+
+  mirror: s => `
+    <div class="stage">
+      ${taskLabel('Послушай звук. Какая буква так звучит?')}
+      ${letterListen(`${s.l}-sound`)}
+      <div class="ru-hint">Осторожно: эти буквы похожи, как отражения в зеркале!</div>
+      <div class="letter-opts">${s.options.map(o=>letterBtn(o, o, o === s.answer)).join('')}</div>
+    </div>`,
+});
+// Сразу озвучиваем то, что нужно услышать
+function letterAfterRender(step){
+  const later = id => setTimeout(()=>{ if(session && currentStep() === step) playLetter(id); }, 400);
+  if(step.type === 'letterCard') later(`${step.l}-name`);
+  if(step.type === 'hearLetter') later(`${step.l}-${step.mode}`);
+  if(step.type === 'firstLetter') later(`${step.l}-word`);
+  if(step.type === 'typeLetter'){ later(`${step.l}-name`); const el = document.getElementById('gramInput'); if(el) el.focus(); }
+  if(step.type === 'mirror') later(`${step.l}-sound`);
+}
+
+/* ---- «Я уже знаю буквы»: 10 заданий, 8 верных — Полянка букв засчитана ---- */
+function openLetterTest(){
+  soundClick();
+  const section = SECTIONS.find(s=>s.level === 0);
+  session = { kind:'station', test:true, sectionId:section.id, lessonId:'letters_all', steps:buildAlphabetQuiz(10), stepIdx:0 };
+  screen = 'lesson';
+  render();
+}
+function finishLetterTest(){
+  const scored = session.steps.filter(s=>s.scored);
+  const right = scored.filter(s=>s.result === true).length;
+  const pass = right / scored.length >= LETTER_TEST_PASS;
+  if(pass){ appState.lettersSkipped = true; markActiveToday(); saveState(); }
+  track('проверка букв', pass ? 'сдана' : 'не сдана');
+  session = null; screen = 'map'; render();
+  const layer = document.createElement('div');
+  layer.className = 'pop-layer letter-test-layer';
+  layer.setAttribute('role', 'dialog');
+  layer.innerHTML = `
+    <div class="pop-card">
+      <div class="pop-title">${pass ? 'Ты знаешь буквы!' : 'Почти!'}</div>
+      <div class="pop-pet">${petSvg(pass ? 1 : 0, [], 'chick')}</div>
+      <div class="pop-text">${pass
+        ? `Правильно ${right} из ${scored.length}. Лесная опушка открыта — вперёд за новыми словами! А на Полянку букв можно заходить в любое время.`
+        : `Правильно ${right} из ${scored.length}. Давай пройдём Полянку букв — это быстро, и потом слова пойдут легче.`}</div>
+      <button class="btn btn-primary" onclick="document.querySelector('.letter-test-layer').remove()">${pass ? 'Ура!' : 'Хорошо'}</button>
+    </div>`;
+  document.getElementById('app').appendChild(layer);
+  if(pass){ fireConfetti(); soundCelebrate(); }
+}
+
 function renderGrammarScreen(){
   const step = currentStep();
   const pct = Math.round(session.stepIdx / session.steps.length * 100);
@@ -2230,6 +2544,7 @@ function grammarAfterRender(){
   if(step.type === 'story') sayLater(step.frames[step.frame].en);
   if(step.type === 'question') sayLater(step.q);
   if(step.type === 'typeWord' || step.type === 'typeGap'){ const el = document.getElementById('gramInput'); if(el) el.focus(); }
+  letterAfterRender(step);
 }
 
 // Общий итог любого задания: запоминаем результат, ошибку ставим на повтор в конец
@@ -2242,9 +2557,10 @@ function gramResult(ok){
     const again = step.type === 'build' ? { ...step, bank: shuffle(step.bank) } : { ...step };
     session.steps.push({ ...again, done:false, retry:true, scored:false });
   }
-  if(ok){ soundCorrect(); vibrate(50); speak(step.fbEn); }
-  else { soundWrong(); setTimeout(()=>speak(step.fbEn), 350); }
-  setTimeout(()=>showFeedback(ok, { en: step.fbEn, ru: step.fbRu, note: step.note }), 450);
+  const say = () => step.fbAudio ? playLetter(step.fbAudio) : speak(step.fbEn);
+  if(ok){ soundCorrect(); vibrate(50); say(); }
+  else { soundWrong(); setTimeout(say, 350); }
+  setTimeout(()=>showFeedback(ok, { en: step.fbEn, ru: step.fbRu, note: step.note, audio: step.fbAudio }), 450);
 }
 function gramChoose(btn){
   const step = currentStep();
@@ -2323,7 +2639,7 @@ function gramNext(){
   if(!session || session.kind !== 'station') return;
   session.buildOrder = [];
   session.stepIdx++;
-  if(session.stepIdx >= session.steps.length){ finishSession(); return; }
+  if(session.stepIdx >= session.steps.length){ if(session.test) finishLetterTest(); else finishSession(); return; }
   render();
 }
 
@@ -2406,6 +2722,7 @@ function stationProblems(){
       return;
     }
     const st = lesson.station;
+    if(st.type === 'letters') return;
     (st.spec.explains || []).forEach(t=>known.add(t.toLowerCase()));
     (STATION_FLAGS[st.topic] || []).forEach(f=>flags.add(f));
     if(st.type === 'sound'){
@@ -2531,6 +2848,7 @@ function renderSessionEnd(){
   ).join('');
   const isGrammar = lesson.kind === 'station';
   const isSound = isGrammar && lesson.station.type === 'sound';
+  const isLetters = isGrammar && lesson.station.type === 'letters';
   const wordsHtml = isGrammar
     ? stationChips(lesson.station)
     : lesson.words.map(w=>
@@ -2542,7 +2860,7 @@ function renderSessionEnd(){
       <div class="end-hero">
         <div class="end-stars">${starsHtml}</div>
         <div class="end-worm">${wormSvg('celebrate')}</div>
-        <h1 class="end-title">${isSound ? 'Звуки пойманы!' : isGrammar ? 'Станция пройдена!' : 'Урок пройден!'}</h1>
+        <h1 class="end-title">${isLetters ? 'Буквы пойманы!' : isSound ? 'Звуки пойманы!' : isGrammar ? 'Станция пройдена!' : 'Урок пройден!'}</h1>
         <div class="end-sub">${lesson.title}</div>
         <div class="end-chip ${gained > 0 ? 'gain' : ''}">${gained > 0 ? `${icon('star',28)} +${gained}` : 'Отличное повторение!'}</div>
       </div>
@@ -2550,11 +2868,11 @@ function renderSessionEnd(){
         <div class="unlock-card" style="--c:${nextEntry.section.color};">
           <div class="unlock-pic">${lessonPicHtml(next, 38)}</div>
           <div>
-            <div class="unlock-title">${next.kind === 'station' ? (next.station.type === 'sound' ? 'Открыта станция звуков!' : 'Открыта станция правил!') : 'Открыт новый урок!'}</div>
+            <div class="unlock-title">${next.kind === 'station' ? (next.station.type === 'letters' ? 'Открыты новые буквы!' : next.station.type === 'sound' ? 'Открыта станция звуков!' : 'Открыта станция правил!') : 'Открыт новый урок!'}</div>
             <div class="unlock-sub">${next.title}</div>
           </div>
         </div>` : ''}
-      <div class="section-label">${isSound ? 'Слова станции' : isGrammar ? 'Фразы станции' : 'Слова урока'}</div>
+      <div class="section-label">${isLetters ? 'Буквы и слова' : isSound ? 'Слова станции' : isGrammar ? 'Фразы станции' : 'Слова урока'}</div>
       <div class="word-chips">${wordsHtml}</div>
     </div>
     <div class="end-actions">
@@ -3345,6 +3663,8 @@ if(!IN_APP && 'serviceWorker' in navigator && location.protocol.startsWith('http
       const ids = new Set([...DECOR, 'gift', 'school_1_book', 'nature_2_snow', 'nature_3_tree', 'nature_3_flower', 'fruits_veg_5_mushroom']);
       Object.values(WORD_BY_ID).forEach(w=>{ if(w.emoji) ids.add(w.id); });
       const urls = [...ids].map(id=>new URL(`assets/images/${id}.svg`, location.href).href);
+      // Звуки «Полянки букв»: имя, звук и слово для каждой буквы
+      ALPHA.forEach(l=>['name', 'sound', 'word'].forEach(k=>urls.push(new URL(`assets/audio/letters/${l}-${k}.mp3`, location.href).href)));
       if(reg.active) reg.active.postMessage({ type: 'precache', urls });
     }).catch(err=>console.warn('Без офлайн-режима:', err));
   });
